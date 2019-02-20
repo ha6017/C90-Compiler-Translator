@@ -3,75 +3,110 @@
 %{
 // Avoid error "error: `fileno' was not declared in this scope"
 extern "C" int fileno(FILE *stream);
-
+#include <iostream>
 #include "maths_parser.tab.hpp"
+
+
+void debug();
+bool DEBUG = true;
 %}
 
+
 %%
-"int"			{ return T_INT; }
-"void"			{ return T_VOID; }
-"return"		{  return T_RETURN; }
-"if"			{  return T_IF; }
-"else"			{  return T_ELSE; }
-"while"			{  return T_WHILE; }
-"for"			{  return T_FOR; }
-"do"			{  return T_DO; }
-"break"			{ return T_BREAK; }
-"continue"		{  return T_CONTINUE; }
-"go to"			{ return T_GO_TO; }
 
-[*]             {  return T_TIMES; }
-[-]             {   return T_MINUS; }
-[/]             {   return T_DIVIDE; }
-[+]             {   return T_PLUS; }
-[=]				{   return T_EQUAL; }
+"typedef"						{debug(); return T_TYPEDEF;}
+"extern"						{debug();return T_EXTERN;}
+"static"						{debug();return T_STATIC;}
+"auto"							{debug();return T_AUTO;}
+"register"					{debug();return T_REGISTER;}
 
-[(]             {   return T_LBRACKET; }
-[)]             {   return T_RBRACKET; }
+"void"							{debug();return T_VOID;}
+"char"							{debug();return T_CHAR;}
+"short"							{debug();return T_SHORT;}
+"int"								{debug();return T_INT;}
+"long"							{debug();return T_LONG;}
+"float"							{debug();return T_FLOAT;}
+"double"						{debug();return T_DOUBLE;}
+"signed"						{debug();return T_SIGNED;}
 
-[{]             {   return T_LCBRACKET; }
-[}]             {   return T_RCBRACKET; }
+"const"							{debug();return T_CONST;}
+"volatile"					{debug();return T_VOLATILE;}	
 
-[\[]			{   return T_LSBRACKET; }
-[\]]			{   return T_RSBRACKET; }
+"return"						{debug();return T_RETURN;}
+"break"			  { debug();return T_BREAK; }
 
-[,]				{   return T_COMM; }
-[;]				{   return T_SEMI_COLON; }
-[:]				{   return T_COLON; }
+"while"							{debug();return T_WHILE;}
+"if"								{debug();return T_IF;}
+"else"							{debug();return T_ELSE;}
+"for"								{debug();return T_FOR;}
+"do"								{debug();return T_DO;}
+"switch"         {debug();return T_SWITCH; }
 
-[<]				{    return T_LT; }
-[>]				{    return T_GT; }
-[<][=]			{   return T_LE; }
-[>][=]			{    return T_GE; }
-[=][=]			{    return T_EQ; }
-[!][=]			{   return T_NEQ; }
+"continue"		{ debug(); return T_CONTINUE; }
+"goto"			{debug(); return T_GO_TO; }
 
-[!]				{   return T_LEXCLAIM; }
-[&][&]			{   return T_LAND; }
-[|][|]			{   return T_LOR; }
-[<][<]			{   return T_LSHIFT; }
-[>][>]			{   return T_RSHIFT; }
+"struct"  {debug();return T_STRUCT;}
 
-[&]				{   return T_AND; }
-[|]				{   return T_OR; }
-[%]				{   return T_REM; }
-[\^]				{   return T_XOR; }
+"case"    {debug();return T_CASE;}
+"enum"  { debug();return T_ENUM;}
+"register" {debug();return T_REGISTER;}
 
-[~]				{  return T_NOT; }
+"union" {debug();return T_UNION;}
 
-[-]?[0-9]+		{  yylval.number=strtod(yytext, 0); return I_INT; }
+"unsigned"  {debug();return T_UNSIGNED; }
 
+[A-Za-z_]([A-Za-z_]|[0-9])*  { debug();  yylval.string=new std::string(yytext); return T_VARIABLE; }
 
+[*]             { debug();  return T_TIMES; }
+[-]             { debug();  return T_MINUS; }
+[/]             { debug();  return T_DIVIDE; }
+[+]             { debug();  return T_PLUS; }
+[=]				      {debug();  return T_EQUAL; }
 
-[-]?[0-9]+([.][0-9]*)? {  yylval.number=strtod(yytext, 0); return I_FLOAT;}
+[(]             { debug();  return T_LBRACKET; }
+[)]             { debug();  return T_RBRACKET; }
+
+[{]             { debug();  return T_LCBRACKET; }
+[}]             { debug();  return T_RCBRACKET; }
+
+[\[]			{ debug();  return T_LSBRACKET; }
+[\]]			{ debug();  return T_RSBRACKET; }
+
+[,]				{ debug();  return T_COMMA; }
+[;]				{debug();   return T_SEMI_COLON; }
+[:]				{debug();   return T_COLON; }
+
+[<]				{ debug();   return T_LT; }
+[>]				{ debug();   return T_GT; }
+[<][=]			{debug();   return T_LE; }
+[>][=]			{debug();    return T_GE; }
+[=][=]			{ debug();   return T_EQ; }
+[!][=]			{ debug();  return T_NEQ; }
+
+[!]				{ debug();  return T_LEXCLAIM; }
+[&][&]			{ debug();  return T_LAND; }
+[|][|]			{ debug();  return T_LOR; }
+[<][<]			{ debug();  return T_LSHIFT; }
+[>][>]			{ debug();  return T_RSHIFT; }
+
+[&]				{ debug();  return T_AND; }
+[|]				{ debug();  return T_OR; }
+[%]				{ debug();  return T_REM; }
+[\^]				{  debug(); return T_XOR; }
+
+[~]				{  debug();return T_NOT; }
+
+[-]?[0-9]+		{ debug(); yylval.number=strtod(yytext, 0); return I_INT; }
+
+[-]?[0-9]+([.][0-9]*)? { debug(); yylval.number=strtod(yytext, 0); return I_FLOAT;}
 
 log             { return T_LOG;   }
 exp             { return T_EXP; }
 sqrt            { return T_SQRT; }
 
-[a-z]+[a-z0-9]*          {   yylval.string=new std::string(yytext); return T_VARIABLE; }
+"//".*		{debug();}
 
-[ \t\r\n]+		{ ;}
+[ \t\r\n]+		{ debug();}
 
 .               { fprintf(stderr, "Invalid token\n"); exit(1); }
 %%
@@ -80,4 +115,11 @@ void yyerror (char const *s)
 {
   fprintf (stderr, "Parse error : %s\n", s);
   exit(1);
+}
+
+void debug() {
+	if(DEBUG) {
+		std::cout << yytext;
+	}
+	return;
 }

@@ -21,6 +21,9 @@
   std::string *string;
 }
 
+%token T_INT T_VOID T_RETURN
+
+
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
 %token T_LBRACKET T_RBRACKET
 %token T_LOG T_EXP T_SQRT

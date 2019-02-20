@@ -69,53 +69,18 @@ extern int yydebug;
     T_INT = 258,
     T_VOID = 259,
     T_RETURN = 260,
-    I_INT = 261,
-    I_FLOAT = 262,
-    I_CHAR = 263,
-    T_IF = 264,
-    T_ELSE = 265,
-    T_WHILE = 266,
-    T_FOR = 267,
-    T_REM = 268,
-    T_DO = 269,
-    T_TIMES = 270,
-    T_DIVIDE = 271,
-    T_PLUS = 272,
-    T_MINUS = 273,
-    T_EXPONENT = 274,
-    T_EQUAL = 275,
-    T_LEXCLAIM = 276,
-    T_LBRACKET = 277,
-    T_RBRACKET = 278,
-    T_LCBRACKET = 279,
-    T_RCBRACKET = 280,
-    T_LSBRACKET = 281,
-    T_RSBRACKET = 282,
-    T_LOG = 283,
-    T_EXP = 284,
-    T_SQRT = 285,
-    T_LSHIFT = 286,
-    T_RSHIFT = 287,
-    T_XOR = 288,
-    T_NUMBER = 289,
-    T_VARIABLE = 290,
-    T_COMM = 291,
-    T_SEMI_COLON = 292,
-    T_COLON = 293,
-    T_GO_TO = 294,
-    T_CONTINUE = 295,
-    T_LE = 296,
-    T_GE = 297,
-    T_EQ = 298,
-    T_NEQ = 299,
-    T_LT = 300,
-    T_GT = 301,
-    T_BREAK = 302,
-    T_LAND = 303,
-    T_LOR = 304,
-    T_AND = 305,
-    T_OR = 306,
-    T_NOT = 307
+    T_TIMES = 261,
+    T_DIVIDE = 262,
+    T_PLUS = 263,
+    T_MINUS = 264,
+    T_EXPONENT = 265,
+    T_LBRACKET = 266,
+    T_RBRACKET = 267,
+    T_LOG = 268,
+    T_EXP = 269,
+    T_SQRT = 270,
+    T_NUMBER = 271,
+    T_VARIABLE = 272
   };
 #endif
 
@@ -130,7 +95,7 @@ union YYSTYPE
   double number;
   std::string *string;
 
-#line 96 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 99 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
 };
 
 typedef union YYSTYPE YYSTYPE;
