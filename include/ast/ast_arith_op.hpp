@@ -1,0 +1,168 @@
+#ifndef ast_arith_op_hpp
+#define ast_arith_op_hpp
+
+#include <string>
+#include <iostream>
+#include <cmath>
+
+class ArithOperator
+    : public ASTnode
+{
+protected:
+    nodePtr left;
+    nodePtr right;
+public:
+
+    ArithOperator(nodePtr _left, nodePtr _right)
+        : left(_left)
+        , right(_right)
+    {}
+
+    virtual void printC(std::ostream &outStream) const =0;
+
+    virtual void printPython(std::ostream &outStream) const {
+        throw std::runtime_error("No python Impl");
+        ;
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const =0;
+};
+
+class Add
+    : public ArithOperator
+{
+
+public:
+    Add(nodePtr _left, nodePtr _right)
+        : ArithOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" + ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" + ";
+        right->printPython(outStream);
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+
+class Sub
+    : public ArithOperator
+{
+
+public:
+    Sub(nodePtr _left, nodePtr _right)
+        : ArithOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" - ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" - ";
+        right->printPython(outStream);
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+
+class Mult
+    : public ArithOperator
+{
+
+public:
+    Mult(nodePtr _left, nodePtr _right)
+        : ArithOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" * ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" * ";
+        right->printPython(outStream);
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+class Div
+    : public ArithOperator
+{
+
+public:
+    Div(nodePtr _left, nodePtr _right)
+        : ArithOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" / ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" / ";
+        right->printPython(outStream);
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+class Mod
+    : public ArithOperator
+{
+
+public:
+    Mod(nodePtr _left, nodePtr _right)
+        : ArithOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" % ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" % ";
+        right->printPython(outStream);
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+#endif

@@ -4,59 +4,54 @@
 #include <string>
 #include <iostream>
 
+#include "ast_node.hpp"
+
 class Variable
-    : public Expression
+    : public ASTnode
 {
-private:
-    std::string id;
 public:
-    Variable(const std::string &_id)
+    std::string id;
+
+    Variable(std::string _id)
         : id(_id)
     {}
-
-    const std::string getId() const
-    { return id; }
-
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<id;
+    
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<id;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        // TODO-B : Run bin/eval_expr with a variable binding to make sure you understand how this works.
-        // If the binding does not exist, this will throw an error
-        return bindings.at(id);
-    }    
+    virtual void printPython(std::ostream &outStream) const override{
+        outStream<<id;
+    }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+
 };
 
 class Number
-    : public Expression
+    : public ASTnode
 {
-private:
-    double value;
 public:
-    Number(double _value)
-        : value(_value)
+    int value;
+    
+    Number(int value)
+        : value(value)
     {}
-
-    double getValue() const
-    { return value; }
-
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<value;
+    
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<value;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        // TODO-A : Run bin/eval_expr with a numeric expression to make sure you understand how this works.
-        return value;
+    virtual void printPython(std::ostream &outStream) const override{
+        outStream<<value;
     }
+
+    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+
 };
 
 
