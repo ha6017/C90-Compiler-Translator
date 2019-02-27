@@ -1,19 +1,21 @@
-#ifndef ast_arith_op_hpp
-#define ast_arith_op_hpp
+#ifndef ast_cond_op_hpp
+#define ast_cond_op_hpp
 
 #include <string>
 #include <iostream>
 #include <cmath>
 
-class ArithOperator
+#include "ast_node.hpp"
+
+class ConditionalOperator
     : public ASTnode
 {
 protected:
     nodePtr left;
     nodePtr right;
+    
 public:
-
-    ArithOperator(nodePtr _left, nodePtr _right)
+    ConditionalOperator(nodePtr _left, nodePtr _right)
         : left(_left)
         , right(_right)
     {}
@@ -23,30 +25,114 @@ public:
     virtual void printPython(std::ostream &outStream) const {
         throw std::runtime_error("No python Impl");
         
+
+    
     }
 
+    //! Evaluate the tree using the given mapping of variables to numbers
     virtual void convertIR(std::string dstreg, Context &myContext) const =0;
 };
 
-class Add
-    : public ArithOperator
+class CondEqual
+    : public ConditionalOperator
 {
 
 public:
-    Add(nodePtr _left, nodePtr _right)
-        : ArithOperator(_left, _right)
+    CondEqual(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
-        outStream<<" + ";
+        outStream<<" == ";
         right->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
         left->printPython(outStream);
-        outStream<<" + ";
+        outStream<<" == ";
+        right->printPython(outStream);
+    }
+
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+class NotEqual
+    : public ConditionalOperator
+{
+
+public:
+    NotEqual(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" != ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" != ";
+        right->printPython(outStream);
+    }
+
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+class Less
+    : public ConditionalOperator
+{
+
+public:
+    Less(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" < ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" < ";
+        right->printPython(outStream);
+    }
+
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+};
+
+class Greater
+    : public ConditionalOperator
+{
+
+public:
+    Greater(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
+    {}
+    
+    
+    virtual void printC(std::ostream &outStream) const override{
+        left->printC(outStream);
+        outStream<<" > ";
+        right->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        left->printPython(outStream);
+        outStream<<" > ";
         right->printPython(outStream);
     }
 
@@ -56,25 +142,25 @@ public:
 };
 
 
-class Sub
-    : public ArithOperator
+class LessOrEqual
+    : public ConditionalOperator
 {
 
 public:
-    Sub(nodePtr _left, nodePtr _right)
-        : ArithOperator(_left, _right)
+    LessOrEqual(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
-        outStream<<" - ";
+        outStream<<" <= ";
         right->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
         left->printPython(outStream);
-        outStream<<" - ";
+        outStream<<" <= ";
         right->printPython(outStream);
     }
 
@@ -83,80 +169,25 @@ public:
     }
 };
 
-
-class Mult
-    : public ArithOperator
+class GreaterOrEqual
+    : public ConditionalOperator
 {
 
 public:
-    Mult(nodePtr _left, nodePtr _right)
-        : ArithOperator(_left, _right)
+    GreaterOrEqual(nodePtr _left, nodePtr _right)
+        : ConditionalOperator(_left, _right)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
-        outStream<<" * ";
+        outStream<<" >= ";
         right->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
         left->printPython(outStream);
-        outStream<<" * ";
-        right->printPython(outStream);
-    }
-
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
-    }
-};
-
-class Div
-    : public ArithOperator
-{
-
-public:
-    Div(nodePtr _left, nodePtr _right)
-        : ArithOperator(_left, _right)
-    {}
-    
-    
-    virtual void printC(std::ostream &outStream) const override{
-        left->printC(outStream);
-        outStream<<" / ";
-        right->printC(outStream);
-    }
-
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
-        outStream<<" / ";
-        right->printPython(outStream);
-    }
-
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
-    }
-};
-
-class Mod
-    : public ArithOperator
-{
-
-public:
-    Mod(nodePtr _left, nodePtr _right)
-        : ArithOperator(_left, _right)
-    {}
-    
-    
-    virtual void printC(std::ostream &outStream) const override{
-        left->printC(outStream);
-        outStream<<" % ";
-        right->printC(outStream);
-    }
-
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
-        outStream<<" % ";
+        outStream<<" >= ";
         right->printPython(outStream);
     }
 

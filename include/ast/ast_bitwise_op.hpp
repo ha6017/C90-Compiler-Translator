@@ -29,7 +29,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual double printMips(std::ostream &outStream, Context &myContext) const =0;
+    virtual void convertIR(std::string dstreg, Context &myContext) const =0;
 };
 
 class BitAnd
@@ -54,7 +54,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -81,7 +81,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -108,7 +108,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -133,7 +133,7 @@ public:
         left->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -160,7 +160,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -186,7 +186,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };

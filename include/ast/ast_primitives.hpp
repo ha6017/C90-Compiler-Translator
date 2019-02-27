@@ -24,7 +24,7 @@ public:
         outStream<<id;
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 
@@ -48,7 +48,33 @@ public:
         outStream<<value;
     }
 
-    virtual double printMips(std::ostream &outStream, Context &myContext) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+        //NEED TO IMPLEMENT CONTEXT FIRST 
+    }
+
+};
+
+class ArrElement
+    : public ASTnode
+{
+public:
+    int element;
+    std::string id; 
+
+    ArrElement(int element, std::string id)
+        :   element(element)
+        ,   id(id)
+    {}
+    
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<id<<"["<<element<<"]";
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        outStream<<id<<"["<<element<<"]"
+    }
+
+    virtual void convertIR(std::string dstreg, Context &myContext) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 

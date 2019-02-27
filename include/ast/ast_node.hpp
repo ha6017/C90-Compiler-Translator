@@ -9,7 +9,7 @@
 
 class ASTnode;
 
-typedef const astNode *nodePtr;
+typedef const ASTnode *nodePtr;
 
 class ASTNode
 {
@@ -23,13 +23,11 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
         throw std::runtime_error("No python Impl");
-        
-
     
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual double printMips(std::ostream &outStream, Context &myContext) const =0;
+    virtual void convertIR(std::string dstreg , Context &myContext) const =0;
 };
 
 
