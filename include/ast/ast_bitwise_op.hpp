@@ -124,7 +124,7 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<" ~ ";
+        outStream<<" ~";
         left->printC(outStream);
     }
 

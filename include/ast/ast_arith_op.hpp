@@ -22,7 +22,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
         throw std::runtime_error("No python Impl");
-        ;
+        
     }
 
     virtual double printMips(std::ostream &outStream, Context &myContext) const =0;
