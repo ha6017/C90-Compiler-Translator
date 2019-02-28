@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "ast_node.hpp"
+#include "intermediate_rep.hpp"
 
 class Variable
     : public ASTnode
@@ -24,7 +25,7 @@ public:
         outStream<<id;
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 
@@ -48,7 +49,7 @@ public:
         outStream<<value;
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 
@@ -74,7 +75,7 @@ public:
         outStream<<id<<"["<<element<<"]"
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 

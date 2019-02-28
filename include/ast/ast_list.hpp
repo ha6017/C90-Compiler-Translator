@@ -1,20 +1,17 @@
-#ifndef ast_node_hpp
-#define ast_node_hpp
+#ifndef ast_bitwise_op_hpp
+#define ast_bitwise_op_hpp
 
 #include <string>
 #include <iostream>
-#include <map>
+#include <cmath>
 
-#include <memory>
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
 
-class ASTnode;
-
-typedef const ASTnode *nodePtr;
-
-class ASTNode
+class BranchList: ASTNode
 {
+protected:
+
+
 public:
     virtual ~ASTnode()
     {}
@@ -31,6 +28,5 @@ public:
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const =0;
 };
-
 
 #endif

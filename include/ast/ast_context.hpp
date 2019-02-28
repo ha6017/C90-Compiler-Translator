@@ -12,8 +12,8 @@
 class Context
 {
 public:
-    bool regOccupied[32]; //if 0 then
 
+    std::map<>
 
 };
 

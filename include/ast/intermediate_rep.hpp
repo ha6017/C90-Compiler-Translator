@@ -5,8 +5,14 @@
 #include <iostream>
 #include <cmath>
 
-// have a struct with id, r1, r2 and r3 then add header to every file, then change the input parameters of ast member vars to add to a vector of this struct
-
+struct IntermediateRep{
+    std::string id;
+    std::string outReg;
+    std::string inRegA;
+    std::string inRegB;
+    //maybe can add a prefix on the id for global variables so we can deal with them appropriate 
+    //id can maybe 
+}
 
 
 #endif

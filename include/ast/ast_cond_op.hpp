@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "ast_node.hpp"
+#include "intermediate_rep.hpp"
 
 class ConditionalOperator
     : public ASTnode
@@ -30,7 +31,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext) const =0;
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const =0;
 };
 
 class CondEqual
@@ -55,7 +56,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -82,7 +83,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -109,7 +110,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -136,7 +137,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -164,7 +165,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -191,7 +192,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
