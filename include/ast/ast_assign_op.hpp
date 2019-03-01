@@ -9,7 +9,7 @@
 #include "intermediate_rep.hpp"
 
 class UnaryAssignOperator
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     std::string var;
@@ -30,7 +30,7 @@ public:
 
 
 class BinaryAssignOperator
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     std::string var;

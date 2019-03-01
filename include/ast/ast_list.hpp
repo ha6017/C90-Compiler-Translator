@@ -13,7 +13,7 @@ protected:
 
 
 public:
-    virtual ~ASTnode()
+    virtual ~ASTNode()
     {}
 
     virtual void printC(std::ostream &outStream) const {

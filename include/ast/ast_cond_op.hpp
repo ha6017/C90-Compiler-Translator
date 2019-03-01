@@ -9,7 +9,7 @@
 #include "intermediate_rep.hpp"
 
 class ConditionalOperator
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr left;

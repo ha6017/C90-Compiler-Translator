@@ -8,7 +8,7 @@
 #include "intermediate_rep.hpp"
 
 class Variable
-    : public ASTnode
+    : public ASTNode
 {
 public:
     std::string id;
@@ -32,7 +32,7 @@ public:
 };
 
 class Number
-    : public ASTnode
+    : public ASTNode
 {
 public:
     int value;
@@ -56,7 +56,7 @@ public:
 };
 
 class ArrElement
-    : public ASTnode
+    : public ASTNode
 {
 public:
     int element;

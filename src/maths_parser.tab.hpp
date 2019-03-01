@@ -66,21 +66,75 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    T_INT = 258,
-    T_VOID = 259,
-    T_RETURN = 260,
-    T_TIMES = 261,
-    T_DIVIDE = 262,
-    T_PLUS = 263,
-    T_MINUS = 264,
-    T_EXPONENT = 265,
-    T_LBRACKET = 266,
-    T_RBRACKET = 267,
-    T_LOG = 268,
-    T_EXP = 269,
-    T_SQRT = 270,
-    T_NUMBER = 271,
-    T_VARIABLE = 272
+    T_TYPEDEF = 258,
+    T_EXTERN = 259,
+    T_STATIC = 260,
+    T_REGISTER = 261,
+    T_AUTO = 262,
+    T_INT = 263,
+    T_VOID = 264,
+    T_CHAR = 265,
+    T_SHORT = 266,
+    T_LONG = 267,
+    T_FLOAT = 268,
+    T_DOUBLE = 269,
+    T_SIGNED = 270,
+    T_RETURN = 271,
+    T_CONST = 272,
+    T_VOLATILE = 273,
+    I_INT = 274,
+    I_FLOAT = 275,
+    I_CHAR = 276,
+    T_IF = 277,
+    T_ELSE = 278,
+    T_WHILE = 279,
+    T_FOR = 280,
+    T_REM = 281,
+    T_DO = 282,
+    T_SWITCH = 283,
+    T_STRUCT = 284,
+    T_CASE = 285,
+    T_ENUM = 286,
+    T_UNION = 287,
+    T_UNSIGNED = 288,
+    T_TIMES = 289,
+    T_DIVIDE = 290,
+    T_PLUS = 291,
+    T_MINUS = 292,
+    T_EXPONENT = 293,
+    T_EQUAL = 294,
+    T_LEXCLAIM = 295,
+    T_LBRACKET = 296,
+    T_RBRACKET = 297,
+    T_LCBRACKET = 298,
+    T_RCBRACKET = 299,
+    T_LSBRACKET = 300,
+    T_RSBRACKET = 301,
+    T_LOG = 302,
+    T_EXP = 303,
+    T_SQRT = 304,
+    T_LSHIFT = 305,
+    T_RSHIFT = 306,
+    T_NUMBER = 307,
+    T_VARIABLE = 308,
+    T_COMMA = 309,
+    T_SEMI_COLON = 310,
+    T_COLON = 311,
+    T_GO_TO = 312,
+    T_CONTINUE = 313,
+    T_LE = 314,
+    T_GE = 315,
+    T_EQ = 316,
+    T_NEQ = 317,
+    T_LT = 318,
+    T_GT = 319,
+    T_BREAK = 320,
+    T_LAND = 321,
+    T_LOR = 322,
+    T_AND = 323,
+    T_OR = 324,
+    T_XOR = 325,
+    T_NOT = 326
   };
 #endif
 
@@ -91,11 +145,13 @@ union YYSTYPE
 {
 #line 18 "src/maths_parser.y" /* yacc.c:1927  */
 
+  const Ast_node *node;
   const Expression *expr;
-  double number;
+  double float;
+  int number;
   std::string *string;
 
-#line 99 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 155 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
 };
 
 typedef union YYSTYPE YYSTYPE;

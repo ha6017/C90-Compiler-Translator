@@ -6,17 +6,17 @@
 #include <map>
 
 #include <memory>
-#include "ast_node.hpp"
+#include "ast_context.hpp"
 #include "intermediate_rep.hpp"
 
-class ASTnode;
+class ASTNode;
 
-typedef const ASTnode *nodePtr;
+typedef const ASTNode *nodePtr;
 
 class ASTNode
 {
 public:
-    virtual ~ASTnode()
+    virtual ~ASTNode()
     {}
 
     virtual void printC(std::ostream &outStream) const {

@@ -9,7 +9,7 @@
 #include "intermediate_rep.hpp"
 
 class LogicalOperator
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr left;

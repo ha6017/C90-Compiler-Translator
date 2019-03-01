@@ -14,51 +14,49 @@ bool DEBUG = true;
 
 %%
 
-"typedef"						{debug(); return T_TYPEDEF;}
-"extern"						{debug();return T_EXTERN;}
-"static"						{debug();return T_STATIC;}
-"auto"							{debug();return T_AUTO;}
-"register"					{debug();return T_REGISTER;}
+"typedef"						{debug();  yylval.string=new std::string("typedef"); return T_TYPEDEF;}
+"extern"						{debug();  yylval.string=new std::string("extern"); return T_EXTERN;}
+"static"						{debug();  yylval.string=new std::string("static"); return T_STATIC;}
+"auto"							{debug();  yylval.string=new std::string("auto"); return T_AUTO;}
+"register"						{debug();  yylval.string=new std::string("register"); return T_REGISTER;}
 
-"void"							{debug();return T_VOID;}
-"char"							{debug();return T_CHAR;}
-"short"							{debug();return T_SHORT;}
-"int"								{debug();return T_INT;}
-"long"							{debug();return T_LONG;}
-"float"							{debug();return T_FLOAT;}
-"double"						{debug();return T_DOUBLE;}
-"signed"						{debug();return T_SIGNED;}
+"void"							{debug();  yylval.string=new std::string("void"); return T_VOID;}
+"char"							{debug();  yylval.string=new std::string("char"); return T_CHAR;}
+"short"							{debug();  yylval.string=new std::string("short"); return T_SHORT;}
+"int"							{debug();  yylval.string=new std::string("int"); return T_INT;}
+"long"							{debug();  yylval.string=new std::string("long"); return T_LONG;}
+"float"							{debug();  yylval.string=new std::string("float"); return T_FLOAT;}
+"double"						{debug();  yylval.string=new std::string("double"); return T_DOUBLE;}
+"signed"						{debug();  yylval.string=new std::string("signed"); return T_SIGNED;}
 
-"const"							{debug();return T_CONST;}
-"volatile"					{debug();return T_VOLATILE;}	
+"const"							{debug();  yylval.string=new std::string("const"); return T_CONST;}
+"volatile"						{debug();  yylval.string=new std::string("volatile"); return T_VOLATILE;}	
 
-"return"						{debug();return T_RETURN;}
-"break"			  { debug();return T_BREAK; }
+"return"						{debug();  yylval.string=new std::string("return"); return T_RETURN;}
+"break"			  				{ debug();  yylval.string=new std::string("break"); return T_BREAK; }
 
-"while"							{debug();return T_WHILE;}
-"if"								{debug();return T_IF;}
-"else"							{debug();return T_ELSE;}
-"for"								{debug();return T_FOR;}
-"do"								{debug();return T_DO;}
-"switch"         {debug();return T_SWITCH; }
+"while"							{debug();  yylval.string=new std::string("while"); return T_WHILE;}
+"if"							{debug();  yylval.string=new std::string("if"); return T_IF;}
+"else"							{debug();  yylval.string=new std::string("else"); return T_ELSE;}
+"for"							{debug();  yylval.string=new std::string("for"); return T_FOR;}
+"do"							{debug();  yylval.string=new std::string("do"); return T_DO;}
+"switch"        				{debug();  yylval.string=new std::string("switch"); return T_SWITCH; }
 
-"continue"		{ debug(); return T_CONTINUE; }
-"goto"			{debug(); return T_GO_TO; }
+"continue"						{debug();  yylval.string=new std::string("continue"); return T_CONTINUE; }
 
-"struct"  {debug();return T_STRUCT;}
+"struct"  						{debug();  yylval.string=new std::string("struct"); return T_STRUCT;}
 
-"case"    {debug();return T_CASE;}
-"enum"  { debug();return T_ENUM;}
-"register" {debug();return T_REGISTER;}
+"case"    						{debug();  yylval.string=new std::string("case"); return T_CASE;}
+"enum"  						{debug();  yylval.string=new std::string("enum"); return T_ENUM;}
 
-"union" {debug();return T_UNION;}
+"union" 						{debug();  yylval.string=new std::string("union"); return T_UNION;}
 
-"unsigned"  {debug();return T_UNSIGNED; }
+"unsigned"  					{debug();  yylval.string=new std::string("unsigned"); return T_UNSIGNED; }
 
-[A-Za-z_]([A-Za-z_]|[0-9])*  { debug();  yylval.string=new std::string(yytext); return T_VARIABLE; }
+[A-Za-z_]([A-Za-z_]|[0-9])*  	{debug();  yylval.string=new std::string(yytext); return T_VARIABLE; }
 
-[*]             { debug();  return T_TIMES; }
-[-]             { debug();  return T_MINUS; }
+[*]             { debug(); yylval.string = new std::string("*");  return T_TIMES; }
+[-]             { debug(); yylval.string = new std::string("-");  return T_MINUS; }
 [/]             { debug();  return T_DIVIDE; }
 [+]             { debug();  return T_PLUS; }
 [=]				      {debug();  return T_EQUAL; }
@@ -76,12 +74,12 @@ bool DEBUG = true;
 [;]				{debug();   return T_SEMI_COLON; }
 [:]				{debug();   return T_COLON; }
 
-[<]				{ debug();   return T_LT; }
-[>]				{ debug();   return T_GT; }
-[<][=]			{debug();   return T_LE; }
-[>][=]			{debug();    return T_GE; }
-[=][=]			{ debug();   return T_EQ; }
-[!][=]			{ debug();  return T_NEQ; }
+[<]				{ debug(); yylval.string = new std::string("<");   return T_LT; }
+[>]				{ debug(); yylval.string = new std::string("<");   return T_GT; }
+[<][=]			{debug();  yylval.string = new std::string("<=");   return T_LE; }
+[>][=]			{debug(); yylval.string = new std::string(">=");   return T_GE; }
+[=][=]			{ debug(); yylval.string = new std::string("==");   return T_EQ; }
+[!][=]			{ debug(); yylval.string = new std::string("!=");  return T_NEQ; }
 
 [!]				{ debug();  return T_LEXCLAIM; }
 [&][&]			{ debug();  return T_LAND; }
