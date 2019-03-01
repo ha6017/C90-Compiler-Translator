@@ -15,15 +15,11 @@ protected:
     nodePtr myBranchList;
 
 public:
-<<<<<<< HEAD
-    virtual ~ASTNode()
-=======
 
 
     BranchList(nodePtr _statement,nodePtr _statementList)
         : statement(_statement)
         , branchList(_myBranchList)
->>>>>>> 8adde5b516e9173c5580905930b7d2f473983d98
     {}
 
     virtual void printC(std::ostream &outStream) const {
