@@ -9,13 +9,13 @@
 #include "intermediate_rep.hpp"
 
 class If
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr condition;
     nodePtr branch;
 public:
-    BitwiseOperator(nodePtr _condition, nodePtr _branch)
+    If(nodePtr _condition, nodePtr _branch)
         : condition(_condition)
         , branch(_branch)
     {}
@@ -35,13 +35,13 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
      }
 };
 
 class IfElse
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr condition;
@@ -49,7 +49,7 @@ protected:
     nodePtr branchB;
 
 public:
-    BitwiseOperator(nodePtr _condition, nodePtr _branchA, nodePtr _branchB)
+    IfElse(nodePtr _condition, nodePtr _branchA, nodePtr _branchB)
         : condition(_condition)
         , branchA(_branchA)
         , branchB(_branchB)
@@ -72,20 +72,20 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
      }
 };
 
 class While
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr condition;
     nodePtr branch;
 
 public:
-    BitwiseOperator(nodePtr _condition, nodePtr _branch)
+    While(nodePtr _condition, nodePtr _branch)
         : condition(_condition)
         , branch(_branch)
     {}
@@ -105,20 +105,20 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
      }
 };
 
 class DoWhile
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     nodePtr condition;
     nodePtr branch;
 
 public:
-    BitwiseOperator(nodePtr _condition, nodePtr _branch)
+    DoWhile(nodePtr _condition, nodePtr _branch)
         : condition(_condition)
         , branch(_branch)
     {}
@@ -141,7 +141,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
      }
 };

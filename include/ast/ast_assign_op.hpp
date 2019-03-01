@@ -25,7 +25,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
 };
 
 
@@ -36,7 +36,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    UnaryAssignOperator(std::string _var, nodePtr exp)
+    BinaryAssignOperator(std::string _var, nodePtr _exp)
         : var(_var)
         , exp(_exp)
     {}
@@ -48,7 +48,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
 };
 
 class PreIncrement
@@ -70,7 +70,7 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -95,7 +95,7 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -119,7 +119,7 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -143,7 +143,7 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -170,7 +170,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -197,7 +197,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -224,34 +224,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
-    }
-};
-
-class SubEqual 
-    : public BinaryAssignOperator
-{
-protected:
-    std::string var;
-    nodePtr exp;
-public:
-    SubEqual(std::string _var, nodePtr _exp)
-        : BinaryAssignOperator(_var, _exp)
-    {}
-
-    virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"-=";
-        exp->printC(outStream);
-    }
-
-    virtual void printPython(std::ostream &outStream) const override{
-        outStream<<var<<"-=";
-        exp->printPython(outStream);
-    }
-
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -278,7 +251,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -290,7 +263,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    MultEqual(std::string _var, nodePtr _exp)
+    DivEqual(std::string _var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -305,7 +278,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };

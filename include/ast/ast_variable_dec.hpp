@@ -9,7 +9,7 @@
 #include "intermediate_rep.hpp"
 
 class DecInt
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     std::string var;
@@ -33,13 +33,13 @@ public:
 };
 
 class InitInt
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     std::string var;
     nodePtr exp;
 public:
-    DecInt(std::string _var)
+    InitInt(std::string _var, nodePtr _exp)
         :   var(_var)
         ,   exp(_exp)
     {}
@@ -61,13 +61,13 @@ public:
 };
 
 class DecArray
-    : public ASTnode
+    : public ASTNode
 {
 protected:
     std::string var;
     int size;
 public:
-    DecArray(std::string _var)
+    DecArray(std::string _var, int _size)
         :   var(_var)
         ,   size(_size)
     {}
@@ -81,13 +81,13 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
     }
 };
 
-class InitArray
-    : public ASTnode
+/*class InitArray
+    : public ASTNode
 {
 protected:
     std::string var;
@@ -101,7 +101,7 @@ public:
 
         //{1,2,3,4,5}  (int a, int b, )
 
-        listElements = new ASTNode[size];
+        listElements = new [size];
         for(int i=0;i<size;i++){
             listElements[i]=
         }
@@ -121,6 +121,6 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
 
     }
-};
+};*/
 
 #endif

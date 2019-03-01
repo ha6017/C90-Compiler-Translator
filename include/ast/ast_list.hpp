@@ -6,8 +6,9 @@
 #include <cmath>
 
 #include "ast_node.hpp"
+#include "intermediate_rep.hpp"
 
-class BranchList: ASTNode
+class BranchList : public ASTNode
 {
 protected:
 
@@ -15,15 +16,9 @@ protected:
     nodePtr myBranchList;
 
 public:
-<<<<<<< HEAD
-    virtual ~ASTNode()
-=======
-
-
-    BranchList(nodePtr _statement,nodePtr _statementList)
+    BranchList(nodePtr _statement,nodePtr _myBranchList)
         : statement(_statement)
-        , branchList(_myBranchList)
->>>>>>> 8adde5b516e9173c5580905930b7d2f473983d98
+        , myBranchList(_myBranchList)
     {}
 
     virtual void printC(std::ostream &outStream) const {
@@ -38,7 +33,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
         //detect return and end
         statement->convertIR(dstreg, myContext, IRlist);//make it so that statement only uses the dstreg if has return!
         if(myBranchList!=NULL){
@@ -47,7 +42,7 @@ public:
     }
 };
 
-class ArrayList: ASTNode
+/*class ArrayList: public ASTNode
 {
 protected:
 
@@ -56,7 +51,7 @@ protected:
 public:
 
 
-    BranchList(std::vector<nodePtr> _myArrayList)
+    ArrayList(std::vector<nodePtr> &_myArrayList)
     {
         myArrayList=_myArrayList;
     }
@@ -70,7 +65,6 @@ public:
             }
         }
         std::cout<<"}";
-
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -87,9 +81,9 @@ public:
   
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
         
     }
-};
+};*/
 
 #endif

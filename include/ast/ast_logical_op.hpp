@@ -29,7 +29,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
 };
 
 class LogAnd
@@ -54,7 +54,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
@@ -81,18 +81,18 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
 
 class LogNot
-    : public BitwiseOperator
+    : public LogicalOperator
 {
 
 public:
-    LogNot(nodePtr _left)
-        : left(_left);
+    LogNot(nodePtr _left, nodePtr _right)
+        : LogicalOperator(_left,_right)
     {}
     
     
@@ -106,7 +106,7 @@ public:
         left->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         //NEED TO IMPLEMENT CONTEXT FIRST 
     }
 };
