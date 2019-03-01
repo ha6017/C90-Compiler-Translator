@@ -1,5 +1,5 @@
-#ifndef ast_bitwise_op_hpp
-#define ast_bitwise_op_hpp
+#ifndef ast_cond_statement_hpp
+#define ast_cond_statement_hpp
 
 #include <string>
 #include <iostream>

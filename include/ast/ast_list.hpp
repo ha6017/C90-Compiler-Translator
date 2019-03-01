@@ -16,17 +16,9 @@ protected:
     nodePtr myBranchList;
 
 public:
-<<<<<<< HEAD
     BranchList(nodePtr _statement,nodePtr _myBranchList)
         : statement(_statement)
         , myBranchList(_myBranchList)
-=======
-
-
-    BranchList(nodePtr _statement,nodePtr _statementList)
-        : statement(_statement)
-        , branchList(_myBranchList)
->>>>>>> 271354c4c8cb6a4ebb3a4ebe4a65f2f11296ac30
     {}
 
     virtual void printC(std::ostream &outStream) const {

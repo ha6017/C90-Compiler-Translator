@@ -21,10 +21,10 @@ public:
         scope_counter=0;
     }
     std::string makeRegName(){
-        return "reg_"+reg_counter++;
+        return "reg_"+ std::to_string(reg_counter++);
     }
     std::string makeVarName(std::string inName){
-        return inName+scope_counter;
+        return (inName + std::to_string(scope_counter));
     }
 
     void enterScope(){
