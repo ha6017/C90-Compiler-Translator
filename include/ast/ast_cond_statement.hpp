@@ -21,11 +21,11 @@ public:
     {}
 
     virtual void printC(std::ostream &outStream) const {
-        std::cout<<"if(";
+        outStream<<"if(";
         condition->printC(outStream);
-        std::cout<<"){";
+        outStream<<"){";
         branch->printC(outStream);
-        std::cout<<"}";
+        outStream<<"}";
     }
 
     virtual void printPython(std::ostream &outStream) const 
@@ -56,82 +56,13 @@ public:
     {}
 
     virtual void printC(std::ostream &outStream) const {
-        std::cout<<"if(";
+        outStream<<"if(";
         condition->printC(outStream);
-        std::cout<<"){";
+        outStream<<"){";
         branchA->printC(outStream);
-        std::cout<<"} else {";
+        outStream<<"} else {";
         branchB->printC(outStream);
-        std::cout<<"}";
-    }
-
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
-        
-    }
-
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
-     }
-};
-
-class While
-    : public ASTNode
-{
-protected:
-    nodePtr condition;
-    nodePtr branch;
-
-public:
-    While(nodePtr _condition, nodePtr _branch)
-        : condition(_condition)
-        , branch(_branch)
-    {}
-
-    virtual void printC(std::ostream &outStream) const {
-        std::cout<<"while(";
-        condition->printC(outStream);
-        std::cout<<"){";
-        branch->printC(outStream);
-        std::cout<<"}";
-    }
-
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
-        
-    }
-
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
-     }
-};
-
-class DoWhile
-    : public ASTNode
-{
-protected:
-    nodePtr condition;
-    nodePtr branch;
-
-public:
-    DoWhile(nodePtr _condition, nodePtr _branch)
-        : condition(_condition)
-        , branch(_branch)
-    {}
-
-    virtual void printC(std::ostream &outStream) const {
-
-        std::cout<<"do {";
-        branch->printC(outStream);
-        std::cout<<"}";
-
-        std::cout<<"while(";
-        condition->printC(outStream);
-        std::cout<<")";
+        outStream<<"}";
     }
 
     virtual void printPython(std::ostream &outStream) const 
