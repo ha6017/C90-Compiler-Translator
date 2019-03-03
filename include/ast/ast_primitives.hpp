@@ -26,7 +26,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDI", dstreg, "reg_0", id));
+        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", id));
     }
 
 };

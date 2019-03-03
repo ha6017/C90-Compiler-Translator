@@ -36,7 +36,8 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
+        // std::string my_label=myContext.makeLabelName();
+        // IRlist.pushback(IntermediateRep("BNE", left_reg, right_reg, my_label));
      }
 };
 

@@ -56,7 +56,11 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("AND", dstreg, left_reg, right_reg));
     }
 };
 
@@ -83,7 +87,11 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("OR", dstreg, left_reg, right_reg));    
     }
 };
 
@@ -110,32 +118,41 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("XOR", dstreg, left_reg, right_reg));       
     }
 };
 
 class BitNot
-    : public BitwiseOperator
+    : public ASTNode
 {
-
+protected:
+    nodePtr exp;
 public:
-    BitNot(nodePtr _left, nodePtr _right)
-        : BitwiseOperator(_left,_right)
+    RShift(nodePtr _exp)
+    : exp(_exp)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<" ~";
         left->printC(outStream);
+        outStream<<" ~ ";
+        right->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        outStream<<" ~ ";
         left->printPython(outStream);
+        outStream<<" ~ ";
+        right->printPython(outStream);
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string exp_reg = myContext.makeRegName();
+        exp->convertIR(exp_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("NOR", dstreg, exp_reg, exp_reg));     
     }
 };
 
@@ -162,7 +179,11 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("SLLV", dstreg, left_reg, right_reg));   
     }
 };
 class RShift
@@ -188,7 +209,11 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.pushback(IntermediateRep("SRLV", dstreg, left_reg, right_reg)); 
     }
 };
 

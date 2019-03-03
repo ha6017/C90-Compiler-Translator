@@ -187,8 +187,7 @@ public:
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
         IRlist.pushback(IntermediateRep("DIV", "N_A", left_reg, right_reg));
-        IRlist.pushback(IntermediateRep("MFHI", dstreg, "N_A", "N_A"));       
-    }
+        IRlist.pushback(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));       }
 };
 
 #endif
