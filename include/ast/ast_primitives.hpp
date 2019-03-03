@@ -11,22 +11,22 @@ class Variable
     : public ASTNode
 {
 public:
-    std::string id;
+    std::string var;
 
-    Variable(std::string _id)
-        : id(_id)
+    Variable(std::string _var)
+        : var(_var)
     {}
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<id;
+        outStream<<var;
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        outStream<<id;
+        outStream<<var;
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", id));
+        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));
     }
 
 };

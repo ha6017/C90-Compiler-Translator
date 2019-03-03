@@ -43,9 +43,26 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+        initialisation->convertIR(dstreg, myContext, IRlist);
 
-     }
+        std::string compare_reg = myContext.makeRegName();
+        condition->convertIR(compare_reg, myContext, IRlist);
+
+        std::string my_labelA=myContext.makeLabelName();
+        std::string my_labelB=myContext.makeLabelName();
+
+        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A");
+
+        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelB));
+
+        branch->convertIR(dstreg, myContext, IRlist);
+        postLoopExp->convertIR(dstreg, myContext, IRlist);
+        
+        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelA));
+
+        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A");
+    }
 };
 
 class While

@@ -60,7 +60,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("AND", dstreg, left_reg, right_reg));
+        IRlist.push_back(IntermediateRep("AND", dstreg, left_reg, right_reg));
     }
 };
 
@@ -91,7 +91,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("OR", dstreg, left_reg, right_reg));    
+        IRlist.push_back(IntermediateRep("OR", dstreg, left_reg, right_reg));    
     }
 };
 
@@ -122,7 +122,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("XOR", dstreg, left_reg, right_reg));       
+        IRlist.push_back(IntermediateRep("XOR", dstreg, left_reg, right_reg));       
     }
 };
 
@@ -152,7 +152,7 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         std::string exp_reg = myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("NOR", dstreg, exp_reg, exp_reg));     
+        IRlist.push_back(IntermediateRep("NOR", dstreg, exp_reg, exp_reg));     
     }
 };
 
@@ -183,7 +183,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("SLLV", dstreg, left_reg, right_reg));   
+        IRlist.push_back(IntermediateRep("SLLV", dstreg, left_reg, right_reg));   
     }
 };
 class RShift
@@ -213,7 +213,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("SRLV", dstreg, left_reg, right_reg)); 
+        IRlist.push_back(IntermediateRep("SRLV", dstreg, left_reg, right_reg)); 
     }
 };
 

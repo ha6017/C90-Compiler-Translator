@@ -58,7 +58,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, left_reg, right_reg));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, left_reg, right_reg));
     }
 };
 
@@ -90,7 +90,7 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("SUBU", dstreg, left_reg, right_reg));    
+        IRlist.push_back(IntermediateRep("SUBU", dstreg, left_reg, right_reg));    
     }
 };
 
@@ -122,8 +122,8 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("MULT", "N_A", left_reg, right_reg));
-        IRlist.pushback(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));
+        IRlist.push_back(IntermediateRep("MULT", "N_A", left_reg, right_reg));
+        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));
     }
 };
 
@@ -154,8 +154,8 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("DIV", "N_A", left_reg, right_reg));
-        IRlist.pushback(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));    
+        IRlist.push_back(IntermediateRep("DIV", "N_A", left_reg, right_reg));
+        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));    
     }
 };
 
@@ -186,8 +186,8 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("DIV", "N_A", left_reg, right_reg));
-        IRlist.pushback(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));       }
+        IRlist.push_back(IntermediateRep("DIV", "N_A", left_reg, right_reg));
+        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));       }
 };
 
 #endif

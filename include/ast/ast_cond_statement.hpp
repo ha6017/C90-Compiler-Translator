@@ -36,9 +36,21 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        // std::string my_label=myContext.makeLabelName();
-        // IRlist.pushback(IntermediateRep("BNE", left_reg, right_reg, my_label));
-     }
+
+        std::string my_label=myContext.makeLabelName();
+        std::string compare_reg = myContext.makeRegName();
+
+        IRlist.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A");
+        myContext.enterScope();
+
+        condition->convertIR(compare_reg, myContext, IRlist);//evals the boolean condition
+        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_label)); // branch until after the if statement if condition evals to 0
+        branch->convertIR(dstreg, myContext, IRlist);
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A");
+
+        IRlist.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A"); // scope needs thinking
+        myContext.exitScope();
+    }
 };
 
 class IfElse
@@ -73,9 +85,26 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+        std::string compare_reg = myContext.makeRegName();
+        condition->convertIR(compare_reg, myContext, IRlist); // evals the boolean condition
 
-     }
+
+        IRlist.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A");
+        myContext.enterScope();
+
+        std::string my_labelA=myContext.makeLabelName();
+        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelA)); // branch to the else statement if condition evals to 0
+        branchA->convertIR(dstreg, myContext, IRlist);
+        std::string my_labelB=myContext.makeLabelName(); // if the if statement is taken skip to the end of the else statement
+        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
+        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A");
+        branchB->convertIR(dstreg, myContext, IRlist);
+        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A");
+
+        IRlist.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A"); // scope needs thinking
+        myContext.exitScope();
+    }
 };
 
 

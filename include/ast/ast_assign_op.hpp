@@ -71,8 +71,8 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDI", var, var, "1"));
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));    
+        IRlist.push_back(IntermediateRep("ADDI", var, var, "1"));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));    
     }
 };
 
@@ -97,8 +97,8 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("SUBI", var, var, "1"));
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));     
+        IRlist.push_back(IntermediateRep("SUBI", var, var, "1"));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));     
     }
 };
 
@@ -122,8 +122,8 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
-        IRlist.pushback(IntermediateRep("ADDI", var, var, "1"));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
+        IRlist.push_back(IntermediateRep("ADDI", var, var, "1"));
     }
 };
 
@@ -147,8 +147,8 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
-        IRlist.pushback(IntermediateRep("SUBI", var, var, "1"));    
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
+        IRlist.push_back(IntermediateRep("SUBI", var, var, "1"));    
     }
 };
 
@@ -177,8 +177,9 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("ADDU", var, "reg_0", exp_reg)); //cannot put var itself in the convert IR cus var might be refered to in an expression.
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", exp_reg)); //because assignment also has a return value
+        
+        IRlist.push_back(IntermediateRep("ADDU", var, "reg_0", exp_reg)); //cannot put var itself in the convert IR cus var might be refered to in an expression.
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); //because assignment also has a return value
     }
 };
 
@@ -207,8 +208,8 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("ADDU", var, var, exp_reg));
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));    
+        IRlist.push_back(IntermediateRep("ADDU", var, var, exp_reg));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));    
     }
 };
 
@@ -237,8 +238,8 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("SUBU", var, var, exp_reg));
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));       
+        IRlist.push_back(IntermediateRep("SUBU", var, var, exp_reg));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));       
     }
 };
 
@@ -267,9 +268,9 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("MULT", "N_A", var, exp_reg));
-        IRlist.pushback(IntermediateRep("MFLO", var, "N_A", "N_A"));       
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));
+        IRlist.push_back(IntermediateRep("MULT", "N_A", var, exp_reg));
+        IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
     }
 };
 
@@ -296,11 +297,13 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+
+        
         exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.pushback(IntermediateRep("DIV", "N_A", var, exp_reg));
-        IRlist.pushback(IntermediateRep("MFLO", var, "N_A", "N_A"));       
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));
+        IRlist.push_back(IntermediateRep("DIV", "N_A", var, exp_reg));
+        IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
     }
 };
 
