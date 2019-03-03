@@ -26,7 +26,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        IRlist.pushback(IntermediateRep("ADDI", dstreg, "reg_0", id));
     }
 
 };
@@ -50,7 +50,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        IRlist.pushback(IntermediateRep("ADDI", dstreg, "reg_0", std::to_string(value)));
     }
 
 };

@@ -17,7 +17,7 @@ private:
 
 public:
     Context(){
-        reg_counter=0;
+        reg_counter=1;
         scope_counter=0;
     }
     std::string makeRegName(){
