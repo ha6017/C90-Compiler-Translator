@@ -61,12 +61,13 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));//this sets dstreg to 0 if equal and 1 if not so need to invert
-        
-        std::string one_reg = myContext.makeRegName();
-        IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));// SLT with 1 inverts from 0 to 1 and 1 to 0. Use same logic for logNot
+
+        std::string my_label=myContext.makeLabelName();
+
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
+        IRlist.push_back(IntermediateRep("BNE", left_reg, right_reg, my_label));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A");
     }
 };
 
@@ -97,8 +98,11 @@ public:
         left->convertIR(left_reg, myContext, IRlist);
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));
+        std::string my_label=myContext.makeLabelName();
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
+        IRlist.push_back(IntermediateRep("BEQ", left_reg, right_reg, my_label));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A");
     }
 };
 

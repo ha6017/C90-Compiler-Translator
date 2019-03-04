@@ -62,6 +62,7 @@ public:
         std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
         IRlist.push_back(IntermediateRep("AND", dstreg, left_reg, right_reg));
+        
     }
 };
 

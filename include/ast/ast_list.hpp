@@ -31,6 +31,10 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 076ca05336d4ebaf29145c64c8dc98cbd578e665
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -43,8 +47,40 @@ public:
     }
 };
 
+<<<<<<< HEAD
 /*
 class ArrayList: ASTNode
+=======
+class ParamList : public ASTNode
+{
+protected:
+
+    nodePtr param;
+    nodePtr paramList;
+
+public:
+    ParamList(nodePtr _statement,nodePtr _myBranch)
+        : param(_param)
+        , paramList(_paramList)
+    {}
+
+    virtual void printC(std::ostream &outStream) const {
+
+    }
+
+    virtual void printPython(std::ostream &outStream) const {
+
+        
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+
+    }
+};
+
+/*class ArrayList: public ASTNode
+>>>>>>> 076ca05336d4ebaf29145c64c8dc98cbd578e665
 {
 protected:
 

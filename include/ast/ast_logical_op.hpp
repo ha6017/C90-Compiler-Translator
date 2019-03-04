@@ -55,7 +55,11 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();//BRANCH TO TEST IF EQUAL TO 0 and then AND THEM
+        right->convertIR(right_reg, myContext, IRlist);
+        IRlist.push_back(IntermediateRep("AND", dstreg, left_reg, right_reg));
     }
 };
 
