@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -175,7 +176,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        exp_reg=myContext.makeRegName();
+        std::string exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
         
         IRlist.push_back(IntermediateRep("ADDU", var, "reg_0", exp_reg)); //cannot put var itself in the convert IR cus var might be refered to in an expression.
@@ -206,7 +207,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        exp_reg=myContext.makeRegName();
+        std::string exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
         IRlist.push_back(IntermediateRep("ADDU", var, var, exp_reg));
         IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));    
@@ -236,7 +237,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        exp_reg=myContext.makeRegName();
+        std::string exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
         IRlist.push_back(IntermediateRep("SUBU", var, var, exp_reg));
         IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));       
@@ -266,7 +267,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        exp_reg=myContext.makeRegName();
+        std::string exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
         IRlist.push_back(IntermediateRep("MULT", "N_A", var, exp_reg));
         IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
@@ -299,11 +300,39 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
 
         
-        exp_reg=myContext.makeRegName();
+        std::string exp_reg=myContext.makeRegName();
         exp->convertIR(exp_reg, myContext, IRlist);
         IRlist.push_back(IntermediateRep("DIV", "N_A", var, exp_reg));
         IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
         IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
+    }
+};
+
+class RemEqual 
+    : public BinaryAssignOperator
+{
+protected:
+    std::string var;
+    nodePtr exp;
+public:
+    RemEqual(std::string _var, nodePtr _exp)
+        : BinaryAssignOperator(_var, _exp)
+    {}
+
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<var<<"%=";
+        exp->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+        outStream<<var<<"%=";
+        exp->printPython(outStream);
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+
+       
     }
 };
 

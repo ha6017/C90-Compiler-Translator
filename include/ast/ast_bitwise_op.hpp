@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -132,8 +133,8 @@ class BitNot
 protected:
     nodePtr exp;
 public:
-    RShift(nodePtr _exp)
-    : exp(_exp)
+    BitNot(nodePtr _exp)
+        : exp(_exp)
     {}
     
     

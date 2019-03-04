@@ -1,5 +1,5 @@
-#ifndef intermediate_rep_hpp
-#define intermediate_rep_hpp
+#ifndef INTERMEDIATE_REP_HPP
+#define INTERMEDIATE_REP_HPP 
 
 #include <string>
 #include <iostream>
@@ -18,7 +18,7 @@ struct IntermediateRep{
         ,   inRegA(_inRegA)
         ,   inRegB(_inRegB)
     {}
-}
+};
 
 
 #endif

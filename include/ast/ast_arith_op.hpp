@@ -4,9 +4,12 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
+
+//#include "intermediate_rep.hpp"
 
 class ArithOperator
     : public ASTNode
@@ -75,7 +78,7 @@ public:
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
-        outStream<<" - ";
+        outStream<<" - " ;
         right->printC(outStream);
     }
 
