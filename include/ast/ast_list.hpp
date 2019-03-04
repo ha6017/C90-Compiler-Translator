@@ -30,7 +30,8 @@ public:
     }
 
     virtual void printPython(std::ostream &outStream) const {
-    
+
+
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -40,6 +41,34 @@ public:
         if(myBranch!=NULL){
             myBranch->convertIR(dstreg, myContext, IRlist);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
+    }
+};
+
+class ParamList : public ASTNode
+{
+protected:
+
+    nodePtr param;
+    nodePtr paramList;
+
+public:
+    ParamList(nodePtr _statement,nodePtr _myBranch)
+        : param(_param)
+        , paramList(_paramList)
+    {}
+
+    virtual void printC(std::ostream &outStream) const {
+
+    }
+
+    virtual void printPython(std::ostream &outStream) const {
+
+        
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+
     }
 };
 
