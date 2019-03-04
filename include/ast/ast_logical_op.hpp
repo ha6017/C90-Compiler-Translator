@@ -65,9 +65,21 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();//BRANCH TO TEST IF EQUAL TO 0 and then AND THEM
+        std::string right_reg = myContext.makeRegName();
         right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("AND", dstreg, left_reg, right_reg));
+
+        std::string my_labelA=myContext.makeLabelName();
+        std::string my_labelB=myContext.makeLabelName();
+
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
+        IRlist.push_back(IntermediateRep("BEQ", left_reg, "reg_0", my_labelA));
+        IRlist.push_back(IntermediateRep("BEQ", right_reg, "reg_0", my_labelA));
+        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
+
+        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0")); 
+        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+
     }
 };
 
@@ -99,7 +111,25 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+        std::string left_reg = myContext.makeRegName();
+        left->convertIR(left_reg, myContext, IRlist);
+        std::string right_reg = myContext.makeRegName();
+        right->convertIR(right_reg, myContext, IRlist);
+
+        std::string my_labelA=myContext.makeLabelName();
+        std::string my_labelB=myContext.makeLabelName();
+
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
+        std::string one_reg = myContext.makeRegName();
+        IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
+
+        IRlist.push_back(IntermediateRep("BEQ", left_reg, one_reg, my_labelA));
+        IRlist.push_back(IntermediateRep("BEQ", right_reg, one_reg, my_labelA));
+        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
+
+        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
+        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
     }
 };
 
@@ -128,7 +158,15 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-   
+        std::string exp_reg = myContext.makeRegName();
+        exp->convertIR(exp_reg, myContext, IRlist);
+
+        std::string my_label=myContext.makeLabelName();
+
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
+        IRlist.push_back(IntermediateRep("BEQ", exp_reg, "reg_0", my_label));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0")); 
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
     }
 };
 

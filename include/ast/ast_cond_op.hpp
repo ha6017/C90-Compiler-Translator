@@ -230,7 +230,7 @@ public:
         IRlist.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));    
         std::string one_reg = myContext.makeRegName();
         IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));        
+        IRlist.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));
     }
 };
 
