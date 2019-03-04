@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 
@@ -31,10 +32,6 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 076ca05336d4ebaf29145c64c8dc98cbd578e665
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -47,10 +44,6 @@ public:
     }
 };
 
-<<<<<<< HEAD
-/*
-class ArrayList: ASTNode
-=======
 class ParamList : public ASTNode
 {
 protected:
@@ -59,7 +52,7 @@ protected:
     nodePtr paramList;
 
 public:
-    ParamList(nodePtr _statement,nodePtr _myBranch)
+    ParamList(nodePtr _param,nodePtr _paramList)
         : param(_param)
         , paramList(_paramList)
     {}
@@ -80,7 +73,6 @@ public:
 };
 
 /*class ArrayList: public ASTNode
->>>>>>> 076ca05336d4ebaf29145c64c8dc98cbd578e665
 {
 protected:
 

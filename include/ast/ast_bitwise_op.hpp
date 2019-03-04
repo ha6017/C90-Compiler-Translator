@@ -140,15 +140,13 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
-        left->printC(outStream);
-        outStream<<" ~ ";
-        right->printC(outStream);
+        outStream<<"~";
+        exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
-        outStream<<" ~ ";
-        right->printPython(outStream);
+        outStream<<"~";
+        exp->printC(outStream);
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{

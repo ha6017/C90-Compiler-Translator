@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"

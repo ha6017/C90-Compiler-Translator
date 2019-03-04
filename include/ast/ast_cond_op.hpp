@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -67,7 +68,7 @@ public:
         IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
         IRlist.push_back(IntermediateRep("BNE", left_reg, right_reg, my_label));
         IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A");
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
     }
 };
 
@@ -102,7 +103,7 @@ public:
         IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
         IRlist.push_back(IntermediateRep("BEQ", left_reg, right_reg, my_label));
         IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A");
+        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
     }
 };
 

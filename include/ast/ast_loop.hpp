@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -52,7 +53,7 @@ public:
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A");
+        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
 
         IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelB));
 
@@ -61,7 +62,7 @@ public:
         
         IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelA));
 
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A");
+        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
     }
 };
 

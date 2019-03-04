@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <vector>
+
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -51,7 +53,7 @@ public:
         : type(_type)
         , id(_id)
         , myParamList(_myParamList)
-        , myBranch(__myBranch)
+        , myBranch(_myBranch)
     {}
 
     virtual void printC(std::ostream &outStream) const {

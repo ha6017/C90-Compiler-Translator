@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
@@ -26,7 +27,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDU", dstreg, "reg_0", var));
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
     }
 
 };
@@ -50,7 +51,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.pushback(IntermediateRep("ADDI", dstreg, "reg_0", std::to_string(value)));
+        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", std::to_string(value)));
     }
 
 };
