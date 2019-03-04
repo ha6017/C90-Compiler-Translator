@@ -57,7 +57,7 @@ class PreIncrement
 {
 
 public:
-    PreIncrement(std::string _var)
+    PreIncrement(std::string &_var)
         : UnaryAssignOperator(_var)
     {}
     
@@ -83,7 +83,7 @@ class PreDecrement
 {
 
 public:
-    PreDecrement(std::string _var)
+    PreDecrement(std::string &_var)
         : UnaryAssignOperator(_var)
     {}
     

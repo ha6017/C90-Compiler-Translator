@@ -9,7 +9,7 @@
 #include "ast_node.hpp"
 #include "intermediate_rep.hpp"
 
-class DecInt
+/*class DecInt
     : public ASTNode
 {
 protected:
@@ -31,7 +31,7 @@ public:
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
 
     }
-};
+};*/
 
 class InitInt
     : public ASTNode

@@ -105,8 +105,8 @@ STATEMENT :
 	
 // Local Variables	
 VARIABLE_DECLARATION_FUNCTION :
-	| T_INT T_VARIABLE { $$ = new VariableDeclaration2(*$1,*$2, NULL, false);}
-	| T_INT T_VARIABLE T_EQUAL EXPR  { $$ = new VariableDeclaration2(*$1,*$2,$4, false); }
+	| T_INT T_VARIABLE { $$ = new InitInt(*$2, NULL);}
+	| T_INT T_VARIABLE T_EQUAL EXPR  { $$ = new InitInt(*$2,$4); }
 
 ARRAY_DECLARATION:
 	T_INT T_VARIABLE T_LSBRACKET I_INT T_RSBRACKET { $$ = new ArrayDeclaration(*$2, $4);}
@@ -115,8 +115,8 @@ ARRAY_DECLARATION:
 	
 // Global Variables	
 VARIABLE_DECLARATION :
-	| T_INT T_VARIABLE T_SEMI_COLON { $$ = new VariableDeclaration(*$1,*$2, NULL);}
-	| T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON { $$ = new VariableDeclaration(*$1,*$2,$4); }
+	| T_INT T_VARIABLE T_SEMI_COLON { $$ = new InitInt(*$2, NULL);}
+	| T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON { $$ = new InitInt(*$2,$4); }
 
 ASSIGNMENT_STATEMENT :
 	| T_VARIABLE T_EQUAL EXPR { $$ = new AssignEqual(*$1,$3);}
@@ -182,7 +182,7 @@ EXPR6 :		 EXPR6 T_LE EXPR7	{ $$ = new LessOrEqual($1,$3); }
 			| EXPR6 T_GT EXPR7	{ $$ = new Greater ($1,$3); }
 			| EXPR7 { $$ = $1;}
 		
-EXPR7 :		| EXPR7 T_EQ  EXPR8	{ $$ = new CondEqual($1,$3); /*check*/ } 
+EXPR7 :		| EXPR7 T_EQ  EXPR8	{ $$ = new CondEqual($1,$3);  } 
 			| EXPR7 T_NEQ EXPR8	{ $$ = new NotEqual($1, $3);}
 			| EXPR8 { $$ = $1;}
 			
