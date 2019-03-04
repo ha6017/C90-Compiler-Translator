@@ -24,6 +24,10 @@ public:
         , myParamList(_myParamList)
     {}
 
+    virtual ~FuncProto()
+    {
+        delete myParamList;
+    }
     virtual void printC(std::ostream &outStream) const {
 
     }
@@ -56,6 +60,12 @@ public:
         , myBranch(_myBranch)
     {}
 
+    virtual ~FuncDef()
+    {
+        delete myParamList;
+        delete myBranch;
+    }
+
     virtual void printC(std::ostream &outStream) const {
 
     }
@@ -83,6 +93,11 @@ public:
         : id(_id)
         , myParamList(_myParamList)
     {}
+
+    virtual ~FuncCall()
+    {
+        delete myParamList;
+    }
 
     virtual void printC(std::ostream &outStream) const {
 

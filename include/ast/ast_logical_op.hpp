@@ -20,12 +20,15 @@ public:
         : left(_left)
         , right(_right)
     {}
-
+    virtual ~LogicalOperator()
+    {
+        delete left;
+        delete right;
+    }
     virtual void printC(std::ostream &outStream) const =0;
 
     virtual void printPython(std::ostream &outStream) const {
         throw std::runtime_error("No python Impl");
-        
 
     }
 
@@ -41,7 +44,11 @@ public:
     LogAnd(nodePtr _left, nodePtr _right)
         : LogicalOperator(_left, _right)
     {}
-    
+    virtual ~LogAnd()
+    {
+        delete left;
+        delete right;
+    }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -72,7 +79,12 @@ public:
     LogOr(nodePtr _left, nodePtr _right)
         : LogicalOperator(_left, _right)
     {}
-    
+
+    virtual ~LogOr()
+    {
+        delete left;
+        delete right;
+    }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -92,27 +104,31 @@ public:
 };
 
 class LogNot
-    : public LogicalOperator
+    : public ASTNode
 {
-
+protected:
+    nodePtr exp;
 public:
-    LogNot(nodePtr _left, nodePtr _right)
-        : LogicalOperator(_left,_right)
+    LogNot(nodePtr _exp)
+        : exp(_exp)
     {}
-    
+    virtual ~LogNot()
+    {
+        delete exp;
+    }
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<" ! ";
-        left->printC(outStream);
+        outStream<<"!";
+        exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        outStream<<" ! ";
-        left->printPython(outStream);
+        outStream<<"!";
+        exp->printC(outStream);
     }
 
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+   
     }
 };
 

@@ -22,6 +22,13 @@ public:
         , branch(_branch)
     {}
 
+    virtual ~If()
+    {
+        delete condition;
+        delete branch;
+    }
+    
+
     virtual void printC(std::ostream &outStream) const {
         outStream<<"if(";
         condition->printC(outStream);
@@ -69,6 +76,13 @@ public:
         , branchA(_branchA)
         , branchB(_branchB)
     {}
+
+    virtual ~IfElse()
+    {
+        delete condition;
+        delete branchA;
+        delete branchB;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"if(";

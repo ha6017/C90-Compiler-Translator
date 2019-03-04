@@ -19,6 +19,7 @@ public:
         : var(_var)
     {}
 
+
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var;
     }
@@ -44,6 +45,11 @@ public:
         :   var(_var)
         ,   exp(_exp)
     {}
+
+    virtual ~InitInt()
+    {
+        delete exp;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<" = ";

@@ -17,6 +17,7 @@ public:
     Variable(std::string _var)
         : var(_var)
     {}
+
     
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var;
@@ -41,6 +42,7 @@ public:
     Number(int value)
         : value(value)
     {}
+
     
     virtual void printC(std::ostream &outStream) const override{
         outStream<<value;
