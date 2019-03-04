@@ -332,6 +332,11 @@ public:
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
 
+        std::string exp_reg=myContext.makeRegName();
+        exp->convertIR(exp_reg, myContext, IRlist);
+        IRlist.push_back(IntermediateRep("DIV", "N_A", var, exp_reg));
+        IRlist.push_back(IntermediateRep("MFHI", var, "N_A", "N_A"));       
+        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
        
     }
 };
