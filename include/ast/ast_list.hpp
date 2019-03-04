@@ -23,6 +23,12 @@ public:
         , myBranchList(_myBranchList)
     {}
 
+    virtual ~BranchList()
+    {
+        delete statement;
+        delete myBranchList;
+    }
+
     virtual void printC(std::ostream &outStream) const {
         statement->printC(outStream);//make it so that statement only uses the dstreg if has return!
         if(myBranchList!=NULL){
@@ -57,6 +63,11 @@ public:
         , paramList(_paramList)
     {}
 
+    virtual ~ParamList()
+    {
+        delete param;
+        delete paramList;
+    }
     virtual void printC(std::ostream &outStream) const {
 
     }

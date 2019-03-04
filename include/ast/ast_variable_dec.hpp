@@ -19,6 +19,7 @@ public:
         : var(_var)
     {}
 
+
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var;
     }
@@ -29,7 +30,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
+        IRlist.push_back(IntermediateRep("ADDI", var, "reg_0", "0"));
     }
 };*/
 
@@ -45,6 +46,11 @@ public:
         ,   exp(_exp)
     {}
 
+    virtual ~InitInt()
+    {
+        delete exp;
+    }
+
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<" = ";
         exp->printC(outStream);
@@ -57,7 +63,9 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
+        std::string exp_reg=myContext.makeRegName();
+        exp->convertIR(exp_reg, myContext, IRlist);
+        IRlist.push_back(IntermediateRep("ADDU", var, "reg_0", exp_reg));
     }
 };
 
