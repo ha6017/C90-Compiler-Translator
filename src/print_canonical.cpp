@@ -1,10 +1,14 @@
-#include "ast.hpp"
+#include "../include/ast.hpp"
+#include <string>
+#include <stdio.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-    const Expression *ast=parseAST();
+    Context cont= new Context(); 
 
-    ast->print(std::cout);
+    const ASTNode *ast=parseAST();
+
+    ast->printC(std::cout);
     std::cout<<std::endl;
 
     return 0;

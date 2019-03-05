@@ -1,5 +1,5 @@
-#ifndef "ast_prog_hpp"
-#define "ast_prog_hpp"
+#ifndef ast_prog_hpp
+#define ast_prog_hpp
 
 #include <string>
 #include <iostream>
@@ -17,12 +17,12 @@ protected:
     nodePtr prog1;
     nodePtr proglist;
 public:
-    ProgList(Nodeptr _prog1, Nodeptr _proglist)
+    ProgList(nodePtr _prog1, nodePtr _proglist)
         : prog1(_prog1)
         , proglist(_proglist)
     {}
 
-    virtual ~Proglist()
+    virtual ~ProgList()
     { 
         delete prog1;
         delete proglist;
@@ -72,3 +72,5 @@ public:
 
      }
 };
+
+#endif

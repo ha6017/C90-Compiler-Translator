@@ -51,7 +51,7 @@ protected:
     nodePtr paramList;
 
 public:
-    ParamList(nodePtr _statement,nodePtr _myBranch)
+    ParamList(nodePtr _param,nodePtr _paramList)
         : param(_param)
         , paramList(_paramList)
     {}
