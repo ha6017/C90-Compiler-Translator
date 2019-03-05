@@ -16,21 +16,16 @@ class FuncProto
 protected:
     std::string type;
     std::string id;
-    nodePtr myParamList;  //<---- subject to change 
+    //nodePtr myParamList;  //<---- subject to change 
 public:
-    FuncProto(std::string _type, std::string _id, nodePtr _myParamList)
+    FuncProto(std::string &_type, std::string &_id)
         : type(_type)
         , id(_id)
-        , myParamList(_myParamList)
     {}
 
     virtual ~FuncProto()
-    {
-        delete myParamList;
-    }
-    virtual void printC(std::ostream &outStream) const {
-
-    }
+    { }
+    virtual void printC(std::ostream &outStream) const {}
 
     virtual void printPython(std::ostream &outStream) const 
     {
@@ -53,7 +48,7 @@ protected:
     nodePtr myParamList;  //<---- subject to change 
     nodePtr myBranch;
 public:
-    FuncDef(std::string _type, std::string _id, nodePtr _myParamList, nodePtr _myBranch )
+    FuncDef(std::string &_type, std::string &_id, nodePtr _myParamList, nodePtr _myBranch )
         : type(_type)
         , id(_id)
         , myParamList(_myParamList)
@@ -89,7 +84,7 @@ protected:
     std::string id;
     nodePtr myParamList;  //<---- subject to change 
 public:
-    FuncCall(std::string _id, nodePtr _myParamList)
+    FuncCall(std::string &_id, nodePtr _myParamList)
         : id(_id)
         , myParamList(_myParamList)
     {}

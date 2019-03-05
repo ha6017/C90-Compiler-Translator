@@ -86,7 +86,6 @@ public:
 class LogOr
     : public LogicalOperator
 {
-
 public:
     LogOr(nodePtr _left, nodePtr _right)
         : LogicalOperator(_left, _right)

@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <cmath>
-#include <vector>
 
 #include "ast_node.hpp"
 
@@ -22,12 +21,6 @@ public:
         : statement(_statement)
         , myBranchList(_myBranchList)
     {}
-
-    virtual ~BranchList()
-    {
-        delete statement;
-        delete myBranchList;
-    }
 
     virtual void printC(std::ostream &outStream) const {
         statement->printC(outStream);//make it so that statement only uses the dstreg if has return!
@@ -58,23 +51,18 @@ protected:
     nodePtr paramList;
 
 public:
-    ParamList(nodePtr _param,nodePtr _paramList)
+    ParamList(nodePtr _statement,nodePtr _myBranch)
         : param(_param)
         , paramList(_paramList)
     {}
 
-    virtual ~ParamList()
-    {
-        delete param;
-        delete paramList;
-    }
     virtual void printC(std::ostream &outStream) const {
 
     }
 
     virtual void printPython(std::ostream &outStream) const {
 
-        
+
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

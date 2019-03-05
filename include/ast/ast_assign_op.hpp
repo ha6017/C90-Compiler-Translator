@@ -108,7 +108,7 @@ class PostIncrement //THIS IS MUCH HARDER BECAUSE NEEDS TO OCCUR AFTER THE FOR L
 {
 
 public:
-    PostIncrement(std::string _var)
+    PostIncrement(std::string &_var)
         : UnaryAssignOperator(_var)
     {}
     
@@ -133,7 +133,7 @@ class PostDecrement //THIS IS MUCH HARDER BECAUSE NEEDS TO OCCUR AFTER THE FOR L
 {
 
 public:
-    PostDecrement(std::string _var)
+    PostDecrement(std::string &_var)
         : UnaryAssignOperator(_var)
     {}
     
@@ -160,7 +160,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    AssignEqual(std::string _var, nodePtr _exp)
+    AssignEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -191,7 +191,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    PlusEqual(std::string _var, nodePtr _exp)
+    PlusEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -221,7 +221,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    SubEqual(std::string _var, nodePtr _exp)
+    SubEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -251,7 +251,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    MultEqual(std::string _var, nodePtr _exp)
+    MultEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -282,7 +282,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    DivEqual(std::string _var, nodePtr _exp)
+    DivEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
@@ -315,7 +315,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    RemEqual(std::string _var, nodePtr _exp)
+    RemEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 

@@ -14,7 +14,7 @@ class Variable
 public:
     std::string var;
 
-    Variable(std::string _var)
+    Variable(std::string &_var)
         : var(_var)
     {}
 
