@@ -73,4 +73,8 @@ public:
      }
 };
 
+<<<<<<< HEAD
 #endif
+=======
+#endif
+>>>>>>> 976c63f940fdea6315ea284f4968708faeed2323

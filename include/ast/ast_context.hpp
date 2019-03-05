@@ -13,10 +13,11 @@ class Context
 {
 private:
     int reg_counter;
-    int scope_counter;
     int label_counter;
 
 public:
+
+    int scope_counter;
     Context(){
         reg_counter=1; //cus R0 is always 0
         scope_counter=0;
