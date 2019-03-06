@@ -31,7 +31,7 @@ public:
         
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
 };
 
 class Add
@@ -56,12 +56,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, left_reg, right_reg));
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+         
+        std::string left_reg = myContext.findTemp();
+        left->convertIR(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->convertIR(right_reg, myContext, outStream);
+        outStream<<"ADDU "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
     }
 };
 
@@ -88,12 +91,14 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SUBU", dstreg, left_reg, right_reg));    
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->convertIR(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->convertIR(right_reg, myContext, outStream);
+        outStream<<"SUBU "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);   
     }
 };
 
@@ -120,13 +125,16 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("MULT", "N_A", left_reg, right_reg));
-        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+
+        std::string left_reg = myContext.findTemp();
+        left->convertIR(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->convertIR(right_reg, myContext, outStream);
+        outStream<<"MULT "<<left_reg<<", "<<right_reg<<std::endl;
+        outStream<<"MFLO "<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);   
     }
 };
 
@@ -152,13 +160,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("DIV", "N_A", left_reg, right_reg));
-        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));    
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->convertIR(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->convertIR(right_reg, myContext, outStream);
+        outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
+        outStream<<"MFLO "<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);   
     }
 };
 
@@ -184,13 +194,16 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("DIV", "N_A", left_reg, right_reg));
-        IRlist.push_back(IntermediateRep("MFLO", dstreg, "N_A", "N_A"));       }
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->convertIR(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->convertIR(right_reg, myContext, outStream);
+        outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
+        outStream<<"MFHI "<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
+    }
 };
 
 #endif

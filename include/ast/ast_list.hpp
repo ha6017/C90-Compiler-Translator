@@ -34,11 +34,11 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         //detect return and end
-        statement->convertIR(dstreg, myContext, IRlist);//make it so that statement only uses the dstreg if has return!
+        statement->convertIR(dstreg, myContext, outStream);//make it so that statement only uses the dstreg if has return!
         if(myBranchList!=NULL){
-            myBranchList->convertIR(dstreg, myContext, IRlist);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
+            myBranchList->convertIR(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
     }
 };
@@ -66,7 +66,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
 
     }
 };
@@ -111,7 +111,7 @@ public:
 
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> IRlist) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::vector<IntermediateRep> outStream) const {
 
     }
 };*/

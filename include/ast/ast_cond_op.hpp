@@ -38,7 +38,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class CondEqual
@@ -67,18 +67,18 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+    virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
+        right->convertIR(right_reg, myContext, outStream);
 
         std::string my_label=myContext.makeLabelName();
 
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
-        IRlist.push_back(IntermediateRep("BNE", left_reg, right_reg, my_label));
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
+        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
+        outStream.push_back(IntermediateRep("BNE", left_reg, right_reg, my_label));
+        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
+        outStream.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
     }
 };
 
@@ -109,16 +109,16 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
+        right->convertIR(right_reg, myContext, outStream);
         std::string my_label=myContext.makeLabelName();
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
-        IRlist.push_back(IntermediateRep("BEQ", left_reg, right_reg, my_label));
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
+        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
+        outStream.push_back(IntermediateRep("BEQ", left_reg, right_reg, my_label));
+        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
+        outStream.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
     }
 };
 
@@ -149,12 +149,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));    
+        right->convertIR(right_reg, myContext, outStream);
+        outStream.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));    
     }
 };
 
@@ -185,12 +185,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));    
+        right->convertIR(right_reg, myContext, outStream);
+        outStream.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));    
     }
 };
 
@@ -222,15 +222,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));    
+        right->convertIR(right_reg, myContext, outStream);
+        outStream.push_back(IntermediateRep("SLT", dstreg, right_reg, left_reg));    
         std::string one_reg = myContext.makeRegName();
-        IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));
+        outStream.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
+        outStream.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));
     }
 };
 
@@ -261,15 +261,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
+        left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));    
+        right->convertIR(right_reg, myContext, outStream);
+        outStream.push_back(IntermediateRep("SLT", dstreg, left_reg, right_reg));    
         std::string one_reg = myContext.makeRegName();
-        IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));    
+        outStream.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
+        outStream.push_back(IntermediateRep("SLT", dstreg, dstreg, one_reg));    
     }
 };
 

@@ -26,7 +26,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
 };
 
 
@@ -49,7 +49,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
 };
 
 class PreIncrement
@@ -71,9 +71,17 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("ADDI", var, var, "1"));
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));    
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        myContext.UnlockReg(var_reg);
     }
 };
 
@@ -97,9 +105,17 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("SUBI", var, var, "1"));
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));     
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+         
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        myContext.UnlockReg(var_reg);
     }
 };
 
@@ -122,9 +138,16 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
-        IRlist.push_back(IntermediateRep("ADDI", var, var, "1"));
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+         
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        myContext.UnlockReg(var_reg);
     }
 };
 
@@ -147,9 +170,15 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); 
-        IRlist.push_back(IntermediateRep("SUBI", var, var, "1"));    
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+
+        myContext.UnlockReg(var_reg);
     }
 };
 
@@ -175,12 +204,15 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        
-        IRlist.push_back(IntermediateRep("ADDU", var, "reg_0", exp_reg)); //cannot put var itself in the convert IR cus var might be refered to in an expression.
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var)); //because assignment also has a return value
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"ADDU "<<var_reg<<", "<<reg_0<<", "<< exp_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< exp_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg);
     }
 };
 
@@ -206,11 +238,18 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("ADDU", var, var, exp_reg));
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));    
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg);
+
     }
 };
 
@@ -236,11 +275,16 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SUBU", var, var, exp_reg));
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));       
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SUBU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg);    
     }
 };
 
@@ -266,12 +310,17 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("MULT", "N_A", var, exp_reg));
-        IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
+        outStream<<"MFLO "<<var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg); 
     }
 };
 
@@ -297,14 +346,18 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
 
-        
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("DIV", "N_A", var, exp_reg));
-        IRlist.push_back(IntermediateRep("MFLO", var, "N_A", "N_A"));       
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
+        outStream<<"MFLO "<<var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg); 
     }
 };
 
@@ -330,14 +383,17 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-
-        std::string exp_reg=myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("DIV", "N_A", var, exp_reg));
-        IRlist.push_back(IntermediateRep("MFHI", var, "N_A", "N_A"));       
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
-       
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        std::string var_reg = myContext.findTemp();
+        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
+        outStream<<"MFHI "<<var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
+        myContext.UnlockReg(exp_reg); 
     }
 };
 

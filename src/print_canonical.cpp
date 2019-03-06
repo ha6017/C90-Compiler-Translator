@@ -4,9 +4,8 @@
 
 int main(int argc, char *argv[])
 {
-    Context cont= new Context(); 
 
-    const ASTNode *ast=parseAST();
+    nodePtr ast=parseAST();
 
     ast->printC(std::cout);
     std::cout<<std::endl;
