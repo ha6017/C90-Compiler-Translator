@@ -8,7 +8,7 @@
 
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class If
     : public ASTNode
@@ -44,7 +44,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
 
         std::string my_label=myContext.makeLabelName();
         std::string compare_reg = myContext.makeRegName();
@@ -101,7 +101,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         std::string compare_reg = myContext.makeRegName();
         condition->convertIR(compare_reg, myContext, outStream); // evals the boolean condition
 

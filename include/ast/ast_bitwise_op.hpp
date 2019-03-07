@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class BitwiseOperator
     : public ASTNode
@@ -250,7 +250,7 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
-         
+
         std::string left_reg = myContext.findTemp();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();

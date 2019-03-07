@@ -20,14 +20,22 @@ public:
 
     std::map<std::string, unsigned int>globals;
     std::map<std::string, unsigned int>locals;
+    std::map<std::string, std::string>funcNameToLabel;
+    int funcLabelCounter;
+
     bool freeRegs[32]; //0 is locked, 1 is unlocked
     int scope_counter;
-    
+    int currentArrayElement;
+    std::string currentArrayName;
+
+
     Context(){
         scope_counter=0;
         label_counter=0;
+        funcLabelCounter=0;
         currentGlobalPointer=0x20000000;
         currentLocalPointer=0x20400000;
+        currentArrayElement=0; //this is for arraylist
     }
 
     std::string makeVarName(std::string inName){
@@ -40,9 +48,9 @@ public:
     void enterScope(){
         scope_counter++;
     }
-    void exitScope(){
-        scope_counter--;
-    }
+    // void exitScope(){
+    //     scope_counter--;
+    // }
 
     std::string findTemp(){
         for(int i=8;i<16;i++){
@@ -90,13 +98,19 @@ public:
         currentLocalPointer=currentLocalPointer+4*size;
         return currentLocalPointer-4*size;
     }
-    unsigned int findGlobalArrayElement(std::string name, int index){
+    unsigned int findLocalArrayElement(std::string name, int index){
         return globals[name]+4*index;
     }
     unsigned int findGlobalArrayElement(std::string name, int index){
         return locals[name]+4*index;
     }
+    void addFunction(std::string funcName){
+        funcNameToLabel[funcName]="Func_"+funcLabelCounter++;
+    }
 
+    std::string findFuncLabel(std::string funcName){
+        return funcNameToLabel[funcName]; // GREAT NEXT STEP IS ADDING THIS TO THE FUNCTIONS AND YOURE GOOD! dont forget enter scope.
+    }
 
     //need to make a 
 };

@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class For
     : public ASTNode
@@ -45,7 +45,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         //enter scope dont forget
         initialisation->convertIR(dstreg, myContext, outStream);
 
@@ -100,7 +100,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         outStream.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
         myContext.enterScope();
         std::string compare_reg = myContext.makeRegName();
@@ -153,7 +153,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         outStream.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
         myContext.enterScope();
 
@@ -195,7 +195,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         outStream.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
         myContext.enterScope();
         std::string my_label="bottom_"+std::to_string(myContext.scope_counter);
@@ -228,7 +228,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         std::string my_label="top_"+std::to_string(myContext.scope_counter);
         outStream.push_back(IntermediateRep("J", "N_A", "N_A", my_label));
      }

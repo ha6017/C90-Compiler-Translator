@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class ConditionalOperator
     : public ASTNode
@@ -38,7 +38,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
 };
 
 class CondEqual
@@ -67,7 +67,7 @@ public:
         right->printPython(outStream);
     }
 
-    virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
@@ -109,7 +109,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
@@ -149,7 +149,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
@@ -185,7 +185,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
@@ -222,7 +222,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();
@@ -261,7 +261,7 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.makeRegName();
         left->convertIR(left_reg, myContext, outStream);
         std::string right_reg = myContext.makeRegName();

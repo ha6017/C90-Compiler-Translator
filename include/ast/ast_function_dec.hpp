@@ -8,7 +8,7 @@
 
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class FuncProto
     : public ASTNode

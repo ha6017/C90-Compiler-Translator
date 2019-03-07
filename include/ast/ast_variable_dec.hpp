@@ -7,7 +7,8 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
+
 
 /*class DecInt
     : public ASTNode
@@ -76,12 +77,12 @@ class LocalInitArray
 protected:
     std::string var;
     int size;
-    nodePtr myParamList;
+    nodePtr myArrayList;
 public:
-    LocalDecArray(std::string _var, int _size, nodePtr _myParamList)
+    LocalDecArray(std::string _var, int _size, nodePtr _myArrayList)
         :   var(_var)
         ,   size(_size)
-        ,   myParamList(_myParamList)
+        ,   myArrayList(_myArrayList)
     {}
 
     virtual void printC(std::ostream &outStream) const {
@@ -98,7 +99,9 @@ public:
     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         unsigned int arrayLocation=createLocalArray(var,size);
         if(myParamList!=NULL){
-            outStream<<"LW "<<"reg_0"<<", "<<arrayLocation<<"(0)"<<std::endl;  //this needs to be swapped with the PARAMS!!!!
+            myContext.currentArrayElement=0;
+            myContext.currentArrayName=var;
+            myArrayList->convertIR(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
@@ -152,14 +155,18 @@ class GlobalInitArray
 protected:
     std::string var;
     int size;
+    nodePtr myArrayList;
 public:
-    GlobalDecArray(std::string _var, int _size)
+    GlobalInitArray(std::string _var, int _size, nodePtr _myArrayList)
         :   var(_var)
         ,   size(_size)
+        ,   myArrayList(_myArrayList)
     {}
 
     virtual void printC(std::ostream &outStream) const {
-        outStream<<"int "<<var<<"["<<size<<"]";
+        outStream<<"int "<<var<<"["<<size<<"] = {";
+        myParamList->printC(outStream);
+        outStream<<"}";
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -167,10 +174,12 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
         unsigned int arrayLocation=createGlobalArray(var,size);
         if(myParamList!=NULL){
-            outStream<<"LW "<<"reg_0"<<", "<<arrayLocation<<"(0)"<<std::endl;  //this needs to be swapped with the PARAMS!!!!
+            myContext.currentArrayElement=0;
+            myContext.currentArrayName=var;
+            myArrayList->convertIR(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
@@ -179,41 +188,6 @@ public:
     }
 };
 
-/*class InitArray
-    : public ASTNode
-{
-protected:
-    std::string var;
-    int size;
-    nodePtr listElements; //can make into array cus size is known ASTnode
-public:
-    InitArray(std::string _var, int _size, nodePtr _listElements)
-        :   var(_var)
-        ,   size(_size)
-    {
 
-        //{1,2,3,4,5}  (int a, int b, )
-
-        listElements = new [size];
-        for(int i=0;i<size;i++){
-            listElements[i]=
-        }
-    }
-
-    virtual void printC(std::ostream &outStream) const {
-        outStream<<"int "<<var<<" = ";
-        exp->printC(outStream);
-    }
-
-    virtual void printPython(std::ostream &outStream) const {
-        outStream<<var<<" = ";
-        exp->printPython(outStream);
-    }
-
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::vector<IntermediateRep> outStream) const {
-
-    }
-};*/
 
 #endif

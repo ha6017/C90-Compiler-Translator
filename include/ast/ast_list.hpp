@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "ast_node.hpp"
+#include "ast_context.hpp"
 
 class BranchList: ASTNode
 {
@@ -48,12 +49,12 @@ class ParamList : public ASTNode
 protected:
 
     nodePtr param;
-    nodePtr paramList;
+    nodePtr myParamList;
 
 public:
     ParamList(nodePtr _param,nodePtr _paramList)
         : param(_param)
-        , paramList(_paramList)
+        , myParamList(_myParamList)
     {}
 
     virtual void printC(std::ostream &outStream) const {
@@ -71,49 +72,92 @@ public:
     }
 };
 
-/*class ArrayList: public ASTNode
+class ArrayList: public ASTNode
 {
 protected:
 
-    std::vector<nodePtr> myArrayList;
+    nodePtr exp;
+    nodePtr myArrayList;
 
 public:
 
 
-    BranchList(std::vector<nodePtr> _myArrayList)
-    {
-        myArrayList=_myArrayList;
-    }
+    ArrayList(nodePtr _exp,nodePtr _myArrayList)
+        :   exp(_exp)
+        ,   myArrayList(_myArrayList)
+        {}
+
+    
 
     virtual void printC(std::ostream &outStream) const {
-        std::cout<<"{";
-        for(int i = 0; i < myArrayList.size();i++){
-            myArrayList[i]->printC(outStream);
-            if(i!=myArrayList.size()-1){
-                std::cout<<", "<<std::endl;
-            }
-        }
-        std::cout<<"}";
+        // std::cout<<"{";
+        // for(int i = 0; i < myArrayList.size();i++){
+        //     myArrayList[i]->printC(outStream);
+        //     if(i!=myArrayList.size()-1){
+        //         std::cout<<", "<<std::endl;
+        //     }
+        // }
+        // std::cout<<"}";
 
     }
 
     virtual void printPython(std::ostream &outStream) const {
 
-        std::cout<<"{";
-        for(int i = 0; i < myArrayList.size();i++){
-            myArrayList[i]->printC(outStream);
-            if(i!=myArrayList.size()-1){
-                std::cout<<", ";
-            }
-        }
-        std::cout<<"}";
+        // std::cout<<"{";
+        // for(int i = 0; i < myArrayList.size();i++){
+        //     myArrayList[i]->printC(outStream);
+        //     if(i!=myArrayList.size()-1){
+        //         std::cout<<", ";
+        //     }
+        // }
+        // std::cout<<"}";
     }
 
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void convertIR(std::string dstreg, Context myContext, std::vector<IntermediateRep> outStream) const {
+        std::string exp_reg = myContext.findTemp();
+        exp->convertIR(exp_reg, myContext, outStream);
+        outStream<<"LW "<<exp_reg<<", "<<findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
+        myContext.UnlockReg(exp_reg);
+
+        if(myArrayList!=NULL){
+            myArrayList->convertIR(dstreg, myContext,outStream);
+        }
+    }
+};
+
+
+class ProgList
+    : public ASTNode
+{
+protected:
+    nodePtr prog;
+    nodePtr proglist;
+public:
+    ProgList(nodePtr _prog, nodePtr _proglist)
+        : prog1(_prog)
+        , proglist(_proglist)
+    {}
+
+    virtual ~ProgList()
+    { 
+        delete prog1;
+        delete proglist;
+    }
+
+    virtual void printC(std::ostream &outStream) const {}
+
+    virtual void printPython(std::ostream &outStream) const 
+    {
+        throw std::runtime_error("No python Impl");
+        
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
 
     }
-};*/
+};
 
 #endif

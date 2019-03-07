@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class LogicalOperator
     : public ASTNode
@@ -114,25 +114,27 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
-        std::string left_reg = myContext.makeRegName();
+
+        std::string left_reg = myContext.findTemp();
         left->convertIR(left_reg, myContext, outStream);
-        std::string right_reg = myContext.makeRegName();
+        std::string right_reg = myContext.findTemp();
         right->convertIR(right_reg, myContext, outStream);
 
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
-        std::string one_reg = myContext.makeRegName();
-        outStream.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
 
-        outStream.push_back(IntermediateRep("BEQ", left_reg, one_reg, my_labelA));
-        outStream.push_back(IntermediateRep("BEQ", right_reg, one_reg, my_labelA));
-        outStream.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
 
-        outStream.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
-        outStream.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<"BNE "<<left_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"BNE "<<right_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"J "<<my_labelB<<std::endl;
+
+        outStream<<my_labelA<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<my_labelB<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
     }
 };
 
@@ -161,15 +163,16 @@ public:
     }
 
      virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
-        std::string exp_reg = myContext.makeRegName();
+
+        std::string exp_reg = myContext.findTemp();
         exp->convertIR(exp_reg, myContext, outStream);
 
         std::string my_label=myContext.makeLabelName();
-
-        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
-        outStream.push_back(IntermediateRep("BEQ", exp_reg, "reg_0", my_label));
-        outStream.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0")); 
-        outStream.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<"BEQ "<<exp_reg<<", reg_0,"<<my_label<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<my_label<<std::endl;
+        myContext.UnlockReg(exp_reg);
     }
 };
 

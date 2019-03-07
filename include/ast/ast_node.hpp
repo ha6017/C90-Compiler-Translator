@@ -7,8 +7,6 @@
 #include <vector>
 
 #include <memory>
-#include "ast_context.hpp"
-#include "intermediate_rep.hpp"
 
 class ASTNode;
 
