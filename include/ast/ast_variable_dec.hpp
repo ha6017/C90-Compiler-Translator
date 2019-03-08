@@ -30,7 +30,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         outStream.push_back(IntermediateRep("ADDI", var, "reg_0", "0"));
     }
 };*/
@@ -47,7 +47,7 @@ public:
         ,   exp(_exp)
     {}
 
-    virtual ~InitInt()
+    virtual ~LocalInitInt()
     {
         delete exp;
     }
@@ -63,10 +63,10 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
-        outStream<<"SW "<<exp_reg<<", "<<createLocalInt(var)<<"(0)"<<std::endl;
+        exp->printMips(exp_reg, myContext, outStream);
+        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(exp_reg);
     }
 };
@@ -79,7 +79,7 @@ protected:
     int size;
     nodePtr myArrayList;
 public:
-    LocalDecArray(std::string _var, int _size, nodePtr _myArrayList)
+    LocalInitArray(std::string _var, int _size, nodePtr _myArrayList)
         :   var(_var)
         ,   size(_size)
         ,   myArrayList(_myArrayList)
@@ -87,7 +87,7 @@ public:
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<"["<<size<<"] = {";
-        myParamList->printC(outStream);
+        myArrayList->printC(outStream);
         outStream<<"}";
     }
 
@@ -96,12 +96,12 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
-        unsigned int arrayLocation=createLocalArray(var,size);
-        if(myParamList!=NULL){
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        unsigned int arrayLocation=myContext.createLocalArray(var,size);
+        if(myArrayList!=NULL){
             myContext.currentArrayElement=0;
             myContext.currentArrayName=var;
-            myArrayList->convertIR(dstreg, myContext, outStream);
+            myArrayList->printMips(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
@@ -122,7 +122,7 @@ public:
         ,   exp(_exp)
     {}
 
-    virtual ~InitInt()
+    virtual ~GlobalInitInt()
     {
         delete exp;
     }
@@ -138,12 +138,12 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"ADDU "<<var_reg<<", "<<reg_0<<", "<< exp_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<createGlobalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<var_reg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);
     }
@@ -165,7 +165,7 @@ public:
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<"["<<size<<"] = {";
-        myParamList->printC(outStream);
+        myArrayList->printC(outStream);
         outStream<<"}";
     }
 
@@ -174,12 +174,12 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
-        unsigned int arrayLocation=createGlobalArray(var,size);
-        if(myParamList!=NULL){
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        unsigned int arrayLocation=myContext.createGlobalArray(var,size);
+        if(myArrayList!=NULL){
             myContext.currentArrayElement=0;
             myContext.currentArrayName=var;
-            myArrayList->convertIR(dstreg, myContext, outStream);
+            myArrayList->printMips(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 

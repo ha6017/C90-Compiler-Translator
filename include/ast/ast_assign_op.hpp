@@ -26,7 +26,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 
@@ -49,7 +49,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class PreIncrement
@@ -71,15 +71,15 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0, "<< var_reg<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         myContext.UnlockReg(var_reg);
     }
@@ -105,15 +105,15 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         myContext.UnlockReg(var_reg);
     }
@@ -138,14 +138,14 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         myContext.UnlockReg(var_reg);
     }
@@ -170,13 +170,13 @@ public:
 
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
 
         myContext.UnlockReg(var_reg);
     }
@@ -204,14 +204,11 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
-        std::string var_reg = myContext.findTemp();
-        outStream<<"ADDU "<<var_reg<<", "<<reg_0<<", "<< exp_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< exp_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
-        myContext.UnlockReg(var_reg);
+        exp->printMips(exp_reg, myContext, outStream);
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
+        outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(exp_reg);
     }
 };
@@ -238,15 +235,15 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"ADDU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);
 
@@ -275,14 +272,14 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"SUBU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);    
     }
@@ -310,15 +307,15 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -346,16 +343,16 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -383,15 +380,15 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFHI "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<reg_0<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }

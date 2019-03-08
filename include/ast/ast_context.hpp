@@ -7,46 +7,68 @@
 
 #include <memory>
 
+static int label_counter=0;
+
 
 
 class Context
 {
-private:
-    int label_counter;
+
+public:
     unsigned int currentGlobalPointer;
     unsigned int currentLocalPointer;
-public:
-
+    int scopeCountPerScope;
 
     std::map<std::string, unsigned int>globals;
     std::map<std::string, unsigned int>locals;
     std::map<std::string, std::string>funcNameToLabel;
     int funcLabelCounter;
-
+    unsigned int stackOffset;
     bool freeRegs[32]; //0 is locked, 1 is unlocked
     int scope_counter;
-    int currentArrayElement;
-    std::string currentArrayName;
+    int currentArrayElement;    //used for array init
+    std::string currentArrayName;   //used for array init
 
 
     Context(){
         scope_counter=0;
-        label_counter=0;
         funcLabelCounter=0;
+        stackOffset =0x20000000;
         currentGlobalPointer=0x20000000;
         currentLocalPointer=0x20400000;
         currentArrayElement=0; //this is for arraylist
+        scopeCountPerScope=0;
+
+        //CREATE FOR LOOP TO FREE THE TEMPS
+
+    }
+    Context(const Context &inContext){
+        //I NEED TO CREATE COPY CONSTRUCTOR AND CHANGE EVERYTHING TO PASS BY REFERENCE. THEN FIGURE OUT FUNCTION LABEL MAPPINGS
+        globals=inContext.globals;
+        globals=inContext.locals;
+        funcNameToLabel=inContext.funcNameToLabel;
+        funcLabelCounter=inContext.funcLabelCounter;
+        funcLabelCounter=inContext.funcLabelCounter;
+        for(int i=0;i<32;i++){
+            freeRegs[i]=inContext.freeRegs[i];
+        }
+        scope_counter=inContext.scope_counter;
+        currentArrayElement=inContext.currentArrayElement;
+        currentArrayName=inContext.currentArrayName;
+        currentGlobalPointer=inContext.currentGlobalPointer;
+        currentLocalPointer=inContext.currentLocalPointer;
+        scopeCountPerScope=inContext.scopeCountPerScope;
     }
 
-    std::string makeVarName(std::string inName){
-        return inName + std::to_string(scope_counter); // BIG WORRIES HERE in a local scope i should be able stuff outside! but i wont be able to outside variables like this!!
-        //ive removed all uses of this function but kept it for future use.
-    }
     std::string makeLabelName(){
-        return "L_"+ std::to_string(label_counter++);
+        return "L_"+ std::to_string(label_counter++); //need to make label_counter global
+    }
+    std::string makeScopedLabelID(){
+        return std::to_string(scope_counter)+"_"+std::to_string(scopeCountPerScope);
     }
     void enterScope(){
         scope_counter++;
+        //set number of labels in scope  =0 
     }
     // void exitScope(){
     //     scope_counter--;
@@ -71,7 +93,7 @@ public:
         int index=std::stoi(RegName.substr(4));
         freeRegs[index]=1;
     }
-    unsigned int createGlobalInt(std::string name){ //will have another 4 functions for arrays
+    unsigned int createGlobalInt(std::string name){
         globals[name]=currentGlobalPointer;
         currentGlobalPointer=currentGlobalPointer+4;
         return currentGlobalPointer-4;
@@ -85,10 +107,17 @@ public:
         return globals[name];
     }
     unsigned int findLocalInt(std::string name){
-        return locals[name];
+        if(locals[name]>=stackOffset){
+            return locals[name];
+        }else{
+            throw "Variable "+name+" has not yet been declared.\n";
+        }
+    }
+    void updateStackOffset(){
+        stackOffset=currentLocalPointer;
     }
 
-    unsigned int createGlobalArray(std::string name, int size){ //will have another 4 functions for arrays
+    unsigned int createGlobalArray(std::string name, int size){
         globals[name]=currentGlobalPointer;
         currentGlobalPointer=currentGlobalPointer+4*size;
         return currentGlobalPointer-4*size;
@@ -109,10 +138,9 @@ public:
     }
 
     std::string findFuncLabel(std::string funcName){
-        return funcNameToLabel[funcName]; // GREAT NEXT STEP IS ADDING THIS TO THE FUNCTIONS AND YOURE GOOD! dont forget enter scope.
+        return funcNameToLabel[funcName]; 
     }
 
-    //need to make a 
 };
 
 

@@ -44,21 +44,18 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-        std::string my_label=myContext.makeLabelName();
-        std::string compare_reg = myContext.makeRegName();
+        Context newContext(myContext);
+        std::string my_label=newContext.makeLabelName();
 
-        outStream.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.enterScope();
+        std::string compare_reg = newContext.findTemp();
 
-        condition->convertIR(compare_reg, myContext, outStream);//evals the boolean condition
-        outStream.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_label)); // branch until after the if statement if condition evals to 0
-        branch->convertIR(dstreg, myContext, outStream);
-        outStream.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
-
-        outStream.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A")); // scope needs thinking
-        myContext.exitScope();
+        condition->printMips(compare_reg, newContext, outStream);
+    
+        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_label<<std::endl;
+        branch->printMips(dstreg, newContext, outStream);
+        outStream<<my_label<<std::endl;
     }
 };
 
@@ -101,25 +98,25 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
-        std::string compare_reg = myContext.makeRegName();
-        condition->convertIR(compare_reg, myContext, outStream); // evals the boolean condition
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
 
-        outStream.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.enterScope();
+        
+        Context newContext(myContext);
 
-        std::string my_labelA=myContext.makeLabelName();
-        outStream.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelA)); // branch to the else statement if condition evals to 0
-        branchA->convertIR(dstreg, myContext, outStream);
-        std::string my_labelB=myContext.makeLabelName(); // if the if statement is taken skip to the end of the else statement
-        outStream.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
-        outStream.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        branchB->convertIR(dstreg, myContext, outStream);
-        outStream.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        std::string my_labelA=newContext.makeLabelName();
+        std::string my_labelB=newContext.makeLabelName();
 
-        outStream.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A")); // scope needs thinking
-        myContext.exitScope();
+        std::string compare_reg = newContext.findTemp();
+
+        condition->printMips(compare_reg, newContext, outStream);
+    
+        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelA<<std::endl;
+        branchA->printMips(dstreg, newContext, outStream);
+        outStream<<"J "<<my_labelB<<std::endl;
+        outStream<<my_labelA<<std::endl;
+        branchB->printMips(dstreg, newContext, outStream);
+        outStream<<my_labelB<<std::endl;
     }
 };
 

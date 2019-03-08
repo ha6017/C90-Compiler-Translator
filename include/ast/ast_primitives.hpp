@@ -27,9 +27,9 @@ public:
         outStream<<var;
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         
-        outStream<<"LW "<<dstreg<<", "<<findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl; //no global?
 
     }
 
@@ -54,9 +54,9 @@ public:
         outStream<<value;
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
-        outStream<<"ADDI "<<dstreg<<", "<<reg_0<<", "<< value<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", "<<"reg_0"<<", "<< value<<std::endl;
 
     }
 
@@ -82,8 +82,8 @@ public:
         outStream<<id<<"["<<element<<"]";
     }
 
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
-        outStream<<"LW "<<dstreg<<", "<<createLocalArray(id, element)<<"(0)"<<std::endl;
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(0)"<<std::endl;
     }
 
 };

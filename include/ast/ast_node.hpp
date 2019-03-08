@@ -28,7 +28,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 

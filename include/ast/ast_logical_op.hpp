@@ -33,7 +33,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class LogAnd
@@ -62,12 +62,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
 
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
@@ -113,12 +113,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
 
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
@@ -162,10 +162,10 @@ public:
         exp->printC(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
+        exp->printMips(exp_reg, myContext, outStream);
 
         std::string my_label=myContext.makeLabelName();
         outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;

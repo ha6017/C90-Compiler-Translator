@@ -10,34 +10,34 @@
 #include "ast_node.hpp"
 #include "ast_context.hpp"
 
-class FuncProto
-    : public ASTNode
-{
-protected:
-    std::string type;
-    std::string id;
-    //nodePtr myParamList;  //<---- subject to change 
-public:
-    FuncProto(std::string &_type, std::string &_id)
-        : type(_type)
-        , id(_id)
-    {}
+// class FuncProto
+//     : public ASTNode
+// {
+// protected:
+//     std::string type;
+//     std::string id;
+//     //nodePtr myParamList;  //<---- subject to change 
+// public:
+//     FuncProto(std::string &_type, std::string &_id)
+//         : type(_type)
+//         , id(_id)
+//     {}
 
-    virtual ~FuncProto()
-    { }
-    virtual void printC(std::ostream &outStream) const {}
+//     virtual ~FuncProto()
+//     { }
+//     virtual void printC(std::ostream &outStream) const {}
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
-
-     }
-};
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        
+//     }
+// };
 
 class FuncDef
     : public ASTNode
@@ -72,9 +72,9 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
-
-     }
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        
+    }
 };
 
 class FuncCall
@@ -105,7 +105,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
     }
 };

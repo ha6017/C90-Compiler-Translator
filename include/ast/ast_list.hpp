@@ -35,11 +35,11 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         //detect return and end
-        statement->convertIR(dstreg, myContext, outStream);//make it so that statement only uses the dstreg if has return!
+        statement->printMips(dstreg, myContext, outStream);//THIS WONT WORK BECAUSE IF THE STATEMENT IS A VAR DEC AND MY CONTEXT IS ONLY BY COPY THEN ITS GONE.
         if(myBranchList!=NULL){
-            myBranchList->convertIR(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
+            myBranchList->printMips(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
     }
 };
@@ -52,7 +52,7 @@ protected:
     nodePtr myParamList;
 
 public:
-    ParamList(nodePtr _param,nodePtr _paramList)
+    ParamList(nodePtr _param,nodePtr _myParamList)
         : param(_param)
         , myParamList(_myParamList)
     {}
@@ -67,7 +67,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
     }
 };
@@ -115,14 +115,14 @@ public:
 
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::vector<IntermediateRep> outStream) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
-        exp->convertIR(exp_reg, myContext, outStream);
-        outStream<<"LW "<<exp_reg<<", "<<findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
+        exp->printMips(exp_reg, myContext, outStream);
+        outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
         myContext.UnlockReg(exp_reg);
 
         if(myArrayList!=NULL){
-            myArrayList->convertIR(dstreg, myContext,outStream);
+            myArrayList->printMips(dstreg, myContext,outStream);
         }
     }
 };
@@ -136,13 +136,13 @@ protected:
     nodePtr proglist;
 public:
     ProgList(nodePtr _prog, nodePtr _proglist)
-        : prog1(_prog)
+        : prog(_prog)
         , proglist(_proglist)
     {}
 
     virtual ~ProgList()
     { 
-        delete prog1;
+        delete prog;
         delete proglist;
     }
 
@@ -155,7 +155,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
     }
 };

@@ -31,7 +31,7 @@ public:
         
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class Add
@@ -56,12 +56,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
         outStream<<"ADDU "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
@@ -91,11 +91,11 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
         outStream<<"SUBU "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);   
@@ -125,12 +125,12 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
         outStream<<"MULT "<<left_reg<<", "<<right_reg<<std::endl;
         outStream<<"MFLO "<<std::endl;
         myContext.UnlockReg(left_reg);
@@ -160,11 +160,11 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
         outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
         outStream<<"MFLO "<<std::endl;
         myContext.UnlockReg(left_reg);
@@ -194,11 +194,11 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string left_reg = myContext.findTemp();
-        left->convertIR(left_reg, myContext, outStream);
+        left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
-        right->convertIR(right_reg, myContext, outStream);
+        right->printMips(right_reg, myContext, outStream);
         outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
         outStream<<"MFHI "<<std::endl;
         myContext.UnlockReg(left_reg);
