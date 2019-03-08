@@ -63,12 +63,48 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
 
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        std::string param_var=myContext.findParam();
+        param->printMips(param_var, myContext, outStream);
+        if(myParamList!=NULL){
+            myParamList->printMips(dstreg, myContext, outStream);
+        }
+    }
+};
+
+
+class NameList : public ASTNode
+{
+protected:
+
+    std::string name;
+    nodePtr myNameList;
+
+public:
+    NameList(std::string &_name,nodePtr _myNameList)
+        : name(_name)
+        , myNameList(_myNameList)
+    {}
+
+    virtual void printC(std::ostream &outStream) const {
+
+    }
+
+    virtual void printPython(std::ostream &outStream) const {
 
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
+        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(name)<<"(0)"<<std::endl;
+
+        if(myNameList!=NULL){
+            myNameList->printMips(dstreg, myContext, outStream);//Does this list really nead the pointer
+        }
     }
 };
 

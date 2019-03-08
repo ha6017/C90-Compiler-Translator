@@ -45,19 +45,19 @@ class FuncDef
 protected:
     std::string type;
     std::string id;
-    nodePtr myParamList;  //<---- subject to change 
+    nodePtr myNameList;  //<---- subject to change 
     nodePtr myBranch;
 public:
-    FuncDef(std::string &_type, std::string &_id, nodePtr _myParamList, nodePtr _myBranch )
+    FuncDef(std::string &_type, std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
         : type(_type)
         , id(_id)
-        , myParamList(_myParamList)
+        , myNameList(_myNameList)
         , myBranch(_myBranch)
     {}
 
     virtual ~FuncDef()
     {
-        delete myParamList;
+        delete myNameList;
         delete myBranch;
     }
 
@@ -73,7 +73,11 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        
+        outStream<<id<<std::endl;
+        //still need to use paramlist
+        myNameList->printMips(dstreg,myContext,outStream);
+        myBranch->printMips("reg_2", myContext, outStream);
+        outStream<<"JR reg_31"<<std::endl;
     }
 };
 
@@ -106,7 +110,12 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
+        Context newContext(myContext);
+        myParamList->printMips(dstreg, newContext, outStream);
+        newContext.enterScope();
+        newContext.updateStackOffset();
+        outStream<<"JAL "<<id<<std::endl;
+        outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
     }
 };
 

@@ -89,9 +89,25 @@ public:
         }
     }
 
+    std::string findParam(){
+        for(int i=4;i<8;i++){
+            if(freeRegs[i]==1){
+                freeRegs[i]=0;
+                return "reg_"+std::to_string(i);
+            }
+        }
+    }
     void UnlockReg(std::string RegName){
         int index=std::stoi(RegName.substr(4));
         freeRegs[index]=1;
+    }
+    std::string retrieveParam(){
+        for(int i=4;i<8;i++){
+            if(freeRegs[i]==0){
+                freeRegs[i]=1;
+                return "reg_"+std::to_string(i);
+            }
+        }
     }
     unsigned int createGlobalInt(std::string name){
         globals[name]=currentGlobalPointer;
