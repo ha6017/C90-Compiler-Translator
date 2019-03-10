@@ -192,7 +192,11 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
+        Context newContext(myContext);
+        prog->printMips(dstreg,newContext,outStream);
+        if(proglist!=NULL){
+            proglist->printMips(dstreg,myContext,outStream);
+        }
     }
 };
 

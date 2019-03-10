@@ -21,21 +21,22 @@ public:
 
     std::map<std::string, unsigned int>globals;
     std::map<std::string, unsigned int>locals;
-    std::map<std::string, std::string>funcNameToLabel;
-    int funcLabelCounter;
-    unsigned int stackOffset;
+    // std::map<std::string, std::string>funcNameToLabel;
+    // int funcLabelCounter;
+    // unsigned int stackOffset;
     bool freeRegs[32]; //0 is locked, 1 is unlocked
     int scope_counter;
     int currentArrayElement;    //used for array init
     std::string currentArrayName;   //used for array init
 
 
+
     Context(){
         scope_counter=0;
-        funcLabelCounter=0;
-        stackOffset =0x20000000;
-        currentGlobalPointer=0x20000000;
-        currentLocalPointer=0x20400000;
+        // funcLabelCounter=0;
+        // stackOffset =0;
+        currentGlobalPointer=0x200000;
+        currentLocalPointer=0;
         currentArrayElement=0; //this is for arraylist
         scopeCountPerScope=0;
 
@@ -46,9 +47,8 @@ public:
         //I NEED TO CREATE COPY CONSTRUCTOR AND CHANGE EVERYTHING TO PASS BY REFERENCE. THEN FIGURE OUT FUNCTION LABEL MAPPINGS
         globals=inContext.globals;
         globals=inContext.locals;
-        funcNameToLabel=inContext.funcNameToLabel;
-        funcLabelCounter=inContext.funcLabelCounter;
-        funcLabelCounter=inContext.funcLabelCounter;
+        // funcNameToLabel=inContext.funcNameToLabel;
+        // funcLabelCounter=inContext.funcLabelCounter;
         for(int i=0;i<32;i++){
             freeRegs[i]=inContext.freeRegs[i];
         }
@@ -59,7 +59,7 @@ public:
         currentLocalPointer=inContext.currentLocalPointer;
         scopeCountPerScope=inContext.scopeCountPerScope;
     }
-
+    
     std::string makeLabelName(){
         return "L_"+ std::to_string(label_counter++); //need to make label_counter global
     }
@@ -69,6 +69,11 @@ public:
     void enterScope(){
         scope_counter++;
         //set number of labels in scope  =0 
+    }
+    void enterFunction(){
+        scope_counter++;
+        currentLocalPointer=0;
+        locals.clear();
     }
     // void exitScope(){
     //     scope_counter--;
@@ -88,7 +93,7 @@ public:
             }
         }
     }
-
+    
     std::string findParam(){
         for(int i=4;i<8;i++){
             if(freeRegs[i]==1){
@@ -108,6 +113,7 @@ public:
                 return "reg_"+std::to_string(i);
             }
         }
+        throw "Incorrect number of parameters.";
     }
     unsigned int createGlobalInt(std::string name){
         globals[name]=currentGlobalPointer;
@@ -123,15 +129,18 @@ public:
         return globals[name];
     }
     unsigned int findLocalInt(std::string name){
-        if(locals[name]>=stackOffset){
+        if(locals.count(name)>0){
             return locals[name];
         }else{
-            throw "Variable "+name+" has not yet been declared.\n";
+            throw "Variable "+name+" has not been declared.\n";
         }
     }
-    void updateStackOffset(){
-        stackOffset=currentLocalPointer;
-    }
+    // void updateStackOffset(){
+    //     stackOffset=currentLocalPointer;
+    // }
+
+    
+
 
     unsigned int createGlobalArray(std::string name, int size){
         globals[name]=currentGlobalPointer;
@@ -149,13 +158,13 @@ public:
     unsigned int findGlobalArrayElement(std::string name, int index){
         return locals[name]+4*index;
     }
-    void addFunction(std::string funcName){
-        funcNameToLabel[funcName]="Func_"+funcLabelCounter++;
-    }
+    // void addFunction(std::string funcName){
+    //     funcNameToLabel[funcName]="Func_"+funcLabelCounter++;
+    // }
 
-    std::string findFuncLabel(std::string funcName){
-        return funcNameToLabel[funcName]; 
-    }
+    // std::string findFuncLabel(std::string funcName){
+    //     return funcNameToLabel[funcName]; 
+    // }
 
 };
 

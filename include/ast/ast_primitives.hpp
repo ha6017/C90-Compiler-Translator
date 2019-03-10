@@ -29,7 +29,7 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         
-        outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl; //no global?
+        outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl; //no global?
 
     }
 
@@ -83,7 +83,7 @@ public:
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(0)"<<std::endl;
+        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(reg_fp)"<<std::endl;
     }
 
 };

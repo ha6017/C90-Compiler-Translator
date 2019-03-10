@@ -66,7 +66,8 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<" (reg_fp)"<<std::endl;
+
         myContext.UnlockReg(exp_reg);
     }
 };
@@ -104,7 +105,7 @@ public:
             myArrayList->printMips(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
-                outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
+                outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(reg_fp)"<<std::endl; 
             }
         }
     }

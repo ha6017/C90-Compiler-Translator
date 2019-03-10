@@ -77,6 +77,9 @@ public:
         //still need to use paramlist
         myNameList->printMips(dstreg,myContext,outStream);
         myBranch->printMips("reg_2", myContext, outStream);
+        
+        outStream<<"LW "<<"reg_fp"<<", "<<"0"<<" (reg_fp)"<<std::endl;
+        
         outStream<<"JR reg_31"<<std::endl;
     }
 };
@@ -112,8 +115,15 @@ public:
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         Context newContext(myContext);
         myParamList->printMips(dstreg, newContext, outStream);
-        newContext.enterScope();
-        newContext.updateStackOffset();
+        
+        outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
+        newContext.enterFunction();
+
+        // newContext.updateStackOffset();
+        // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
+        // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
+        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
+        outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
         outStream<<"JAL "<<id<<std::endl;
         outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
     }

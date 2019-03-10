@@ -15,7 +15,6 @@
 #include "ast/ast_primitives.hpp"
 #include "ast/ast_prog.hpp"
 #include "ast/ast_variable_dec.hpp"
-#include "ast/intermediate_rep.hpp"
 
 
 extern const ASTNode *parseAST();
