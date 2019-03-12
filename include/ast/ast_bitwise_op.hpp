@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class BitwiseOperator
     : public ASTNode
@@ -36,7 +36,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class BitAnd
@@ -66,12 +66,14 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("AND", dstreg, left_reg, right_reg));
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
+        outStream<<"AND "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
         
     }
 };
@@ -102,12 +104,14 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("OR", dstreg, left_reg, right_reg));    
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
+        outStream<<"OR "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
     }
 };
 
@@ -138,12 +142,14 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("XOR", dstreg, left_reg, right_reg));       
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
+        outStream<<"XOR "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);    
     }
 };
 
@@ -171,10 +177,11 @@ public:
         exp->printC(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg = myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("NOR", dstreg, exp_reg, exp_reg));     
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        exp->printMips(exp_reg, myContext, outStream);
+        outStream<<"NOR "<<dstreg<<", "<<exp_reg<<", "<<exp_reg<<std::endl;
+        myContext.UnlockReg(exp_reg);
     }
 };
 
@@ -204,12 +211,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SLLV", dstreg, left_reg, right_reg));   
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
+        outStream<<"SLLV "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);   
     }
 };
 class RShift
@@ -239,12 +249,15 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("SRLV", dstreg, left_reg, right_reg)); 
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
+        outStream<<"SRLV "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);   
     }
 };
 

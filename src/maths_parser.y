@@ -1,10 +1,11 @@
+
 %code requires{
 
   #include "ast.hpp"
 
   #include <cassert>
 
-  extern const ASTNode *g_root; // A way of getting the AST out
+  extern nodePtr g_root; // A way of getting the AST out
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -16,8 +17,7 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
-  const Ast_Node *node;
-  const ASTNode *expr;
+  nodePtr expr;
   int number;
   std::string *string;
 }
@@ -37,14 +37,13 @@
 %token T_LAND T_LOR T_AND T_OR T_XOR T_NOT
 
 
-%type <node> STATEMENT RETURN_STATEMENT PROG FUNC_DEC VAR_DEC ASSIGNMENT_STATEMENT 
-%type <node> SCOPE STATEMENT_LIST PARAMETER PARAMETER_LIST PROG_LIST FOR_STATEMENT 
-%type <node> IF_CONDITION_STATEMENT IF_ELSE_CONDITION_STATEMENT WHILE_CONDITION_STATEMENT VAR_DEC_FUNCTION
-%type <node> RETURN_VALUE DO_WHILE_STATEMENT
+%type <expr> STATEMENT RETURN_STATEMENT PROG FUNC_DEC VAR_DEC ASSIGNMENT_STATEMENT 
+%type <expr> SCOPE STATEMENT_LIST PARAMETER PARAMETER_LIST PROG_LIST FOR_STATEMENT 
+%type <expr> IF_CONDITION_STATEMENT IF_ELSE_CONDITION_STATEMENT WHILE_CONDITION_STATEMENT VAR_DEC_FUNCTION
+%type <expr> RETURN_VALUE DO_WHILE_STATEMENT
 %type <expr> EXPR EXPR10 EXPR11 EXPR12 EXPR13 EXPR3 EXPR4 EXPR5 EXPR6 EXPR7 EXPR8 EXPR9
 %type <number> I_INT
 %type <string> T_VARIABLE T_INT T_VOID 
-%type <Float> I_FLOAT
 
 %start ROOT
 

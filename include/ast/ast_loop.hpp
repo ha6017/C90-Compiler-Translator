@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class For
     : public ASTNode
@@ -45,26 +45,28 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         //enter scope dont forget
-        initialisation->convertIR(dstreg, myContext, IRlist);
+        Context newContext(myContext);
+        myContext.scopeCountPerScope++;
+        newContext.enterScope();
+        initialisation->printMips(dstreg, newContext, outStream);
 
-        std::string compare_reg = myContext.makeRegName();
+        std::string compare_reg = newContext.findTemp();
 
-        std::string my_labelA="top_"+std::to_string(myContext.scope_counter);
-        std::string my_labelB="bottom_"+std::to_string(myContext.scope_counter);
+        std::string my_labelA="top_"+newContext.makeScopedLabelID();
+        std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
+       
+       
+        outStream<<my_labelA<<std::endl;
+        condition->printMips(compare_reg, newContext, outStream);
+    
+        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
 
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        condition->convertIR(compare_reg, myContext, IRlist);
-
-        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelB));
-
-        branch->convertIR(dstreg, myContext, IRlist);
-        postLoopExp->convertIR(dstreg, myContext, IRlist);
-        
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelA));
-
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        branch->printMips(dstreg, newContext, outStream);
+        postLoopExp->printMips(dstreg, newContext, outStream);
+        outStream<<"J "<<my_labelA<<std::endl;
+        outStream<<my_labelB<<std::endl;
     }
 };
 
@@ -100,20 +102,27 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        IRlist.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.enterScope();
-        std::string compare_reg = myContext.makeRegName();
-        std::string my_labelA="top_"+std::to_string(myContext.scope_counter);
-        std::string my_labelB="bottom_"+std::to_string(myContext.scope_counter);
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        condition->convertIR(compare_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelB));
-        branch->convertIR(dstreg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelA));
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
-        IRlist.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.exitScope();
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+
+        Context newContext(myContext);
+        myContext.scopeCountPerScope++;
+        newContext.enterScope();
+
+        std::string compare_reg = newContext.findTemp();
+
+        std::string my_labelA="top_"+newContext.makeScopedLabelID();
+        std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
+       
+       
+        outStream<<my_labelA<<std::endl;
+        condition->printMips(compare_reg, newContext, outStream);
+    
+        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
+
+        branch->printMips(dstreg, newContext, outStream);
+        outStream<<"J "<<my_labelA<<std::endl;
+        outStream<<my_labelB<<std::endl;
+        //dont need to unlock reg because newContext is about to go out of scope.
      }
 };
 
@@ -153,22 +162,27 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        IRlist.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.enterScope();
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-        std::string compare_reg = myContext.makeRegName();
-        std::string my_labelA="top_"+std::to_string(myContext.scope_counter);
-        std::string my_labelB="bottom_"+std::to_string(myContext.scope_counter);
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        branch->convertIR(dstreg, myContext, IRlist);
-        condition->convertIR(compare_reg, myContext, IRlist);
-        IRlist.push_back(IntermediateRep("BEQ", compare_reg, "reg_0", my_labelB));
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelA));
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        Context newContext(myContext);
+        myContext.scopeCountPerScope++;
+        newContext.enterScope();
 
-        IRlist.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.exitScope();
+        std::string compare_reg = newContext.findTemp();
+
+        std::string my_labelA="top_"+newContext.makeScopedLabelID();
+        std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
+       
+       
+        outStream<<my_labelA<<std::endl;
+        branch->printMips(dstreg, newContext, outStream);
+
+        condition->printMips(compare_reg, newContext, outStream);
+    
+        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
+
+        outStream<<"J "<<my_labelA<<std::endl;
+        outStream<<my_labelB<<std::endl;
      }
 };
 
@@ -195,13 +209,11 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        IRlist.push_back(IntermediateRep("ENTERLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.enterScope();
-        std::string my_label="bottom_"+std::to_string(myContext.scope_counter);
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_label));
-        IRlist.push_back(IntermediateRep("EXITLOCALSCOPE", "N_A", "N_A", "N_A"));
-        myContext.exitScope();
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+
+        std::string my_label="bottom_"+myContext.makeScopedLabelID();
+        outStream<<"J "<<my_label<<std::endl;
+        
      }
 };
 
@@ -228,9 +240,9 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        std::string my_label="top_"+std::to_string(myContext.scope_counter);
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_label));
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        std::string my_label="top_"+myContext.makeScopedLabelID();
+        outStream<<"J "<<my_label<<std::endl;
      }
 };
 

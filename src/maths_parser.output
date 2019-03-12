@@ -160,8 +160,13 @@ T_EXTERN (259)
 T_STATIC (260)
 T_REGISTER (261)
 T_AUTO (262)
+<<<<<<< HEAD
 T_INT <string> (263) 10
 T_VOID <string> (264)
+=======
+T_INT (263) 6 8 10 12 16 31 32 33 34
+T_VOID (264) 7 9 11 13
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
 T_CHAR (265)
 T_SHORT (266)
 T_LONG (267)
@@ -171,7 +176,11 @@ T_SIGNED (270)
 T_RETURN (271)
 T_CONST (272)
 T_VOLATILE (273)
+<<<<<<< HEAD
 I_INT <number> (274) 61
+=======
+I_INT (274) 88
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
 I_FLOAT (275)
 I_CHAR (276)
 T_IF (277) 21 22
@@ -205,9 +214,16 @@ T_SQRT (304)
 T_LSHIFT (305) 38
 T_RSHIFT (306) 39
 T_NUMBER (307)
+<<<<<<< HEAD
 T_VARIABLE <string> (308) 10 11 12 13 14 15 16 17 18 19 20 27 60
 T_COMMA (309)
 T_SEMI_COLON (310) 24
+=======
+T_VARIABLE (308) 6 7 8 9 10 11 12 13 16 31 32 33 34 35 36 37 38 39
+    40 41 42 43 44 53 54 87
+T_COMMA (309) 14
+T_SEMI_COLON (310) 6 7 19 20 33 34 50
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
 T_COLON (311)
 T_GO_TO (312)
 T_CONTINUE (313)
@@ -232,6 +248,7 @@ $accept (72)
     on left: 0
 ROOT (73)
     on left: 1, on right: 0
+<<<<<<< HEAD
 STATEMENT <expr> (74)
     on left: 2 3 4 5 6 7 8 9, on right: 1 21 22 23 24 25
 VAR_DEC_FUNCTION <expr> (75)
@@ -276,6 +293,69 @@ EXPR12 <expr> (94)
     on left: 57 58, on right: 55 56 57
 EXPR13 <expr> (95)
     on left: 59 60 61, on right: 57 58
+=======
+PROG_LIST (74)
+    on left: 2 3, on right: 1 2
+PROG (75)
+    on left: 4 5, on right: 2 3
+FUNC_DEC (76)
+    on left: 6 7 8 9 10 11 12 13, on right: 4
+PARAMETER_LIST (77)
+    on left: 14 15, on right: 12 13 14 53
+PARAMETER (78)
+    on left: 16 17, on right: 14 15
+SCOPE (79)
+    on left: 18, on right: 8 9 12 13
+STATEMENT_LIST (80)
+    on left: 19 20 21 22, on right: 18 19 21 45 47 49 50 51
+STATEMENT (81)
+    on left: 23 24 25 26 27 28 29 30, on right: 19 20 21 22 46 48
+VAR_DEC_FUNCTION (82)
+    on left: 31 32, on right: 27 50
+VAR_DEC (83)
+    on left: 33 34, on right: 5
+ASSIGNMENT_STATEMENT (84)
+    on left: 35 36 37 38 39 40 41 42 43 44, on right: 28 50
+IF_CONDITION_STATEMENT (85)
+    on left: 45 46, on right: 24
+IF_ELSE_CONDITION_STATEMENT (86)
+    on left: 47 48, on right: 25
+WHILE_CONDITION_STATEMENT (87)
+    on left: 49, on right: 26
+FOR_STATEMENT (88)
+    on left: 50, on right: 29
+DO_WHILE_STATEMENT (89)
+    on left: 51, on right: 30
+RETURN_STATEMENT (90)
+    on left: 52, on right: 23
+RETURN_VALUE (91)
+    on left: 53 54 55, on right: 52
+EXPR (92)
+    on left: 56 57, on right: 17 32 34 35 40 41 42 43 44 45 46 47 48
+    49 50 51 55 86
+EXPR3 (93)
+    on left: 58 59 60 61, on right: 56 57 58 59 60
+EXPR4 (94)
+    on left: 62 63 64, on right: 58 59 60 61 62 63
+EXPR5 (95)
+    on left: 65 66 67, on right: 62 63 64 65 66
+EXPR6 (96)
+    on left: 68 69 70 71 72, on right: 65 66 67 68 69 70 71
+EXPR7 (97)
+    on left: 73 74 75, on right: 68 69 70 71 72 73 74
+EXPR8 (98)
+    on left: 76 77, on right: 73 74 75 76
+EXPR9 (99)
+    on left: 78 79, on right: 76 77 78
+EXPR10 (100)
+    on left: 80 81, on right: 78 79 80
+EXPR11 (101)
+    on left: 82 83, on right: 80 81 82
+EXPR12 (102)
+    on left: 84 85, on right: 82 83 84
+EXPR13 (103)
+    on left: 86 87 88, on right: 84 85
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
 
 
 State 0

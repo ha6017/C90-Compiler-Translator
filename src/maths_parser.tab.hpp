@@ -1,9 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.3.1.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +30,6 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
-
 #ifndef YY_YY_SRC_MATHS_PARSER_TAB_HPP_INCLUDED
 # define YY_YY_SRC_MATHS_PARSER_TAB_HPP_INCLUDED
 /* Debug traces.  */
@@ -44,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "src/maths_parser.y" /* yacc.c:1927  */
+#line 2 "src/maths_parser.y" /* yacc.c:1909  */
 
 
   #include "ast.hpp"
@@ -59,7 +55,7 @@ extern int yydebug;
   int yylex(void);
   void yyerror(const char *);
 
-#line 63 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 59 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -143,13 +139,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 18 "src/maths_parser.y" /* yacc.c:1927  */
+#line 19 "src/maths_parser.y" /* yacc.c:1909  */
 
   nodePtr expr;
   int number;
   std::string *string;
 
-#line 153 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 149 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

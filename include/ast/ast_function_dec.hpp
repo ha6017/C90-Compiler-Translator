@@ -8,36 +8,36 @@
 
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
-class FuncProto
-    : public ASTNode
-{
-protected:
-    std::string type;
-    std::string id;
-    //nodePtr myParamList;  //<---- subject to change 
-public:
-    FuncProto(std::string &_type, std::string &_id)
-        : type(_type)
-        , id(_id)
-    {}
+// class FuncProto
+//     : public ASTNode
+// {
+// protected:
+//     std::string type;
+//     std::string id;
+//     //nodePtr myParamList;  //<---- subject to change 
+// public:
+//     FuncProto(std::string &_type, std::string &_id)
+//         : type(_type)
+//         , id(_id)
+//     {}
 
-    virtual ~FuncProto()
-    { }
-    virtual void printC(std::ostream &outStream) const {}
+//     virtual ~FuncProto()
+//     { }
+//     virtual void printC(std::ostream &outStream) const {}
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
-     }
-};
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        
+//     }
+// };
 
 class FuncDef
     : public ASTNode
@@ -45,19 +45,19 @@ class FuncDef
 protected:
     std::string type;
     std::string id;
-    nodePtr myParamList;  //<---- subject to change 
+    nodePtr myNameList;  //<---- subject to change 
     nodePtr myBranch;
 public:
-    FuncDef(std::string &_type, std::string &_id, nodePtr _myParamList, nodePtr _myBranch )
+    FuncDef(std::string &_type, std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
         : type(_type)
         , id(_id)
-        , myParamList(_myParamList)
+        , myNameList(_myNameList)
         , myBranch(_myBranch)
     {}
 
     virtual ~FuncDef()
     {
-        delete myParamList;
+        delete myNameList;
         delete myBranch;
     }
 
@@ -72,9 +72,16 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
-     }
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        outStream<<id<<std::endl;
+        //still need to use paramlist
+        myNameList->printMips(dstreg,myContext,outStream);
+        myBranch->printMips("reg_2", myContext, outStream);
+        
+        outStream<<"LW "<<"reg_fp"<<", "<<"0"<<" (reg_fp)"<<std::endl;
+        
+        outStream<<"JR reg_31"<<std::endl;
+    }
 };
 
 class FuncCall
@@ -105,8 +112,20 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        Context newContext(myContext);
+        myParamList->printMips(dstreg, newContext, outStream);
+        
+        outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
+        newContext.enterFunction();
 
+        // newContext.updateStackOffset();
+        // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
+        // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
+        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
+        outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
+        outStream<<"JAL "<<id<<std::endl;
+        outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
     }
 };
 

@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class LogicalOperator
     : public ASTNode
@@ -33,7 +33,7 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const =0;
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
 };
 
 class LogAnd
@@ -62,24 +62,28 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
 
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1"));
-        IRlist.push_back(IntermediateRep("BEQ", left_reg, "reg_0", my_labelA));
-        IRlist.push_back(IntermediateRep("BEQ", right_reg, "reg_0", my_labelA));
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<"BEQ "<<left_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"BEQ "<<right_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"J "<<my_labelB<<std::endl;
 
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0")); 
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        outStream<<my_labelA<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<my_labelB<<std::endl;
 
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
+        
     }
 };
 
@@ -109,26 +113,28 @@ public:
         right->printPython(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string left_reg = myContext.makeRegName();
-        left->convertIR(left_reg, myContext, IRlist);
-        std::string right_reg = myContext.makeRegName();
-        right->convertIR(right_reg, myContext, IRlist);
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        std::string left_reg = myContext.findTemp();
+        left->printMips(left_reg, myContext, outStream);
+        std::string right_reg = myContext.findTemp();
+        right->printMips(right_reg, myContext, outStream);
 
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0"));
-        std::string one_reg = myContext.makeRegName();
-        IRlist.push_back(IntermediateRep("ADDI", one_reg, "reg_0", "1"));
 
-        IRlist.push_back(IntermediateRep("BEQ", left_reg, one_reg, my_labelA));
-        IRlist.push_back(IntermediateRep("BEQ", right_reg, one_reg, my_labelA));
-        IRlist.push_back(IntermediateRep("J", "N_A", "N_A", my_labelB));
 
-        IRlist.push_back(IntermediateRep(my_labelA, "N_A", "N_A", "N_A"));
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
-        IRlist.push_back(IntermediateRep(my_labelB, "N_A", "N_A", "N_A"));
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<"BNE "<<left_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"BNE "<<right_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"J "<<my_labelB<<std::endl;
+
+        outStream<<my_labelA<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<my_labelB<<std::endl;
+        myContext.UnlockReg(left_reg);
+        myContext.UnlockReg(right_reg);
     }
 };
 
@@ -156,16 +162,17 @@ public:
         exp->printC(outStream);
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        std::string exp_reg = myContext.makeRegName();
-        exp->convertIR(exp_reg, myContext, IRlist);
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        std::string exp_reg = myContext.findTemp();
+        exp->printMips(exp_reg, myContext, outStream);
 
         std::string my_label=myContext.makeLabelName();
-
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "1")); 
-        IRlist.push_back(IntermediateRep("BEQ", exp_reg, "reg_0", my_label));
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", "0")); 
-        IRlist.push_back(IntermediateRep(my_label, "N_A", "N_A", "N_A"));
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<"BEQ "<<exp_reg<<", reg_0,"<<my_label<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<my_label<<std::endl;
+        myContext.UnlockReg(exp_reg);
     }
 };
 

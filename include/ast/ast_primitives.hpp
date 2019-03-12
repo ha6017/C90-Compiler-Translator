@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+#include "ast_context.hpp"
 
 class Variable
     : public ASTNode
@@ -27,8 +27,10 @@ public:
         outStream<<var;
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("ADDU", dstreg, "reg_0", var));
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        
+        outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl; //no global?
+
     }
 
 };
@@ -52,8 +54,10 @@ public:
         outStream<<value;
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        IRlist.push_back(IntermediateRep("ADDI", dstreg, "reg_0", std::to_string(value)));
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+
+        outStream<<"ADDI "<<dstreg<<", "<<"reg_0"<<", "<< value<<std::endl;
+
     }
 
 };
@@ -78,8 +82,8 @@ public:
         outStream<<id<<"["<<element<<"]";
     }
 
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const override{
-        //NEED TO IMPLEMENT CONTEXT FIRST 
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(reg_fp)"<<std::endl;
     }
 
 };

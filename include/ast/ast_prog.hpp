@@ -1,76 +1,80 @@
-#ifndef ast_prog_hpp
-#define ast_prog_hpp
+// #ifndef ast_prog_hpp
+// #define ast_prog_hpp
 
-#include <string>
-#include <iostream>
-#include <cmath>
-#include <vector>
+// #include <string>
+// #include <iostream>
+// #include <cmath>
+// #include <vector>
 
 
-#include "ast_node.hpp"
-#include "intermediate_rep.hpp"
+// #include "ast_node.hpp"
+// #include "ast_context.hpp"
 
-class ProgList
-    : public ASTNode
-{
-protected:
-    nodePtr prog1;
-    nodePtr proglist;
-public:
-    ProgList(nodePtr _prog1, nodePtr _proglist)
-        : prog1(_prog1)
-        , proglist(_proglist)
-    {}
+// class ProgList
+//     : public ASTNode
+// {
+// protected:
+//     nodePtr prog1;
+//     nodePtr proglist;
+// public:
+//     ProgList(nodePtr _prog1, nodePtr _proglist)
+//         : prog1(_prog1)
+//         , proglist(_proglist)
+//     {}
 
-    virtual ~ProgList()
-    { 
-        delete prog1;
-        delete proglist;
-    }
+//     virtual ~ProgList()
+//     { 
+//         delete prog1;
+//         delete proglist;
+//     }
 
-    virtual void printC(std::ostream &outStream) const {}
+//     virtual void printC(std::ostream &outStream) const {}
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-     }
-};
+//      }
+// };
 
-class Prog
-    : public ASTNode
-{
-protected:
-    nodePtr Prog1;
-public:
-    Prog(nodePtr _Prog1 )
-        : Prog1(_Prog1)
-    {}
+// class Prog
+//     : public ASTNode
+// {
+// protected:
+//     nodePtr Prog1;
+// public:
+//     Prog(nodePtr _Prog1 )
+//         : Prog1(_Prog1)
+//     {}
 
-    virtual ~Prog()
-    {
-        delete Prog1;
-    }
+//     virtual ~Prog()
+//     {
+//         delete Prog1;
+//     }
 
-    virtual void printC(std::ostream &outStream) const {
+//     virtual void printC(std::ostream &outStream) const {
 
-    }
+//     }
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-     }
-};
+//      }
+// };
 
+<<<<<<< HEAD
 #endif
+=======
+// #endif
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
