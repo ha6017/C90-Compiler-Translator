@@ -4,6 +4,10 @@
 
 int main(int argc, char *argv[])
 {
+<<<<<<< HEAD
+    //Context cont= new Context(); 
+=======
+>>>>>>> 7142eddc3dec562c19e92735dde9696afd88320d
 
     nodePtr ast=parseAST();
 

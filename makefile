@@ -14,6 +14,7 @@ bin/print_canonical : src/print_canonical.o src/maths_parser.tab.o src/maths_lex
 	g++ $(CPPFLAGS) -o bin/print_canonical $^
 
 
+.PHONY: clean
 
 clean :
 	rm -f src/*.o
