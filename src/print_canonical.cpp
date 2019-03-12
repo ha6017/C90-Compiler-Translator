@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    Context cont= new Context(); 
+    //Context cont= new Context(); 
 
     const ASTNode *ast=parseAST();
 

@@ -7,7 +7,7 @@
 
 #include "ast_node.hpp"
 
-class BranchList: ASTNode
+class BranchList: public ASTNode
 {
 protected:
 

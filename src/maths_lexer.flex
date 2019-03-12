@@ -116,6 +116,7 @@ void yyerror (char const *s)
 }
 
 void debug() {
+	
 	if(DEBUG) {
 		std::cout << yytext;
 	}

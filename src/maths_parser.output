@@ -1,3 +1,17 @@
+Nonterminals useless in grammar
+
+   VAR_DEC
+   FACTOR
+   FUNC_DEC
+   PARAMETER
+   PARAMETER_LIST
+   PROG
+   PROG_LIST
+   SCOPE
+   STATEMENT_LIST
+   TERM
+
+
 Terminals unused in grammar
 
    T_TYPEDEF
@@ -5,6 +19,7 @@ Terminals unused in grammar
    T_STATIC
    T_REGISTER
    T_AUTO
+   T_VOID
    T_CHAR
    T_SHORT
    T_LONG
@@ -30,143 +45,110 @@ Terminals unused in grammar
    T_EXP
    T_SQRT
    T_NUMBER
+   T_COMMA
    T_COLON
    T_GO_TO
    T_CONTINUE
    T_BREAK
 
 
-State 22 conflicts: 2 shift/reduce
-State 69 conflicts: 2 shift/reduce
-State 70 conflicts: 2 shift/reduce
-State 71 conflicts: 2 shift/reduce
-State 95 conflicts: 6 shift/reduce
-State 166 conflicts: 1 shift/reduce
-State 175 conflicts: 1 shift/reduce
+Rules useless in grammar
+
+   62 VAR_DEC: T_INT T_VARIABLE T_SEMI_COLON
+   63        | T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON
+
+
+State 10 conflicts: 5 shift/reduce
+State 114 conflicts: 1 shift/reduce
 
 
 Grammar
 
     0 $accept: ROOT $end
 
-    1 ROOT: PROG_LIST
+    1 ROOT: STATEMENT
 
-    2 PROG_LIST: PROG PROG_LIST
-    3          | PROG
+    2 STATEMENT: RETURN_STATEMENT
+    3          | IF_CONDITION_STATEMENT
+    4          | IF_ELSE_CONDITION_STATEMENT
+    5          | WHILE_CONDITION_STATEMENT
+    6          | VAR_DEC_FUNCTION
+    7          | ASSIGNMENT_STATEMENT
+    8          | FOR_STATEMENT
+    9          | DO_WHILE_STATEMENT
 
-    4 PROG: FUNC_DEC
-    5     | VAR_DEC
+   10 VAR_DEC_FUNCTION: T_INT T_VARIABLE
 
-    6 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON
-    7         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON
-    8         | T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-    9         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   10         | T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   11         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   12         | T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   13         | T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
+   11 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL EXPR
+   12                     | T_VARIABLE T_PLUS T_PLUS
+   13                     | T_PLUS T_PLUS T_VARIABLE
+   14                     | T_VARIABLE T_MINUS T_MINUS
+   15                     | T_MINUS T_MINUS T_VARIABLE
+   16                     | T_VARIABLE T_PLUS T_EQUAL EXPR
+   17                     | T_VARIABLE T_MINUS T_EQUAL EXPR
+   18                     | T_VARIABLE T_TIMES T_EQUAL EXPR
+   19                     | T_VARIABLE T_DIVIDE T_EQUAL EXPR
+   20                     | T_VARIABLE T_REM T_EQUAL EXPR
 
-   14 PARAMETER_LIST: PARAMETER T_COMMA PARAMETER_LIST
-   15               | PARAMETER
+   21 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT
 
-   16 PARAMETER: T_INT T_VARIABLE
-   17          | EXPR
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
 
-   18 SCOPE: STATEMENT_LIST
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-   19 STATEMENT_LIST: STATEMENT T_SEMI_COLON STATEMENT_LIST
-   20               | STATEMENT T_SEMI_COLON
-   21               | STATEMENT STATEMENT_LIST
-   22               | STATEMENT
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-   23 STATEMENT: RETURN_STATEMENT
-   24          | IF_CONDITION_STATEMENT
-   25          | IF_ELSE_CONDITION_STATEMENT
-   26          | WHILE_CONDITION_STATEMENT
-   27          | VAR_DEC_FUNCTION
-   28          | ASSIGNMENT_STATEMENT
-   29          | FOR_STATEMENT
-   30          | DO_WHILE_STATEMENT
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
 
-   31 VAR_DEC_FUNCTION: T_INT T_VARIABLE
-   32                 | T_INT T_VARIABLE T_EQUAL EXPR
+   26 RETURN_STATEMENT: RETURN_VALUE
 
-   33 VAR_DEC: T_INT T_VARIABLE T_SEMI_COLON
-   34        | T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON
+   27 RETURN_VALUE: T_VARIABLE T_LBRACKET T_RBRACKET
+   28             | EXPR
 
-   35 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL EXPR
-   36                     | T_VARIABLE T_PLUS T_PLUS
-   37                     | T_PLUS T_PLUS T_VARIABLE
-   38                     | T_VARIABLE T_MINUS T_MINUS
-   39                     | T_MINUS T_MINUS T_VARIABLE
-   40                     | T_VARIABLE T_PLUS T_EQUAL EXPR
-   41                     | T_VARIABLE T_MINUS T_EQUAL EXPR
-   42                     | T_VARIABLE T_TIMES T_EQUAL EXPR
-   43                     | T_VARIABLE T_DIVIDE T_EQUAL EXPR
-   44                     | T_VARIABLE T_REM T_EQUAL EXPR
+   29 EXPR: T_NOT EXPR3
+   30     | EXPR3
 
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   46                       | T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT
+   31 EXPR3: EXPR3 T_DIVIDE EXPR4
+   32      | EXPR3 T_TIMES EXPR4
+   33      | EXPR3 T_REM EXPR4
+   34      | EXPR4
 
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   48                            | T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
+   35 EXPR4: EXPR4 T_PLUS EXPR5
+   36      | EXPR4 T_MINUS EXPR5
+   37      | EXPR5
 
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   38 EXPR5: EXPR5 T_LSHIFT EXPR6
+   39      | EXPR5 T_RSHIFT EXPR6
+   40      | EXPR6
 
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   41 EXPR6: EXPR6 T_LE EXPR7
+   42      | EXPR6 T_GE EXPR7
+   43      | EXPR6 T_LT EXPR7
+   44      | EXPR6 T_GT EXPR7
+   45      | EXPR7
 
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
+   46 EXPR7: EXPR7 T_EQ EXPR8
+   47      | EXPR7 T_NEQ EXPR8
+   48      | EXPR8
 
-   52 RETURN_STATEMENT: RETURN_VALUE
+   49 EXPR8: EXPR8 T_AND EXPR9
+   50      | EXPR9
 
-   53 RETURN_VALUE: T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET
-   54             | T_VARIABLE T_LBRACKET T_RBRACKET
-   55             | EXPR
+   51 EXPR9: EXPR9 T_XOR EXPR10
+   52      | EXPR10
 
-   56 EXPR: T_NOT EXPR3
-   57     | EXPR3
+   53 EXPR10: EXPR10 T_OR EXPR11
+   54       | EXPR11
 
-   58 EXPR3: EXPR3 T_DIVIDE EXPR4
-   59      | EXPR3 T_TIMES EXPR4
-   60      | EXPR3 T_REM EXPR4
-   61      | EXPR4
+   55 EXPR11: EXPR11 T_LAND EXPR12
+   56       | EXPR12
 
-   62 EXPR4: EXPR4 T_PLUS EXPR5
-   63      | EXPR4 T_MINUS EXPR5
-   64      | EXPR5
+   57 EXPR12: EXPR12 T_LOR EXPR13
+   58       | EXPR13
 
-   65 EXPR5: EXPR5 T_LSHIFT EXPR6
-   66      | EXPR5 T_RSHIFT EXPR6
-   67      | EXPR6
-
-   68 EXPR6: EXPR6 T_LE EXPR7
-   69      | EXPR6 T_GE EXPR7
-   70      | EXPR6 T_LT EXPR7
-   71      | EXPR6 T_GT EXPR7
-   72      | EXPR7
-
-   73 EXPR7: EXPR7 T_EQ EXPR8
-   74      | EXPR7 T_NEQ EXPR8
-   75      | EXPR8
-
-   76 EXPR8: EXPR8 T_AND EXPR9
-   77      | EXPR9
-
-   78 EXPR9: EXPR9 T_XOR EXPR10
-   79      | EXPR10
-
-   80 EXPR10: EXPR10 T_OR EXPR11
-   81       | EXPR11
-
-   82 EXPR11: EXPR11 T_LAND EXPR12
-   83       | EXPR12
-
-   84 EXPR12: EXPR12 T_LOR EXPR13
-   85       | EXPR13
-
-   86 EXPR13: T_LBRACKET EXPR T_RBRACKET
-   87       | T_VARIABLE
-   88       | I_INT
+   59 EXPR13: T_LBRACKET EXPR T_RBRACKET
+   60       | T_VARIABLE
+   61       | I_INT
 
 
 Terminals, with rules where they appear
@@ -178,8 +160,8 @@ T_EXTERN (259)
 T_STATIC (260)
 T_REGISTER (261)
 T_AUTO (262)
-T_INT <string> (263) 6 8 10 12 16 31 32 33 34
-T_VOID <string> (264) 7 9 11 13
+T_INT <string> (263) 10
+T_VOID <string> (264)
 T_CHAR (265)
 T_SHORT (266)
 T_LONG (267)
@@ -189,60 +171,59 @@ T_SIGNED (270)
 T_RETURN (271)
 T_CONST (272)
 T_VOLATILE (273)
-I_INT <number> (274) 88
-I_FLOAT <Float> (275)
+I_INT <number> (274) 61
+I_FLOAT (275)
 I_CHAR (276)
-T_IF (277) 45 46 47 48
-T_ELSE (278) 47 48
-T_WHILE (279) 49 51
-T_FOR (280) 50
-T_REM (281) 44 60
-T_DO (282) 51
+T_IF (277) 21 22
+T_ELSE (278) 22
+T_WHILE (279) 23 25
+T_FOR (280) 24
+T_REM (281) 20 33
+T_DO (282) 25
 T_SWITCH (283)
 T_STRUCT (284)
 T_CASE (285)
 T_ENUM (286)
 T_UNION (287)
 T_UNSIGNED (288)
-T_TIMES (289) 42 59
-T_DIVIDE (290) 43 58
-T_PLUS (291) 36 37 40 62
-T_MINUS (292) 38 39 41 63
+T_TIMES (289) 18 32
+T_DIVIDE (290) 19 31
+T_PLUS (291) 12 13 16 35
+T_MINUS (292) 14 15 17 36
 T_EXPONENT (293)
-T_EQUAL (294) 32 34 35 40 41 42 43 44
+T_EQUAL (294) 11 16 17 18 19 20
 T_LEXCLAIM (295)
-T_LBRACKET (296) 6 7 8 9 10 11 12 13 45 46 47 48 49 50 51 53 54 86
-T_RBRACKET (297) 6 7 8 9 10 11 12 13 45 46 47 48 49 50 51 53 54 86
-T_LCBRACKET (298) 8 9 10 11 12 13 45 47 49 50 51
-T_RCBRACKET (299) 8 9 10 11 12 13 45 47 49 50 51
+T_LBRACKET (296) 21 22 23 24 25 27 59
+T_RBRACKET (297) 21 22 23 24 25 27 59
+T_LCBRACKET (298) 23 24 25
+T_RCBRACKET (299) 23 24 25
 T_LSBRACKET (300)
 T_RSBRACKET (301)
 T_LOG (302)
 T_EXP (303)
 T_SQRT (304)
-T_LSHIFT (305) 65
-T_RSHIFT (306) 66
+T_LSHIFT (305) 38
+T_RSHIFT (306) 39
 T_NUMBER (307)
-T_VARIABLE <string> (308) 6 7 8 9 10 11 12 13 16 31 32 33 34 35 36
-    37 38 39 40 41 42 43 44 53 54 87
-T_COMMA (309) 14
-T_SEMI_COLON (310) 6 7 19 20 33 34 50
+T_VARIABLE <string> (308) 10 11 12 13 14 15 16 17 18 19 20 27 60
+T_COMMA (309)
+T_SEMI_COLON (310) 24
 T_COLON (311)
 T_GO_TO (312)
 T_CONTINUE (313)
-T_LE (314) 68
-T_GE (315) 69
-T_EQ (316) 73
-T_NEQ (317) 74
-T_LT (318) 70
-T_GT (319) 71
+T_LE (314) 41
+T_GE (315) 42
+T_EQ (316) 46
+T_NEQ (317) 47
+T_LT (318) 43
+T_GT (319) 44
 T_BREAK (320)
-T_LAND (321) 82
-T_LOR (322) 84
-T_AND (323) 76
-T_OR (324) 80
-T_XOR (325) 78
-T_NOT (326) 56
+T_LAND (321) 55
+T_LOR (322) 57
+T_AND (323) 49
+T_OR (324) 53
+T_XOR (325) 51
+T_NOT (326) 29
 
 
 Nonterminals, with rules where they appear
@@ -251,2590 +232,1719 @@ $accept (72)
     on left: 0
 ROOT (73)
     on left: 1, on right: 0
-PROG_LIST <node> (74)
-    on left: 2 3, on right: 1 2
-PROG <node> (75)
-    on left: 4 5, on right: 2 3
-FUNC_DEC <node> (76)
-    on left: 6 7 8 9 10 11 12 13, on right: 4
-PARAMETER_LIST <node> (77)
-    on left: 14 15, on right: 12 13 14 53
-PARAMETER <node> (78)
-    on left: 16 17, on right: 14 15
-SCOPE <node> (79)
-    on left: 18, on right: 8 9 12 13
-STATEMENT_LIST <node> (80)
-    on left: 19 20 21 22, on right: 18 19 21 45 47 49 50 51
-STATEMENT <node> (81)
-    on left: 23 24 25 26 27 28 29 30, on right: 19 20 21 22 46 48
-VAR_DEC_FUNCTION <node> (82)
-    on left: 31 32, on right: 27 50
-VAR_DEC <node> (83)
-    on left: 33 34, on right: 5
-ASSIGNMENT_STATEMENT <node> (84)
-    on left: 35 36 37 38 39 40 41 42 43 44, on right: 28 50
-IF_CONDITION_STATEMENT <node> (85)
-    on left: 45 46, on right: 24
-IF_ELSE_CONDITION_STATEMENT <node> (86)
-    on left: 47 48, on right: 25
-WHILE_CONDITION_STATEMENT <node> (87)
-    on left: 49, on right: 26
-FOR_STATEMENT <node> (88)
-    on left: 50, on right: 29
-DO_WHILE_STATEMENT <node> (89)
-    on left: 51, on right: 30
-RETURN_STATEMENT <node> (90)
-    on left: 52, on right: 23
-RETURN_VALUE <node> (91)
-    on left: 53 54 55, on right: 52
-EXPR <expr> (92)
-    on left: 56 57, on right: 17 32 34 35 40 41 42 43 44 45 46 47 48
-    49 50 51 55 86
-EXPR3 <expr> (93)
-    on left: 58 59 60 61, on right: 56 57 58 59 60
-EXPR4 <expr> (94)
-    on left: 62 63 64, on right: 58 59 60 61 62 63
-EXPR5 <expr> (95)
-    on left: 65 66 67, on right: 62 63 64 65 66
-EXPR6 <expr> (96)
-    on left: 68 69 70 71 72, on right: 65 66 67 68 69 70 71
-EXPR7 <expr> (97)
-    on left: 73 74 75, on right: 68 69 70 71 72 73 74
-EXPR8 <expr> (98)
-    on left: 76 77, on right: 73 74 75 76
-EXPR9 <expr> (99)
-    on left: 78 79, on right: 76 77 78
-EXPR10 <expr> (100)
-    on left: 80 81, on right: 78 79 80
-EXPR11 <expr> (101)
-    on left: 82 83, on right: 80 81 82
-EXPR12 <expr> (102)
-    on left: 84 85, on right: 82 83 84
-EXPR13 <expr> (103)
-    on left: 86 87 88, on right: 84 85
+STATEMENT <expr> (74)
+    on left: 2 3 4 5 6 7 8 9, on right: 1 21 22 23 24 25
+VAR_DEC_FUNCTION <expr> (75)
+    on left: 10, on right: 6 24
+ASSIGNMENT_STATEMENT <expr> (76)
+    on left: 11 12 13 14 15 16 17 18 19 20, on right: 7 24
+IF_CONDITION_STATEMENT <expr> (77)
+    on left: 21, on right: 3
+IF_ELSE_CONDITION_STATEMENT <expr> (78)
+    on left: 22, on right: 4
+WHILE_CONDITION_STATEMENT <expr> (79)
+    on left: 23, on right: 5
+FOR_STATEMENT <expr> (80)
+    on left: 24, on right: 8
+DO_WHILE_STATEMENT <expr> (81)
+    on left: 25, on right: 9
+RETURN_STATEMENT <expr> (82)
+    on left: 26, on right: 2
+RETURN_VALUE <expr> (83)
+    on left: 27 28, on right: 26
+EXPR <expr> (84)
+    on left: 29 30, on right: 11 16 17 18 19 20 21 22 23 24 25 28 59
+EXPR3 <expr> (85)
+    on left: 31 32 33 34, on right: 29 30 31 32 33
+EXPR4 <expr> (86)
+    on left: 35 36 37, on right: 31 32 33 34 35 36
+EXPR5 <expr> (87)
+    on left: 38 39 40, on right: 35 36 37 38 39
+EXPR6 <expr> (88)
+    on left: 41 42 43 44 45, on right: 38 39 40 41 42 43 44
+EXPR7 <expr> (89)
+    on left: 46 47 48, on right: 41 42 43 44 45 46 47
+EXPR8 <expr> (90)
+    on left: 49 50, on right: 46 47 48 49
+EXPR9 <expr> (91)
+    on left: 51 52, on right: 49 50 51
+EXPR10 <expr> (92)
+    on left: 53 54, on right: 51 52 53
+EXPR11 <expr> (93)
+    on left: 55 56, on right: 53 54 55
+EXPR12 <expr> (94)
+    on left: 57 58, on right: 55 56 57
+EXPR13 <expr> (95)
+    on left: 59 60 61, on right: 57 58
 
 
 State 0
 
     0 $accept: . ROOT $end
 
-    T_INT   shift, and go to state 1
-    T_VOID  shift, and go to state 2
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
 
-    ROOT       go to state 3
-    PROG_LIST  go to state 4
-    PROG       go to state 5
-    FUNC_DEC   go to state 6
-    VAR_DEC    go to state 7
+    ROOT                         go to state 12
+    STATEMENT                    go to state 13
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
 
 
 State 1
 
-    6 FUNC_DEC: T_INT . T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON
-    8         | T_INT . T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   10         | T_INT . T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   12         | T_INT . T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   33 VAR_DEC: T_INT . T_VARIABLE T_SEMI_COLON
-   34        | T_INT . T_VARIABLE T_EQUAL EXPR T_SEMI_COLON
+   10 VAR_DEC_FUNCTION: T_INT . T_VARIABLE
 
-    T_VARIABLE  shift, and go to state 8
+    T_VARIABLE  shift, and go to state 35
 
 
 State 2
 
-    7 FUNC_DEC: T_VOID . T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON
-    9         | T_VOID . T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   11         | T_VOID . T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   13         | T_VOID . T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
+   61 EXPR13: I_INT .
 
-    T_VARIABLE  shift, and go to state 9
+    $default  reduce using rule 61 (EXPR13)
 
 
 State 3
 
-    0 $accept: ROOT . $end
+   21 IF_CONDITION_STATEMENT: T_IF . T_LBRACKET EXPR T_RBRACKET STATEMENT
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF . T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
 
-    $end  shift, and go to state 10
+    T_LBRACKET  shift, and go to state 36
 
 
 State 4
 
-    1 ROOT: PROG_LIST .
+   23 WHILE_CONDITION_STATEMENT: T_WHILE . T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    $default  reduce using rule 1 (ROOT)
+    T_LBRACKET  shift, and go to state 37
 
 
 State 5
 
-    2 PROG_LIST: PROG . PROG_LIST
-    3          | PROG .
+   24 FOR_STATEMENT: T_FOR . T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_INT   shift, and go to state 1
-    T_VOID  shift, and go to state 2
-
-    $default  reduce using rule 3 (PROG_LIST)
-
-    PROG_LIST  go to state 11
-    PROG       go to state 5
-    FUNC_DEC   go to state 6
-    VAR_DEC    go to state 7
+    T_LBRACKET  shift, and go to state 38
 
 
 State 6
 
-    4 PROG: FUNC_DEC .
+   25 DO_WHILE_STATEMENT: T_DO . T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
 
-    $default  reduce using rule 4 (PROG)
+    T_LCBRACKET  shift, and go to state 39
 
 
 State 7
 
-    5 PROG: VAR_DEC .
+   13 ASSIGNMENT_STATEMENT: T_PLUS . T_PLUS T_VARIABLE
 
-    $default  reduce using rule 5 (PROG)
+    T_PLUS  shift, and go to state 40
 
 
 State 8
 
-    6 FUNC_DEC: T_INT T_VARIABLE . T_LBRACKET T_RBRACKET T_SEMI_COLON
-    8         | T_INT T_VARIABLE . T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   10         | T_INT T_VARIABLE . T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   12         | T_INT T_VARIABLE . T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   33 VAR_DEC: T_INT T_VARIABLE . T_SEMI_COLON
-   34        | T_INT T_VARIABLE . T_EQUAL EXPR T_SEMI_COLON
+   15 ASSIGNMENT_STATEMENT: T_MINUS . T_MINUS T_VARIABLE
 
-    T_EQUAL       shift, and go to state 12
-    T_LBRACKET    shift, and go to state 13
-    T_SEMI_COLON  shift, and go to state 14
+    T_MINUS  shift, and go to state 41
 
 
 State 9
 
-    7 FUNC_DEC: T_VOID T_VARIABLE . T_LBRACKET T_RBRACKET T_SEMI_COLON
-    9         | T_VOID T_VARIABLE . T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   11         | T_VOID T_VARIABLE . T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET
-   13         | T_VOID T_VARIABLE . T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
+   59 EXPR13: T_LBRACKET . EXPR T_RBRACKET
 
-    T_LBRACKET  shift, and go to state 15
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 43
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 10
+
+   11 ASSIGNMENT_STATEMENT: T_VARIABLE . T_EQUAL EXPR
+   12                     | T_VARIABLE . T_PLUS T_PLUS
+   14                     | T_VARIABLE . T_MINUS T_MINUS
+   16                     | T_VARIABLE . T_PLUS T_EQUAL EXPR
+   17                     | T_VARIABLE . T_MINUS T_EQUAL EXPR
+   18                     | T_VARIABLE . T_TIMES T_EQUAL EXPR
+   19                     | T_VARIABLE . T_DIVIDE T_EQUAL EXPR
+   20                     | T_VARIABLE . T_REM T_EQUAL EXPR
+   27 RETURN_VALUE: T_VARIABLE . T_LBRACKET T_RBRACKET
+   60 EXPR13: T_VARIABLE .
+
+    T_REM       shift, and go to state 44
+    T_TIMES     shift, and go to state 45
+    T_DIVIDE    shift, and go to state 46
+    T_PLUS      shift, and go to state 47
+    T_MINUS     shift, and go to state 48
+    T_EQUAL     shift, and go to state 49
+    T_LBRACKET  shift, and go to state 50
+
+    T_REM     [reduce using rule 60 (EXPR13)]
+    T_TIMES   [reduce using rule 60 (EXPR13)]
+    T_DIVIDE  [reduce using rule 60 (EXPR13)]
+    T_PLUS    [reduce using rule 60 (EXPR13)]
+    T_MINUS   [reduce using rule 60 (EXPR13)]
+    $default  reduce using rule 60 (EXPR13)
+
+
+State 11
+
+   29 EXPR: T_NOT . EXPR3
+
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR3   go to state 51
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
+
+
+State 12
+
+    0 $accept: ROOT . $end
+
+    $end  shift, and go to state 52
+
+
+State 13
+
+    1 ROOT: STATEMENT .
+
+    $default  reduce using rule 1 (ROOT)
+
+
+State 14
+
+    6 STATEMENT: VAR_DEC_FUNCTION .
+
+    $default  reduce using rule 6 (STATEMENT)
+
+
+State 15
+
+    7 STATEMENT: ASSIGNMENT_STATEMENT .
+
+    $default  reduce using rule 7 (STATEMENT)
+
+
+State 16
+
+    3 STATEMENT: IF_CONDITION_STATEMENT .
+
+    $default  reduce using rule 3 (STATEMENT)
+
+
+State 17
+
+    4 STATEMENT: IF_ELSE_CONDITION_STATEMENT .
+
+    $default  reduce using rule 4 (STATEMENT)
+
+
+State 18
+
+    5 STATEMENT: WHILE_CONDITION_STATEMENT .
+
+    $default  reduce using rule 5 (STATEMENT)
+
+
+State 19
+
+    8 STATEMENT: FOR_STATEMENT .
+
+    $default  reduce using rule 8 (STATEMENT)
+
+
+State 20
+
+    9 STATEMENT: DO_WHILE_STATEMENT .
+
+    $default  reduce using rule 9 (STATEMENT)
+
+
+State 21
+
+    2 STATEMENT: RETURN_STATEMENT .
+
+    $default  reduce using rule 2 (STATEMENT)
+
+
+State 22
+
+   26 RETURN_STATEMENT: RETURN_VALUE .
+
+    $default  reduce using rule 26 (RETURN_STATEMENT)
+
+
+State 23
+
+   28 RETURN_VALUE: EXPR .
+
+    $default  reduce using rule 28 (RETURN_VALUE)
+
+
+State 24
+
+   30 EXPR: EXPR3 .
+   31 EXPR3: EXPR3 . T_DIVIDE EXPR4
+   32      | EXPR3 . T_TIMES EXPR4
+   33      | EXPR3 . T_REM EXPR4
+
+    T_REM     shift, and go to state 53
+    T_TIMES   shift, and go to state 54
+    T_DIVIDE  shift, and go to state 55
+
+    $default  reduce using rule 30 (EXPR)
+
+
+State 25
+
+   34 EXPR3: EXPR4 .
+   35 EXPR4: EXPR4 . T_PLUS EXPR5
+   36      | EXPR4 . T_MINUS EXPR5
+
+    T_PLUS   shift, and go to state 56
+    T_MINUS  shift, and go to state 57
+
+    $default  reduce using rule 34 (EXPR3)
+
+
+State 26
+
+   37 EXPR4: EXPR5 .
+   38 EXPR5: EXPR5 . T_LSHIFT EXPR6
+   39      | EXPR5 . T_RSHIFT EXPR6
+
+    T_LSHIFT  shift, and go to state 58
+    T_RSHIFT  shift, and go to state 59
+
+    $default  reduce using rule 37 (EXPR4)
+
+
+State 27
+
+   40 EXPR5: EXPR6 .
+   41 EXPR6: EXPR6 . T_LE EXPR7
+   42      | EXPR6 . T_GE EXPR7
+   43      | EXPR6 . T_LT EXPR7
+   44      | EXPR6 . T_GT EXPR7
+
+    T_LE  shift, and go to state 60
+    T_GE  shift, and go to state 61
+    T_LT  shift, and go to state 62
+    T_GT  shift, and go to state 63
+
+    $default  reduce using rule 40 (EXPR5)
+
+
+State 28
+
+   45 EXPR6: EXPR7 .
+   46 EXPR7: EXPR7 . T_EQ EXPR8
+   47      | EXPR7 . T_NEQ EXPR8
+
+    T_EQ   shift, and go to state 64
+    T_NEQ  shift, and go to state 65
+
+    $default  reduce using rule 45 (EXPR6)
+
+
+State 29
+
+   48 EXPR7: EXPR8 .
+   49 EXPR8: EXPR8 . T_AND EXPR9
+
+    T_AND  shift, and go to state 66
+
+    $default  reduce using rule 48 (EXPR7)
+
+
+State 30
+
+   50 EXPR8: EXPR9 .
+   51 EXPR9: EXPR9 . T_XOR EXPR10
+
+    T_XOR  shift, and go to state 67
+
+    $default  reduce using rule 50 (EXPR8)
+
+
+State 31
+
+   52 EXPR9: EXPR10 .
+   53 EXPR10: EXPR10 . T_OR EXPR11
+
+    T_OR  shift, and go to state 68
+
+    $default  reduce using rule 52 (EXPR9)
+
+
+State 32
+
+   54 EXPR10: EXPR11 .
+   55 EXPR11: EXPR11 . T_LAND EXPR12
+
+    T_LAND  shift, and go to state 69
+
+    $default  reduce using rule 54 (EXPR10)
+
+
+State 33
+
+   56 EXPR11: EXPR12 .
+   57 EXPR12: EXPR12 . T_LOR EXPR13
+
+    T_LOR  shift, and go to state 70
+
+    $default  reduce using rule 56 (EXPR11)
+
+
+State 34
+
+   58 EXPR12: EXPR13 .
+
+    $default  reduce using rule 58 (EXPR12)
+
+
+State 35
+
+   10 VAR_DEC_FUNCTION: T_INT T_VARIABLE .
+
+    $default  reduce using rule 10 (VAR_DEC_FUNCTION)
+
+
+State 36
+
+   21 IF_CONDITION_STATEMENT: T_IF T_LBRACKET . EXPR T_RBRACKET STATEMENT
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET . EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
+
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 71
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
+
+
+State 37
+
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET . EXPR T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
+
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 72
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
+
+
+State 38
+
+   24 FOR_STATEMENT: T_FOR T_LBRACKET . VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
+
+    T_INT  shift, and go to state 1
+
+    VAR_DEC_FUNCTION  go to state 73
+
+
+State 39
+
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET . STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
+
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
+
+    STATEMENT                    go to state 74
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
+
+
+State 40
+
+   13 ASSIGNMENT_STATEMENT: T_PLUS T_PLUS . T_VARIABLE
+
+    T_VARIABLE  shift, and go to state 75
+
+
+State 41
+
+   15 ASSIGNMENT_STATEMENT: T_MINUS T_MINUS . T_VARIABLE
+
+    T_VARIABLE  shift, and go to state 76
+
+
+State 42
+
+   60 EXPR13: T_VARIABLE .
+
+    $default  reduce using rule 60 (EXPR13)
+
+
+State 43
+
+   59 EXPR13: T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 77
+
+
+State 44
+
+   20 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM . T_EQUAL EXPR
+
+    T_EQUAL  shift, and go to state 78
+
+
+State 45
+
+   18 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES . T_EQUAL EXPR
+
+    T_EQUAL  shift, and go to state 79
+
+
+State 46
+
+   19 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE . T_EQUAL EXPR
+
+    T_EQUAL  shift, and go to state 80
+
+
+State 47
+
+   12 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS . T_PLUS
+   16                     | T_VARIABLE T_PLUS . T_EQUAL EXPR
+
+    T_PLUS   shift, and go to state 81
+    T_EQUAL  shift, and go to state 82
+
+
+State 48
+
+   14 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS . T_MINUS
+   17                     | T_VARIABLE T_MINUS . T_EQUAL EXPR
+
+    T_MINUS  shift, and go to state 83
+    T_EQUAL  shift, and go to state 84
+
+
+State 49
+
+   11 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL . EXPR
+
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 85
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
+
+
+State 50
+
+   27 RETURN_VALUE: T_VARIABLE T_LBRACKET . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 86
+
+
+State 51
+
+   29 EXPR: T_NOT EXPR3 .
+   31 EXPR3: EXPR3 . T_DIVIDE EXPR4
+   32      | EXPR3 . T_TIMES EXPR4
+   33      | EXPR3 . T_REM EXPR4
+
+    T_REM     shift, and go to state 53
+    T_TIMES   shift, and go to state 54
+    T_DIVIDE  shift, and go to state 55
+
+    $default  reduce using rule 29 (EXPR)
+
+
+State 52
 
     0 $accept: ROOT $end .
 
     $default  accept
 
 
-State 11
-
-    2 PROG_LIST: PROG PROG_LIST .
-
-    $default  reduce using rule 2 (PROG_LIST)
-
-
-State 12
-
-   34 VAR_DEC: T_INT T_VARIABLE T_EQUAL . EXPR T_SEMI_COLON
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 20
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 13
-
-    6 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET . T_RBRACKET T_SEMI_COLON
-    8         | T_INT T_VARIABLE T_LBRACKET . T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   10         | T_INT T_VARIABLE T_LBRACKET . T_RBRACKET T_LCBRACKET T_RCBRACKET
-   12         | T_INT T_VARIABLE T_LBRACKET . PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-
-    T_INT       shift, and go to state 32
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_RBRACKET  shift, and go to state 33
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    PARAMETER_LIST  go to state 34
-    PARAMETER       go to state 35
-    EXPR            go to state 36
-    EXPR3           go to state 21
-    EXPR4           go to state 22
-    EXPR5           go to state 23
-    EXPR6           go to state 24
-    EXPR7           go to state 25
-    EXPR8           go to state 26
-    EXPR9           go to state 27
-    EXPR10          go to state 28
-    EXPR11          go to state 29
-    EXPR12          go to state 30
-    EXPR13          go to state 31
-
-
-State 14
-
-   33 VAR_DEC: T_INT T_VARIABLE T_SEMI_COLON .
-
-    $default  reduce using rule 33 (VAR_DEC)
-
-
-State 15
-
-    7 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET . T_RBRACKET T_SEMI_COLON
-    9         | T_VOID T_VARIABLE T_LBRACKET . T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-   11         | T_VOID T_VARIABLE T_LBRACKET . T_RBRACKET T_LCBRACKET T_RCBRACKET
-   13         | T_VOID T_VARIABLE T_LBRACKET . PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-
-    T_INT       shift, and go to state 32
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_RBRACKET  shift, and go to state 37
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    PARAMETER_LIST  go to state 38
-    PARAMETER       go to state 35
-    EXPR            go to state 36
-    EXPR3           go to state 21
-    EXPR4           go to state 22
-    EXPR5           go to state 23
-    EXPR6           go to state 24
-    EXPR7           go to state 25
-    EXPR8           go to state 26
-    EXPR9           go to state 27
-    EXPR10          go to state 28
-    EXPR11          go to state 29
-    EXPR12          go to state 30
-    EXPR13          go to state 31
-
-
-State 16
-
-   88 EXPR13: I_INT .
-
-    $default  reduce using rule 88 (EXPR13)
-
-
-State 17
-
-   86 EXPR13: T_LBRACKET . EXPR T_RBRACKET
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 39
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 18
-
-   87 EXPR13: T_VARIABLE .
-
-    $default  reduce using rule 87 (EXPR13)
-
-
-State 19
-
-   56 EXPR: T_NOT . EXPR3
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR3   go to state 40
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 20
-
-   34 VAR_DEC: T_INT T_VARIABLE T_EQUAL EXPR . T_SEMI_COLON
-
-    T_SEMI_COLON  shift, and go to state 41
-
-
-State 21
-
-   57 EXPR: EXPR3 .
-   58 EXPR3: EXPR3 . T_DIVIDE EXPR4
-   59      | EXPR3 . T_TIMES EXPR4
-   60      | EXPR3 . T_REM EXPR4
-
-    T_REM     shift, and go to state 42
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 57 (EXPR)
-
-
-State 22
-
-   61 EXPR3: EXPR4 .
-   62 EXPR4: EXPR4 . T_PLUS EXPR5
-   63      | EXPR4 . T_MINUS EXPR5
-
-    T_PLUS   shift, and go to state 45
-    T_MINUS  shift, and go to state 46
-
-    T_PLUS    [reduce using rule 61 (EXPR3)]
-    T_MINUS   [reduce using rule 61 (EXPR3)]
-    $default  reduce using rule 61 (EXPR3)
-
-
-State 23
-
-   64 EXPR4: EXPR5 .
-   65 EXPR5: EXPR5 . T_LSHIFT EXPR6
-   66      | EXPR5 . T_RSHIFT EXPR6
-
-    T_LSHIFT  shift, and go to state 47
-    T_RSHIFT  shift, and go to state 48
-
-    $default  reduce using rule 64 (EXPR4)
-
-
-State 24
-
-   67 EXPR5: EXPR6 .
-   68 EXPR6: EXPR6 . T_LE EXPR7
-   69      | EXPR6 . T_GE EXPR7
-   70      | EXPR6 . T_LT EXPR7
-   71      | EXPR6 . T_GT EXPR7
-
-    T_LE  shift, and go to state 49
-    T_GE  shift, and go to state 50
-    T_LT  shift, and go to state 51
-    T_GT  shift, and go to state 52
-
-    $default  reduce using rule 67 (EXPR5)
-
-
-State 25
-
-   72 EXPR6: EXPR7 .
-   73 EXPR7: EXPR7 . T_EQ EXPR8
-   74      | EXPR7 . T_NEQ EXPR8
-
-    T_EQ   shift, and go to state 53
-    T_NEQ  shift, and go to state 54
-
-    $default  reduce using rule 72 (EXPR6)
-
-
-State 26
-
-   75 EXPR7: EXPR8 .
-   76 EXPR8: EXPR8 . T_AND EXPR9
-
-    T_AND  shift, and go to state 55
-
-    $default  reduce using rule 75 (EXPR7)
-
-
-State 27
-
-   77 EXPR8: EXPR9 .
-   78 EXPR9: EXPR9 . T_XOR EXPR10
-
-    T_XOR  shift, and go to state 56
-
-    $default  reduce using rule 77 (EXPR8)
-
-
-State 28
-
-   79 EXPR9: EXPR10 .
-   80 EXPR10: EXPR10 . T_OR EXPR11
-
-    T_OR  shift, and go to state 57
-
-    $default  reduce using rule 79 (EXPR9)
-
-
-State 29
-
-   81 EXPR10: EXPR11 .
-   82 EXPR11: EXPR11 . T_LAND EXPR12
-
-    T_LAND  shift, and go to state 58
-
-    $default  reduce using rule 81 (EXPR10)
-
-
-State 30
-
-   83 EXPR11: EXPR12 .
-   84 EXPR12: EXPR12 . T_LOR EXPR13
-
-    T_LOR  shift, and go to state 59
-
-    $default  reduce using rule 83 (EXPR11)
-
-
-State 31
-
-   85 EXPR12: EXPR13 .
-
-    $default  reduce using rule 85 (EXPR12)
-
-
-State 32
-
-   16 PARAMETER: T_INT . T_VARIABLE
-
-    T_VARIABLE  shift, and go to state 60
-
-
-State 33
-
-    6 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET . T_SEMI_COLON
-    8         | T_INT T_VARIABLE T_LBRACKET T_RBRACKET . T_LCBRACKET SCOPE T_RCBRACKET
-   10         | T_INT T_VARIABLE T_LBRACKET T_RBRACKET . T_LCBRACKET T_RCBRACKET
-
-    T_LCBRACKET   shift, and go to state 61
-    T_SEMI_COLON  shift, and go to state 62
-
-
-State 34
-
-   12 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST . T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-
-    T_RBRACKET  shift, and go to state 63
-
-
-State 35
-
-   14 PARAMETER_LIST: PARAMETER . T_COMMA PARAMETER_LIST
-   15               | PARAMETER .
-
-    T_COMMA  shift, and go to state 64
-
-    $default  reduce using rule 15 (PARAMETER_LIST)
-
-
-State 36
-
-   17 PARAMETER: EXPR .
-
-    $default  reduce using rule 17 (PARAMETER)
-
-
-State 37
-
-    7 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET . T_SEMI_COLON
-    9         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET . T_LCBRACKET SCOPE T_RCBRACKET
-   11         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET . T_LCBRACKET T_RCBRACKET
-
-    T_LCBRACKET   shift, and go to state 65
-    T_SEMI_COLON  shift, and go to state 66
-
-
-State 38
-
-   13 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST . T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET
-
-    T_RBRACKET  shift, and go to state 67
-
-
-State 39
-
-   86 EXPR13: T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 68
-
-
-State 40
-
-   56 EXPR: T_NOT EXPR3 .
-   58 EXPR3: EXPR3 . T_DIVIDE EXPR4
-   59      | EXPR3 . T_TIMES EXPR4
-   60      | EXPR3 . T_REM EXPR4
-
-    T_REM     shift, and go to state 42
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 56 (EXPR)
-
-
-State 41
-
-   34 VAR_DEC: T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON .
-
-    $default  reduce using rule 34 (VAR_DEC)
-
-
-State 42
-
-   60 EXPR3: EXPR3 T_REM . EXPR4
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR4   go to state 69
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 43
-
-   59 EXPR3: EXPR3 T_TIMES . EXPR4
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR4   go to state 70
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 44
-
-   58 EXPR3: EXPR3 T_DIVIDE . EXPR4
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR4   go to state 71
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 45
-
-   62 EXPR4: EXPR4 T_PLUS . EXPR5
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR5   go to state 72
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 46
-
-   63 EXPR4: EXPR4 T_MINUS . EXPR5
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR5   go to state 73
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 47
-
-   65 EXPR5: EXPR5 T_LSHIFT . EXPR6
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR6   go to state 74
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 48
-
-   66 EXPR5: EXPR5 T_RSHIFT . EXPR6
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR6   go to state 75
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 49
-
-   68 EXPR6: EXPR6 T_LE . EXPR7
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR7   go to state 76
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 50
-
-   69 EXPR6: EXPR6 T_GE . EXPR7
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR7   go to state 77
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 51
-
-   70 EXPR6: EXPR6 T_LT . EXPR7
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR7   go to state 78
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 52
-
-   71 EXPR6: EXPR6 T_GT . EXPR7
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-
-    EXPR7   go to state 79
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
 State 53
 
-   73 EXPR7: EXPR7 T_EQ . EXPR8
+   33 EXPR3: EXPR3 T_REM . EXPR4
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR8   go to state 80
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    EXPR4   go to state 87
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 54
 
-   74 EXPR7: EXPR7 T_NEQ . EXPR8
+   32 EXPR3: EXPR3 T_TIMES . EXPR4
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR8   go to state 81
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    EXPR4   go to state 88
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 55
 
-   76 EXPR8: EXPR8 T_AND . EXPR9
+   31 EXPR3: EXPR3 T_DIVIDE . EXPR4
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR9   go to state 82
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    EXPR4   go to state 89
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 56
 
-   78 EXPR9: EXPR9 T_XOR . EXPR10
+   35 EXPR4: EXPR4 T_PLUS . EXPR5
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR10  go to state 83
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    EXPR5   go to state 90
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 57
 
-   80 EXPR10: EXPR10 T_OR . EXPR11
+   36 EXPR4: EXPR4 T_MINUS . EXPR5
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR11  go to state 84
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    EXPR5   go to state 91
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 58
 
-   82 EXPR11: EXPR11 T_LAND . EXPR12
+   38 EXPR5: EXPR5 T_LSHIFT . EXPR6
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR12  go to state 85
-    EXPR13  go to state 31
+    EXPR6   go to state 92
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 59
 
-   84 EXPR12: EXPR12 T_LOR . EXPR13
+   39 EXPR5: EXPR5 T_RSHIFT . EXPR6
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    EXPR13  go to state 86
+    EXPR6   go to state 93
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 60
 
-   16 PARAMETER: T_INT T_VARIABLE .
+   41 EXPR6: EXPR6 T_LE . EXPR7
 
-    $default  reduce using rule 16 (PARAMETER)
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR7   go to state 94
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 61
 
-    8 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET . SCOPE T_RCBRACKET
-   10         | T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET . T_RCBRACKET
+   42 EXPR6: EXPR6 T_GE . EXPR7
 
-    T_INT        shift, and go to state 87
-    I_INT        shift, and go to state 16
-    T_IF         shift, and go to state 88
-    T_WHILE      shift, and go to state 89
-    T_FOR        shift, and go to state 90
-    T_DO         shift, and go to state 91
-    T_PLUS       shift, and go to state 92
-    T_MINUS      shift, and go to state 93
-    T_LBRACKET   shift, and go to state 17
-    T_RCBRACKET  shift, and go to state 94
-    T_VARIABLE   shift, and go to state 95
-    T_NOT        shift, and go to state 19
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    SCOPE                        go to state 96
-    STATEMENT_LIST               go to state 97
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    EXPR7   go to state 95
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 62
 
-    6 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON .
+   43 EXPR6: EXPR6 T_LT . EXPR7
 
-    $default  reduce using rule 6 (FUNC_DEC)
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR7   go to state 96
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 63
 
-   12 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET . T_LCBRACKET SCOPE T_RCBRACKET
+   44 EXPR6: EXPR6 T_GT . EXPR7
 
-    T_LCBRACKET  shift, and go to state 109
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR7   go to state 97
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 64
 
-   14 PARAMETER_LIST: PARAMETER T_COMMA . PARAMETER_LIST
+   46 EXPR7: EXPR7 T_EQ . EXPR8
 
-    T_INT       shift, and go to state 32
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    PARAMETER_LIST  go to state 110
-    PARAMETER       go to state 35
-    EXPR            go to state 36
-    EXPR3           go to state 21
-    EXPR4           go to state 22
-    EXPR5           go to state 23
-    EXPR6           go to state 24
-    EXPR7           go to state 25
-    EXPR8           go to state 26
-    EXPR9           go to state 27
-    EXPR10          go to state 28
-    EXPR11          go to state 29
-    EXPR12          go to state 30
-    EXPR13          go to state 31
+    EXPR8   go to state 98
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 65
 
-    9 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET . SCOPE T_RCBRACKET
-   11         | T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET . T_RCBRACKET
+   47 EXPR7: EXPR7 T_NEQ . EXPR8
 
-    T_INT        shift, and go to state 87
-    I_INT        shift, and go to state 16
-    T_IF         shift, and go to state 88
-    T_WHILE      shift, and go to state 89
-    T_FOR        shift, and go to state 90
-    T_DO         shift, and go to state 91
-    T_PLUS       shift, and go to state 92
-    T_MINUS      shift, and go to state 93
-    T_LBRACKET   shift, and go to state 17
-    T_RCBRACKET  shift, and go to state 111
-    T_VARIABLE   shift, and go to state 95
-    T_NOT        shift, and go to state 19
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    SCOPE                        go to state 112
-    STATEMENT_LIST               go to state 97
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    EXPR8   go to state 99
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 66
 
-    7 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON .
+   49 EXPR8: EXPR8 T_AND . EXPR9
 
-    $default  reduce using rule 7 (FUNC_DEC)
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR9   go to state 100
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 67
 
-   13 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET . T_LCBRACKET SCOPE T_RCBRACKET
+   51 EXPR9: EXPR9 T_XOR . EXPR10
 
-    T_LCBRACKET  shift, and go to state 113
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR10  go to state 101
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 68
 
-   86 EXPR13: T_LBRACKET EXPR T_RBRACKET .
+   53 EXPR10: EXPR10 T_OR . EXPR11
 
-    $default  reduce using rule 86 (EXPR13)
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+
+    EXPR11  go to state 102
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 69
 
-   60 EXPR3: EXPR3 T_REM EXPR4 .
-   62 EXPR4: EXPR4 . T_PLUS EXPR5
-   63      | EXPR4 . T_MINUS EXPR5
+   55 EXPR11: EXPR11 T_LAND . EXPR12
 
-    T_PLUS   shift, and go to state 45
-    T_MINUS  shift, and go to state 46
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    T_PLUS    [reduce using rule 60 (EXPR3)]
-    T_MINUS   [reduce using rule 60 (EXPR3)]
-    $default  reduce using rule 60 (EXPR3)
+    EXPR12  go to state 103
+    EXPR13  go to state 34
 
 
 State 70
 
-   59 EXPR3: EXPR3 T_TIMES EXPR4 .
-   62 EXPR4: EXPR4 . T_PLUS EXPR5
-   63      | EXPR4 . T_MINUS EXPR5
+   57 EXPR12: EXPR12 T_LOR . EXPR13
 
-    T_PLUS   shift, and go to state 45
-    T_MINUS  shift, and go to state 46
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
 
-    T_PLUS    [reduce using rule 59 (EXPR3)]
-    T_MINUS   [reduce using rule 59 (EXPR3)]
-    $default  reduce using rule 59 (EXPR3)
+    EXPR13  go to state 104
 
 
 State 71
 
-   58 EXPR3: EXPR3 T_DIVIDE EXPR4 .
-   62 EXPR4: EXPR4 . T_PLUS EXPR5
-   63      | EXPR4 . T_MINUS EXPR5
+   21 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR . T_RBRACKET STATEMENT
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR . T_RBRACKET STATEMENT T_ELSE STATEMENT
 
-    T_PLUS   shift, and go to state 45
-    T_MINUS  shift, and go to state 46
-
-    T_PLUS    [reduce using rule 58 (EXPR3)]
-    T_MINUS   [reduce using rule 58 (EXPR3)]
-    $default  reduce using rule 58 (EXPR3)
+    T_RBRACKET  shift, and go to state 105
 
 
 State 72
 
-   62 EXPR4: EXPR4 T_PLUS EXPR5 .
-   65 EXPR5: EXPR5 . T_LSHIFT EXPR6
-   66      | EXPR5 . T_RSHIFT EXPR6
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR . T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_LSHIFT  shift, and go to state 47
-    T_RSHIFT  shift, and go to state 48
-
-    $default  reduce using rule 62 (EXPR4)
+    T_RBRACKET  shift, and go to state 106
 
 
 State 73
 
-   63 EXPR4: EXPR4 T_MINUS EXPR5 .
-   65 EXPR5: EXPR5 . T_LSHIFT EXPR6
-   66      | EXPR5 . T_RSHIFT EXPR6
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION . T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_LSHIFT  shift, and go to state 47
-    T_RSHIFT  shift, and go to state 48
-
-    $default  reduce using rule 63 (EXPR4)
+    T_SEMI_COLON  shift, and go to state 107
 
 
 State 74
 
-   65 EXPR5: EXPR5 T_LSHIFT EXPR6 .
-   68 EXPR6: EXPR6 . T_LE EXPR7
-   69      | EXPR6 . T_GE EXPR7
-   70      | EXPR6 . T_LT EXPR7
-   71      | EXPR6 . T_GT EXPR7
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT . T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
 
-    T_LE  shift, and go to state 49
-    T_GE  shift, and go to state 50
-    T_LT  shift, and go to state 51
-    T_GT  shift, and go to state 52
-
-    $default  reduce using rule 65 (EXPR5)
+    T_RCBRACKET  shift, and go to state 108
 
 
 State 75
 
-   66 EXPR5: EXPR5 T_RSHIFT EXPR6 .
-   68 EXPR6: EXPR6 . T_LE EXPR7
-   69      | EXPR6 . T_GE EXPR7
-   70      | EXPR6 . T_LT EXPR7
-   71      | EXPR6 . T_GT EXPR7
+   13 ASSIGNMENT_STATEMENT: T_PLUS T_PLUS T_VARIABLE .
 
-    T_LE  shift, and go to state 49
-    T_GE  shift, and go to state 50
-    T_LT  shift, and go to state 51
-    T_GT  shift, and go to state 52
-
-    $default  reduce using rule 66 (EXPR5)
+    $default  reduce using rule 13 (ASSIGNMENT_STATEMENT)
 
 
 State 76
 
-   68 EXPR6: EXPR6 T_LE EXPR7 .
-   73 EXPR7: EXPR7 . T_EQ EXPR8
-   74      | EXPR7 . T_NEQ EXPR8
+   15 ASSIGNMENT_STATEMENT: T_MINUS T_MINUS T_VARIABLE .
 
-    T_EQ   shift, and go to state 53
-    T_NEQ  shift, and go to state 54
-
-    $default  reduce using rule 68 (EXPR6)
+    $default  reduce using rule 15 (ASSIGNMENT_STATEMENT)
 
 
 State 77
 
-   69 EXPR6: EXPR6 T_GE EXPR7 .
-   73 EXPR7: EXPR7 . T_EQ EXPR8
-   74      | EXPR7 . T_NEQ EXPR8
+   59 EXPR13: T_LBRACKET EXPR T_RBRACKET .
 
-    T_EQ   shift, and go to state 53
-    T_NEQ  shift, and go to state 54
-
-    $default  reduce using rule 69 (EXPR6)
+    $default  reduce using rule 59 (EXPR13)
 
 
 State 78
 
-   70 EXPR6: EXPR6 T_LT EXPR7 .
-   73 EXPR7: EXPR7 . T_EQ EXPR8
-   74      | EXPR7 . T_NEQ EXPR8
+   20 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM T_EQUAL . EXPR
 
-    T_EQ   shift, and go to state 53
-    T_NEQ  shift, and go to state 54
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 70 (EXPR6)
+    EXPR    go to state 109
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 79
 
-   71 EXPR6: EXPR6 T_GT EXPR7 .
-   73 EXPR7: EXPR7 . T_EQ EXPR8
-   74      | EXPR7 . T_NEQ EXPR8
+   18 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES T_EQUAL . EXPR
 
-    T_EQ   shift, and go to state 53
-    T_NEQ  shift, and go to state 54
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 71 (EXPR6)
+    EXPR    go to state 110
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 80
 
-   73 EXPR7: EXPR7 T_EQ EXPR8 .
-   76 EXPR8: EXPR8 . T_AND EXPR9
+   19 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE T_EQUAL . EXPR
 
-    T_AND  shift, and go to state 55
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 73 (EXPR7)
+    EXPR    go to state 111
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 81
 
-   74 EXPR7: EXPR7 T_NEQ EXPR8 .
-   76 EXPR8: EXPR8 . T_AND EXPR9
+   12 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_PLUS .
 
-    T_AND  shift, and go to state 55
-
-    $default  reduce using rule 74 (EXPR7)
+    $default  reduce using rule 12 (ASSIGNMENT_STATEMENT)
 
 
 State 82
 
-   76 EXPR8: EXPR8 T_AND EXPR9 .
-   78 EXPR9: EXPR9 . T_XOR EXPR10
+   16 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_EQUAL . EXPR
 
-    T_XOR  shift, and go to state 56
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 76 (EXPR8)
+    EXPR    go to state 112
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 83
 
-   78 EXPR9: EXPR9 T_XOR EXPR10 .
-   80 EXPR10: EXPR10 . T_OR EXPR11
+   14 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_MINUS .
 
-    T_OR  shift, and go to state 57
-
-    $default  reduce using rule 78 (EXPR9)
+    $default  reduce using rule 14 (ASSIGNMENT_STATEMENT)
 
 
 State 84
 
-   80 EXPR10: EXPR10 T_OR EXPR11 .
-   82 EXPR11: EXPR11 . T_LAND EXPR12
+   17 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_EQUAL . EXPR
 
-    T_LAND  shift, and go to state 58
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 80 (EXPR10)
+    EXPR    go to state 113
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 85
 
-   82 EXPR11: EXPR11 T_LAND EXPR12 .
-   84 EXPR12: EXPR12 . T_LOR EXPR13
+   11 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL EXPR .
 
-    T_LOR  shift, and go to state 59
-
-    $default  reduce using rule 82 (EXPR11)
+    $default  reduce using rule 11 (ASSIGNMENT_STATEMENT)
 
 
 State 86
 
-   84 EXPR12: EXPR12 T_LOR EXPR13 .
+   27 RETURN_VALUE: T_VARIABLE T_LBRACKET T_RBRACKET .
 
-    $default  reduce using rule 84 (EXPR12)
+    $default  reduce using rule 27 (RETURN_VALUE)
 
 
 State 87
 
-   31 VAR_DEC_FUNCTION: T_INT . T_VARIABLE
-   32                 | T_INT . T_VARIABLE T_EQUAL EXPR
+   33 EXPR3: EXPR3 T_REM EXPR4 .
+   35 EXPR4: EXPR4 . T_PLUS EXPR5
+   36      | EXPR4 . T_MINUS EXPR5
 
-    T_VARIABLE  shift, and go to state 114
+    T_PLUS   shift, and go to state 56
+    T_MINUS  shift, and go to state 57
+
+    $default  reduce using rule 33 (EXPR3)
 
 
 State 88
 
-   45 IF_CONDITION_STATEMENT: T_IF . T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   46                       | T_IF . T_LBRACKET EXPR T_RBRACKET STATEMENT
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF . T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   48                            | T_IF . T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
+   32 EXPR3: EXPR3 T_TIMES EXPR4 .
+   35 EXPR4: EXPR4 . T_PLUS EXPR5
+   36      | EXPR4 . T_MINUS EXPR5
 
-    T_LBRACKET  shift, and go to state 115
+    T_PLUS   shift, and go to state 56
+    T_MINUS  shift, and go to state 57
+
+    $default  reduce using rule 32 (EXPR3)
 
 
 State 89
 
-   49 WHILE_CONDITION_STATEMENT: T_WHILE . T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   31 EXPR3: EXPR3 T_DIVIDE EXPR4 .
+   35 EXPR4: EXPR4 . T_PLUS EXPR5
+   36      | EXPR4 . T_MINUS EXPR5
 
-    T_LBRACKET  shift, and go to state 116
+    T_PLUS   shift, and go to state 56
+    T_MINUS  shift, and go to state 57
+
+    $default  reduce using rule 31 (EXPR3)
 
 
 State 90
 
-   50 FOR_STATEMENT: T_FOR . T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   35 EXPR4: EXPR4 T_PLUS EXPR5 .
+   38 EXPR5: EXPR5 . T_LSHIFT EXPR6
+   39      | EXPR5 . T_RSHIFT EXPR6
 
-    T_LBRACKET  shift, and go to state 117
+    T_LSHIFT  shift, and go to state 58
+    T_RSHIFT  shift, and go to state 59
+
+    $default  reduce using rule 35 (EXPR4)
 
 
 State 91
 
-   51 DO_WHILE_STATEMENT: T_DO . T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
+   36 EXPR4: EXPR4 T_MINUS EXPR5 .
+   38 EXPR5: EXPR5 . T_LSHIFT EXPR6
+   39      | EXPR5 . T_RSHIFT EXPR6
 
-    T_LCBRACKET  shift, and go to state 118
+    T_LSHIFT  shift, and go to state 58
+    T_RSHIFT  shift, and go to state 59
+
+    $default  reduce using rule 36 (EXPR4)
 
 
 State 92
 
-   37 ASSIGNMENT_STATEMENT: T_PLUS . T_PLUS T_VARIABLE
+   38 EXPR5: EXPR5 T_LSHIFT EXPR6 .
+   41 EXPR6: EXPR6 . T_LE EXPR7
+   42      | EXPR6 . T_GE EXPR7
+   43      | EXPR6 . T_LT EXPR7
+   44      | EXPR6 . T_GT EXPR7
 
-    T_PLUS  shift, and go to state 119
+    T_LE  shift, and go to state 60
+    T_GE  shift, and go to state 61
+    T_LT  shift, and go to state 62
+    T_GT  shift, and go to state 63
+
+    $default  reduce using rule 38 (EXPR5)
 
 
 State 93
 
-   39 ASSIGNMENT_STATEMENT: T_MINUS . T_MINUS T_VARIABLE
+   39 EXPR5: EXPR5 T_RSHIFT EXPR6 .
+   41 EXPR6: EXPR6 . T_LE EXPR7
+   42      | EXPR6 . T_GE EXPR7
+   43      | EXPR6 . T_LT EXPR7
+   44      | EXPR6 . T_GT EXPR7
 
-    T_MINUS  shift, and go to state 120
+    T_LE  shift, and go to state 60
+    T_GE  shift, and go to state 61
+    T_LT  shift, and go to state 62
+    T_GT  shift, and go to state 63
+
+    $default  reduce using rule 39 (EXPR5)
 
 
 State 94
 
-   10 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET .
+   41 EXPR6: EXPR6 T_LE EXPR7 .
+   46 EXPR7: EXPR7 . T_EQ EXPR8
+   47      | EXPR7 . T_NEQ EXPR8
 
-    $default  reduce using rule 10 (FUNC_DEC)
+    T_EQ   shift, and go to state 64
+    T_NEQ  shift, and go to state 65
+
+    $default  reduce using rule 41 (EXPR6)
 
 
 State 95
 
-   35 ASSIGNMENT_STATEMENT: T_VARIABLE . T_EQUAL EXPR
-   36                     | T_VARIABLE . T_PLUS T_PLUS
-   38                     | T_VARIABLE . T_MINUS T_MINUS
-   40                     | T_VARIABLE . T_PLUS T_EQUAL EXPR
-   41                     | T_VARIABLE . T_MINUS T_EQUAL EXPR
-   42                     | T_VARIABLE . T_TIMES T_EQUAL EXPR
-   43                     | T_VARIABLE . T_DIVIDE T_EQUAL EXPR
-   44                     | T_VARIABLE . T_REM T_EQUAL EXPR
-   53 RETURN_VALUE: T_VARIABLE . T_LBRACKET PARAMETER_LIST T_RBRACKET
-   54             | T_VARIABLE . T_LBRACKET T_RBRACKET
-   87 EXPR13: T_VARIABLE .
+   42 EXPR6: EXPR6 T_GE EXPR7 .
+   46 EXPR7: EXPR7 . T_EQ EXPR8
+   47      | EXPR7 . T_NEQ EXPR8
 
-    T_REM       shift, and go to state 121
-    T_TIMES     shift, and go to state 122
-    T_DIVIDE    shift, and go to state 123
-    T_PLUS      shift, and go to state 124
-    T_MINUS     shift, and go to state 125
-    T_EQUAL     shift, and go to state 126
-    T_LBRACKET  shift, and go to state 127
+    T_EQ   shift, and go to state 64
+    T_NEQ  shift, and go to state 65
 
-    T_REM       [reduce using rule 87 (EXPR13)]
-    T_TIMES     [reduce using rule 87 (EXPR13)]
-    T_DIVIDE    [reduce using rule 87 (EXPR13)]
-    T_PLUS      [reduce using rule 87 (EXPR13)]
-    T_MINUS     [reduce using rule 87 (EXPR13)]
-    T_LBRACKET  [reduce using rule 87 (EXPR13)]
-    $default    reduce using rule 87 (EXPR13)
+    $default  reduce using rule 42 (EXPR6)
 
 
 State 96
 
-    8 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
+   43 EXPR6: EXPR6 T_LT EXPR7 .
+   46 EXPR7: EXPR7 . T_EQ EXPR8
+   47      | EXPR7 . T_NEQ EXPR8
 
-    T_RCBRACKET  shift, and go to state 128
+    T_EQ   shift, and go to state 64
+    T_NEQ  shift, and go to state 65
+
+    $default  reduce using rule 43 (EXPR6)
 
 
 State 97
 
-   18 SCOPE: STATEMENT_LIST .
+   44 EXPR6: EXPR6 T_GT EXPR7 .
+   46 EXPR7: EXPR7 . T_EQ EXPR8
+   47      | EXPR7 . T_NEQ EXPR8
 
-    $default  reduce using rule 18 (SCOPE)
+    T_EQ   shift, and go to state 64
+    T_NEQ  shift, and go to state 65
+
+    $default  reduce using rule 44 (EXPR6)
 
 
 State 98
 
-   19 STATEMENT_LIST: STATEMENT . T_SEMI_COLON STATEMENT_LIST
-   20               | STATEMENT . T_SEMI_COLON
-   21               | STATEMENT . STATEMENT_LIST
-   22               | STATEMENT .
+   46 EXPR7: EXPR7 T_EQ EXPR8 .
+   49 EXPR8: EXPR8 . T_AND EXPR9
 
-    T_INT         shift, and go to state 87
-    I_INT         shift, and go to state 16
-    T_IF          shift, and go to state 88
-    T_WHILE       shift, and go to state 89
-    T_FOR         shift, and go to state 90
-    T_DO          shift, and go to state 91
-    T_PLUS        shift, and go to state 92
-    T_MINUS       shift, and go to state 93
-    T_LBRACKET    shift, and go to state 17
-    T_VARIABLE    shift, and go to state 95
-    T_SEMI_COLON  shift, and go to state 129
-    T_NOT         shift, and go to state 19
+    T_AND  shift, and go to state 66
 
-    $default  reduce using rule 22 (STATEMENT_LIST)
-
-    STATEMENT_LIST               go to state 130
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    $default  reduce using rule 46 (EXPR7)
 
 
 State 99
 
-   27 STATEMENT: VAR_DEC_FUNCTION .
+   47 EXPR7: EXPR7 T_NEQ EXPR8 .
+   49 EXPR8: EXPR8 . T_AND EXPR9
 
-    $default  reduce using rule 27 (STATEMENT)
+    T_AND  shift, and go to state 66
+
+    $default  reduce using rule 47 (EXPR7)
 
 
 State 100
 
-   28 STATEMENT: ASSIGNMENT_STATEMENT .
+   49 EXPR8: EXPR8 T_AND EXPR9 .
+   51 EXPR9: EXPR9 . T_XOR EXPR10
 
-    $default  reduce using rule 28 (STATEMENT)
+    T_XOR  shift, and go to state 67
+
+    $default  reduce using rule 49 (EXPR8)
 
 
 State 101
 
-   24 STATEMENT: IF_CONDITION_STATEMENT .
+   51 EXPR9: EXPR9 T_XOR EXPR10 .
+   53 EXPR10: EXPR10 . T_OR EXPR11
 
-    $default  reduce using rule 24 (STATEMENT)
+    T_OR  shift, and go to state 68
+
+    $default  reduce using rule 51 (EXPR9)
 
 
 State 102
 
-   25 STATEMENT: IF_ELSE_CONDITION_STATEMENT .
+   53 EXPR10: EXPR10 T_OR EXPR11 .
+   55 EXPR11: EXPR11 . T_LAND EXPR12
 
-    $default  reduce using rule 25 (STATEMENT)
+    T_LAND  shift, and go to state 69
+
+    $default  reduce using rule 53 (EXPR10)
 
 
 State 103
 
-   26 STATEMENT: WHILE_CONDITION_STATEMENT .
+   55 EXPR11: EXPR11 T_LAND EXPR12 .
+   57 EXPR12: EXPR12 . T_LOR EXPR13
 
-    $default  reduce using rule 26 (STATEMENT)
+    T_LOR  shift, and go to state 70
+
+    $default  reduce using rule 55 (EXPR11)
 
 
 State 104
 
-   29 STATEMENT: FOR_STATEMENT .
+   57 EXPR12: EXPR12 T_LOR EXPR13 .
 
-    $default  reduce using rule 29 (STATEMENT)
+    $default  reduce using rule 57 (EXPR12)
 
 
 State 105
 
-   30 STATEMENT: DO_WHILE_STATEMENT .
+   21 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET . STATEMENT
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET . STATEMENT T_ELSE STATEMENT
 
-    $default  reduce using rule 30 (STATEMENT)
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
+
+    STATEMENT                    go to state 114
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
 
 
 State 106
 
-   23 STATEMENT: RETURN_STATEMENT .
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET . T_LCBRACKET STATEMENT T_RCBRACKET
 
-    $default  reduce using rule 23 (STATEMENT)
+    T_LCBRACKET  shift, and go to state 115
 
 
 State 107
 
-   52 RETURN_STATEMENT: RETURN_VALUE .
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON . EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    $default  reduce using rule 52 (RETURN_STATEMENT)
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 116
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 108
 
-   55 RETURN_VALUE: EXPR .
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET . T_WHILE T_LBRACKET EXPR T_RBRACKET
 
-    $default  reduce using rule 55 (RETURN_VALUE)
+    T_WHILE  shift, and go to state 117
 
 
 State 109
 
-   12 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET . SCOPE T_RCBRACKET
+   20 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM T_EQUAL EXPR .
 
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    SCOPE                        go to state 131
-    STATEMENT_LIST               go to state 97
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    $default  reduce using rule 20 (ASSIGNMENT_STATEMENT)
 
 
 State 110
 
-   14 PARAMETER_LIST: PARAMETER T_COMMA PARAMETER_LIST .
+   18 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES T_EQUAL EXPR .
 
-    $default  reduce using rule 14 (PARAMETER_LIST)
+    $default  reduce using rule 18 (ASSIGNMENT_STATEMENT)
 
 
 State 111
 
-   11 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET .
+   19 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE T_EQUAL EXPR .
 
-    $default  reduce using rule 11 (FUNC_DEC)
+    $default  reduce using rule 19 (ASSIGNMENT_STATEMENT)
 
 
 State 112
 
-    9 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
+   16 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_EQUAL EXPR .
 
-    T_RCBRACKET  shift, and go to state 132
+    $default  reduce using rule 16 (ASSIGNMENT_STATEMENT)
 
 
 State 113
 
-   13 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET . SCOPE T_RCBRACKET
+   17 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_EQUAL EXPR .
 
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    SCOPE                        go to state 133
-    STATEMENT_LIST               go to state 97
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    $default  reduce using rule 17 (ASSIGNMENT_STATEMENT)
 
 
 State 114
 
-   31 VAR_DEC_FUNCTION: T_INT T_VARIABLE .
-   32                 | T_INT T_VARIABLE . T_EQUAL EXPR
+   21 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT .
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT . T_ELSE STATEMENT
 
-    T_EQUAL  shift, and go to state 134
+    T_ELSE  shift, and go to state 118
 
-    $default  reduce using rule 31 (VAR_DEC_FUNCTION)
+    T_ELSE    [reduce using rule 21 (IF_CONDITION_STATEMENT)]
+    $default  reduce using rule 21 (IF_CONDITION_STATEMENT)
 
 
 State 115
 
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET . EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   46                       | T_IF T_LBRACKET . EXPR T_RBRACKET STATEMENT
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET . EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   48                            | T_IF T_LBRACKET . EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET . STATEMENT T_RCBRACKET
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
 
-    EXPR    go to state 135
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    STATEMENT                    go to state 119
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
 
 
 State 116
 
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET . EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR . T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 136
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    T_SEMI_COLON  shift, and go to state 120
 
 
 State 117
 
-   50 FOR_STATEMENT: T_FOR T_LBRACKET . VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE . T_LBRACKET EXPR T_RBRACKET
 
-    T_INT  shift, and go to state 87
-
-    VAR_DEC_FUNCTION  go to state 137
+    T_LBRACKET  shift, and go to state 121
 
 
 State 118
 
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET . STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE . STATEMENT
 
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
 
-    STATEMENT_LIST               go to state 138
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    STATEMENT                    go to state 122
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
 
 
 State 119
 
-   37 ASSIGNMENT_STATEMENT: T_PLUS T_PLUS . T_VARIABLE
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT . T_RCBRACKET
 
-    T_VARIABLE  shift, and go to state 139
+    T_RCBRACKET  shift, and go to state 123
 
 
 State 120
 
-   39 ASSIGNMENT_STATEMENT: T_MINUS T_MINUS . T_VARIABLE
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON . ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_VARIABLE  shift, and go to state 140
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_VARIABLE  shift, and go to state 124
+
+    ASSIGNMENT_STATEMENT  go to state 125
 
 
 State 121
 
-   44 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM . T_EQUAL EXPR
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET . EXPR T_RBRACKET
 
-    T_EQUAL  shift, and go to state 141
+    I_INT       shift, and go to state 2
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 42
+    T_NOT       shift, and go to state 11
+
+    EXPR    go to state 126
+    EXPR3   go to state 24
+    EXPR4   go to state 25
+    EXPR5   go to state 26
+    EXPR6   go to state 27
+    EXPR7   go to state 28
+    EXPR8   go to state 29
+    EXPR9   go to state 30
+    EXPR10  go to state 31
+    EXPR11  go to state 32
+    EXPR12  go to state 33
+    EXPR13  go to state 34
 
 
 State 122
 
-   42 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES . T_EQUAL EXPR
+   22 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT .
 
-    T_EQUAL  shift, and go to state 142
+    $default  reduce using rule 22 (IF_ELSE_CONDITION_STATEMENT)
 
 
 State 123
 
-   43 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE . T_EQUAL EXPR
+   23 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET .
 
-    T_EQUAL  shift, and go to state 143
+    $default  reduce using rule 23 (WHILE_CONDITION_STATEMENT)
 
 
 State 124
 
-   36 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS . T_PLUS
-   40                     | T_VARIABLE T_PLUS . T_EQUAL EXPR
+   11 ASSIGNMENT_STATEMENT: T_VARIABLE . T_EQUAL EXPR
+   12                     | T_VARIABLE . T_PLUS T_PLUS
+   14                     | T_VARIABLE . T_MINUS T_MINUS
+   16                     | T_VARIABLE . T_PLUS T_EQUAL EXPR
+   17                     | T_VARIABLE . T_MINUS T_EQUAL EXPR
+   18                     | T_VARIABLE . T_TIMES T_EQUAL EXPR
+   19                     | T_VARIABLE . T_DIVIDE T_EQUAL EXPR
+   20                     | T_VARIABLE . T_REM T_EQUAL EXPR
 
-    T_PLUS   shift, and go to state 144
-    T_EQUAL  shift, and go to state 145
+    T_REM     shift, and go to state 44
+    T_TIMES   shift, and go to state 45
+    T_DIVIDE  shift, and go to state 46
+    T_PLUS    shift, and go to state 47
+    T_MINUS   shift, and go to state 48
+    T_EQUAL   shift, and go to state 49
 
 
 State 125
 
-   38 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS . T_MINUS
-   41                     | T_VARIABLE T_MINUS . T_EQUAL EXPR
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT . T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_MINUS  shift, and go to state 146
-    T_EQUAL  shift, and go to state 147
+    T_RBRACKET  shift, and go to state 127
 
 
 State 126
 
-   35 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL . EXPR
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR . T_RBRACKET
 
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 148
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
+    T_RBRACKET  shift, and go to state 128
 
 
 State 127
 
-   53 RETURN_VALUE: T_VARIABLE T_LBRACKET . PARAMETER_LIST T_RBRACKET
-   54             | T_VARIABLE T_LBRACKET . T_RBRACKET
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET . T_LCBRACKET STATEMENT T_RCBRACKET
 
-    T_INT       shift, and go to state 32
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_RBRACKET  shift, and go to state 149
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    PARAMETER_LIST  go to state 150
-    PARAMETER       go to state 35
-    EXPR            go to state 36
-    EXPR3           go to state 21
-    EXPR4           go to state 22
-    EXPR5           go to state 23
-    EXPR6           go to state 24
-    EXPR7           go to state 25
-    EXPR8           go to state 26
-    EXPR9           go to state 27
-    EXPR10          go to state 28
-    EXPR11          go to state 29
-    EXPR12          go to state 30
-    EXPR13          go to state 31
+    T_LCBRACKET  shift, and go to state 129
 
 
 State 128
 
-    8 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
+   25 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET .
 
-    $default  reduce using rule 8 (FUNC_DEC)
+    $default  reduce using rule 25 (DO_WHILE_STATEMENT)
 
 
 State 129
 
-   19 STATEMENT_LIST: STATEMENT T_SEMI_COLON . STATEMENT_LIST
-   20               | STATEMENT T_SEMI_COLON .
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET . STATEMENT T_RCBRACKET
 
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
+    T_INT       shift, and go to state 1
+    I_INT       shift, and go to state 2
+    T_IF        shift, and go to state 3
+    T_WHILE     shift, and go to state 4
+    T_FOR       shift, and go to state 5
+    T_DO        shift, and go to state 6
+    T_PLUS      shift, and go to state 7
+    T_MINUS     shift, and go to state 8
+    T_LBRACKET  shift, and go to state 9
+    T_VARIABLE  shift, and go to state 10
+    T_NOT       shift, and go to state 11
 
-    $default  reduce using rule 20 (STATEMENT_LIST)
-
-    STATEMENT_LIST               go to state 151
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
+    STATEMENT                    go to state 130
+    VAR_DEC_FUNCTION             go to state 14
+    ASSIGNMENT_STATEMENT         go to state 15
+    IF_CONDITION_STATEMENT       go to state 16
+    IF_ELSE_CONDITION_STATEMENT  go to state 17
+    WHILE_CONDITION_STATEMENT    go to state 18
+    FOR_STATEMENT                go to state 19
+    DO_WHILE_STATEMENT           go to state 20
+    RETURN_STATEMENT             go to state 21
+    RETURN_VALUE                 go to state 22
+    EXPR                         go to state 23
+    EXPR3                        go to state 24
+    EXPR4                        go to state 25
+    EXPR5                        go to state 26
+    EXPR6                        go to state 27
+    EXPR7                        go to state 28
+    EXPR8                        go to state 29
+    EXPR9                        go to state 30
+    EXPR10                       go to state 31
+    EXPR11                       go to state 32
+    EXPR12                       go to state 33
+    EXPR13                       go to state 34
 
 
 State 130
 
-   21 STATEMENT_LIST: STATEMENT STATEMENT_LIST .
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT . T_RCBRACKET
 
-    $default  reduce using rule 21 (STATEMENT_LIST)
+    T_RCBRACKET  shift, and go to state 131
 
 
 State 131
 
-   12 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
+   24 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT T_RCBRACKET .
 
-    T_RCBRACKET  shift, and go to state 152
-
-
-State 132
-
-    9 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
-
-    $default  reduce using rule 9 (FUNC_DEC)
-
-
-State 133
-
-   13 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
-
-    T_RCBRACKET  shift, and go to state 153
-
-
-State 134
-
-   32 VAR_DEC_FUNCTION: T_INT T_VARIABLE T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 154
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 135
-
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR . T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   46                       | T_IF T_LBRACKET EXPR . T_RBRACKET STATEMENT
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR . T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   48                            | T_IF T_LBRACKET EXPR . T_RBRACKET STATEMENT T_ELSE STATEMENT
-
-    T_RBRACKET  shift, and go to state 155
-
-
-State 136
-
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR . T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_RBRACKET  shift, and go to state 156
-
-
-State 137
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION . T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_SEMI_COLON  shift, and go to state 157
-
-
-State 138
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST . T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET
-
-    T_RCBRACKET  shift, and go to state 158
-
-
-State 139
-
-   37 ASSIGNMENT_STATEMENT: T_PLUS T_PLUS T_VARIABLE .
-
-    $default  reduce using rule 37 (ASSIGNMENT_STATEMENT)
-
-
-State 140
-
-   39 ASSIGNMENT_STATEMENT: T_MINUS T_MINUS T_VARIABLE .
-
-    $default  reduce using rule 39 (ASSIGNMENT_STATEMENT)
-
-
-State 141
-
-   44 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 159
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 142
-
-   42 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 160
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 143
-
-   43 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 161
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 144
-
-   36 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_PLUS .
-
-    $default  reduce using rule 36 (ASSIGNMENT_STATEMENT)
-
-
-State 145
-
-   40 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 162
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 146
-
-   38 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_MINUS .
-
-    $default  reduce using rule 38 (ASSIGNMENT_STATEMENT)
-
-
-State 147
-
-   41 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_EQUAL . EXPR
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 163
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 148
-
-   35 ASSIGNMENT_STATEMENT: T_VARIABLE T_EQUAL EXPR .
-
-    $default  reduce using rule 35 (ASSIGNMENT_STATEMENT)
-
-
-State 149
-
-   54 RETURN_VALUE: T_VARIABLE T_LBRACKET T_RBRACKET .
-
-    $default  reduce using rule 54 (RETURN_VALUE)
-
-
-State 150
-
-   53 RETURN_VALUE: T_VARIABLE T_LBRACKET PARAMETER_LIST . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 164
-
-
-State 151
-
-   19 STATEMENT_LIST: STATEMENT T_SEMI_COLON STATEMENT_LIST .
-
-    $default  reduce using rule 19 (STATEMENT_LIST)
-
-
-State 152
-
-   12 FUNC_DEC: T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
-
-    $default  reduce using rule 12 (FUNC_DEC)
-
-
-State 153
-
-   13 FUNC_DEC: T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
-
-    $default  reduce using rule 13 (FUNC_DEC)
-
-
-State 154
-
-   32 VAR_DEC_FUNCTION: T_INT T_VARIABLE T_EQUAL EXPR .
-
-    $default  reduce using rule 32 (VAR_DEC_FUNCTION)
-
-
-State 155
-
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET . T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   46                       | T_IF T_LBRACKET EXPR T_RBRACKET . STATEMENT
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET . T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-   48                            | T_IF T_LBRACKET EXPR T_RBRACKET . STATEMENT T_ELSE STATEMENT
-
-    T_INT        shift, and go to state 87
-    I_INT        shift, and go to state 16
-    T_IF         shift, and go to state 88
-    T_WHILE      shift, and go to state 89
-    T_FOR        shift, and go to state 90
-    T_DO         shift, and go to state 91
-    T_PLUS       shift, and go to state 92
-    T_MINUS      shift, and go to state 93
-    T_LBRACKET   shift, and go to state 17
-    T_LCBRACKET  shift, and go to state 165
-    T_VARIABLE   shift, and go to state 95
-    T_NOT        shift, and go to state 19
-
-    STATEMENT                    go to state 166
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 156
-
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET . T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 167
-
-
-State 157
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON . EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 168
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 158
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET . T_WHILE T_LBRACKET EXPR T_RBRACKET
-
-    T_WHILE  shift, and go to state 169
-
-
-State 159
-
-   44 ASSIGNMENT_STATEMENT: T_VARIABLE T_REM T_EQUAL EXPR .
-
-    $default  reduce using rule 44 (ASSIGNMENT_STATEMENT)
-
-
-State 160
-
-   42 ASSIGNMENT_STATEMENT: T_VARIABLE T_TIMES T_EQUAL EXPR .
-
-    $default  reduce using rule 42 (ASSIGNMENT_STATEMENT)
-
-
-State 161
-
-   43 ASSIGNMENT_STATEMENT: T_VARIABLE T_DIVIDE T_EQUAL EXPR .
-
-    $default  reduce using rule 43 (ASSIGNMENT_STATEMENT)
-
-
-State 162
-
-   40 ASSIGNMENT_STATEMENT: T_VARIABLE T_PLUS T_EQUAL EXPR .
-
-    $default  reduce using rule 40 (ASSIGNMENT_STATEMENT)
-
-
-State 163
-
-   41 ASSIGNMENT_STATEMENT: T_VARIABLE T_MINUS T_EQUAL EXPR .
-
-    $default  reduce using rule 41 (ASSIGNMENT_STATEMENT)
-
-
-State 164
-
-   53 RETURN_VALUE: T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET .
-
-    $default  reduce using rule 53 (RETURN_VALUE)
-
-
-State 165
-
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET . STATEMENT_LIST T_RCBRACKET
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET . STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    STATEMENT_LIST               go to state 170
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 166
-
-   46 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT .
-   48 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT . T_ELSE STATEMENT
-
-    T_ELSE  shift, and go to state 171
-
-    T_ELSE    [reduce using rule 46 (IF_CONDITION_STATEMENT)]
-    $default  reduce using rule 46 (IF_CONDITION_STATEMENT)
-
-
-State 167
-
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET . STATEMENT_LIST T_RCBRACKET
-
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    STATEMENT_LIST               go to state 172
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 168
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR . T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_SEMI_COLON  shift, and go to state 173
-
-
-State 169
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE . T_LBRACKET EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 174
-
-
-State 170
-
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST . T_RCBRACKET
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST . T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_RCBRACKET  shift, and go to state 175
-
-
-State 171
-
-   48 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE . STATEMENT
-
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    STATEMENT                    go to state 176
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 172
-
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST . T_RCBRACKET
-
-    T_RCBRACKET  shift, and go to state 177
-
-
-State 173
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON . ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_VARIABLE  shift, and go to state 178
-
-    ASSIGNMENT_STATEMENT  go to state 179
-
-
-State 174
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET . EXPR T_RBRACKET
-
-    I_INT       shift, and go to state 16
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 18
-    T_NOT       shift, and go to state 19
-
-    EXPR    go to state 180
-    EXPR3   go to state 21
-    EXPR4   go to state 22
-    EXPR5   go to state 23
-    EXPR6   go to state 24
-    EXPR7   go to state 25
-    EXPR8   go to state 26
-    EXPR9   go to state 27
-    EXPR10  go to state 28
-    EXPR11  go to state 29
-    EXPR12  go to state 30
-    EXPR13  go to state 31
-
-
-State 175
-
-   45 IF_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET .
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET . T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_ELSE  shift, and go to state 181
-
-    T_ELSE    [reduce using rule 45 (IF_CONDITION_STATEMENT)]
-    $default  reduce using rule 45 (IF_CONDITION_STATEMENT)
-
-
-State 176
-
-   48 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET STATEMENT T_ELSE STATEMENT .
-
-    $default  reduce using rule 48 (IF_ELSE_CONDITION_STATEMENT)
-
-
-State 177
-
-   49 WHILE_CONDITION_STATEMENT: T_WHILE T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET .
-
-    $default  reduce using rule 49 (WHILE_CONDITION_STATEMENT)
-
-
-State 178
-
-   35 ASSIGNMENT_STATEMENT: T_VARIABLE . T_EQUAL EXPR
-   36                     | T_VARIABLE . T_PLUS T_PLUS
-   38                     | T_VARIABLE . T_MINUS T_MINUS
-   40                     | T_VARIABLE . T_PLUS T_EQUAL EXPR
-   41                     | T_VARIABLE . T_MINUS T_EQUAL EXPR
-   42                     | T_VARIABLE . T_TIMES T_EQUAL EXPR
-   43                     | T_VARIABLE . T_DIVIDE T_EQUAL EXPR
-   44                     | T_VARIABLE . T_REM T_EQUAL EXPR
-
-    T_REM     shift, and go to state 121
-    T_TIMES   shift, and go to state 122
-    T_DIVIDE  shift, and go to state 123
-    T_PLUS    shift, and go to state 124
-    T_MINUS   shift, and go to state 125
-    T_EQUAL   shift, and go to state 126
-
-
-State 179
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT . T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_RBRACKET  shift, and go to state 182
-
-
-State 180
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 183
-
-
-State 181
-
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE . T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 184
-
-
-State 182
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET . T_LCBRACKET STATEMENT_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 185
-
-
-State 183
-
-   51 DO_WHILE_STATEMENT: T_DO T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_WHILE T_LBRACKET EXPR T_RBRACKET .
-
-    $default  reduce using rule 51 (DO_WHILE_STATEMENT)
-
-
-State 184
-
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET . STATEMENT_LIST T_RCBRACKET
-
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    STATEMENT_LIST               go to state 186
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 185
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET . STATEMENT_LIST T_RCBRACKET
-
-    T_INT       shift, and go to state 87
-    I_INT       shift, and go to state 16
-    T_IF        shift, and go to state 88
-    T_WHILE     shift, and go to state 89
-    T_FOR       shift, and go to state 90
-    T_DO        shift, and go to state 91
-    T_PLUS      shift, and go to state 92
-    T_MINUS     shift, and go to state 93
-    T_LBRACKET  shift, and go to state 17
-    T_VARIABLE  shift, and go to state 95
-    T_NOT       shift, and go to state 19
-
-    STATEMENT_LIST               go to state 187
-    STATEMENT                    go to state 98
-    VAR_DEC_FUNCTION             go to state 99
-    ASSIGNMENT_STATEMENT         go to state 100
-    IF_CONDITION_STATEMENT       go to state 101
-    IF_ELSE_CONDITION_STATEMENT  go to state 102
-    WHILE_CONDITION_STATEMENT    go to state 103
-    FOR_STATEMENT                go to state 104
-    DO_WHILE_STATEMENT           go to state 105
-    RETURN_STATEMENT             go to state 106
-    RETURN_VALUE                 go to state 107
-    EXPR                         go to state 108
-    EXPR3                        go to state 21
-    EXPR4                        go to state 22
-    EXPR5                        go to state 23
-    EXPR6                        go to state 24
-    EXPR7                        go to state 25
-    EXPR8                        go to state 26
-    EXPR9                        go to state 27
-    EXPR10                       go to state 28
-    EXPR11                       go to state 29
-    EXPR12                       go to state 30
-    EXPR13                       go to state 31
-
-
-State 186
-
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST . T_RCBRACKET
-
-    T_RCBRACKET  shift, and go to state 188
-
-
-State 187
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST . T_RCBRACKET
-
-    T_RCBRACKET  shift, and go to state 189
-
-
-State 188
-
-   47 IF_ELSE_CONDITION_STATEMENT: T_IF T_LBRACKET EXPR T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET T_ELSE T_LCBRACKET STATEMENT_LIST T_RCBRACKET .
-
-    $default  reduce using rule 47 (IF_ELSE_CONDITION_STATEMENT)
-
-
-State 189
-
-   50 FOR_STATEMENT: T_FOR T_LBRACKET VAR_DEC_FUNCTION T_SEMI_COLON EXPR T_SEMI_COLON ASSIGNMENT_STATEMENT T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET .
-
-    $default  reduce using rule 50 (FOR_STATEMENT)
+    $default  reduce using rule 24 (FOR_STATEMENT)
