@@ -79,8 +79,13 @@ public:
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0, "<< var_reg<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
-
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }
         myContext.UnlockReg(var_reg);
     }
 };
@@ -113,8 +118,13 @@ public:
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
-
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }
         myContext.UnlockReg(var_reg);
     }
 };
@@ -145,8 +155,13 @@ public:
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
-
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }
         myContext.UnlockReg(var_reg);
     }
 };
@@ -176,8 +191,13 @@ public:
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
-
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }
         myContext.UnlockReg(var_reg);
     }
 };
@@ -208,7 +228,13 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
-        outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }        
         myContext.UnlockReg(exp_reg);
     }
 };
@@ -243,7 +269,15 @@ public:
         outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"ADDU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }   
+
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);
 
@@ -279,7 +313,13 @@ public:
         outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
         outStream<<"SUBU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }   
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);    
     }
@@ -315,7 +355,13 @@ public:
         outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }   
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -352,7 +398,13 @@ public:
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }   
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -388,7 +440,13 @@ public:
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFHI "<<var_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        if(myContext.localIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+        }else{
+            throw "Variable has not yet been declared";
+        }   
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }

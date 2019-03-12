@@ -125,21 +125,27 @@ public:
         currentLocalPointer=currentLocalPointer+4;
         return currentLocalPointer-4;
     }
-    unsigned int findGlobalInt(std::string name){
-        return globals[name];
+    std::string findGlobalInt(std::string name){
+        return "reg_"+std::to_string(globals[name]);
     }
-    unsigned int findLocalInt(std::string name){
-        if(locals.count(name)>0){
-            return locals[name];
+
+    std::string findLocalInt(std::string name){
+        return "reg_"+std::to_string(locals[name]);
+    }
+    bool globalIntExists(std::string name){
+        if(globals.count(name)>0){
+            return 1;
         }else{
-            throw "Variable "+name+" has not been declared.\n";
+            return 0;;
         }
     }
-    // void updateStackOffset(){
-    //     stackOffset=currentLocalPointer;
-    // }
-
-    
+    bool localIntExists(std::string name){
+        if(locals.count(name)>0){
+            return 1;
+        }else{
+            return 0;;
+        }
+    }
 
 
     unsigned int createGlobalArray(std::string name, int size){

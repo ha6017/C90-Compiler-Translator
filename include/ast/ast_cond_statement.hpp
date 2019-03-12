@@ -56,6 +56,7 @@ public:
         outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_label<<std::endl;
         branch->printMips(dstreg, newContext, outStream);
         outStream<<my_label<<std::endl;
+
     }
 };
 

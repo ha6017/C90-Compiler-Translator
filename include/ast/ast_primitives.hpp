@@ -28,8 +28,13 @@ public:
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-        
-        outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl; //no global?
+        if(myContext.localIntExists(var)){
+            outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl; //no global?
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"LW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"(0)"<<std::endl; //no global?
+        }else{
+            throw "Variable has not yet been declared";
+        }
 
     }
 
