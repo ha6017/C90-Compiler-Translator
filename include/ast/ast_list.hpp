@@ -34,14 +34,14 @@ public:
 
     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-        //detect return and end
-        statement->convertIR(dstreg, myContext, IRlist);//make it so that statement only uses the dstreg if has return!
-        if(myBranchList!=NULL){
-            myBranchList->convertIR(dstreg, myContext, IRlist);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
-        }
-    }
+    // //! Evaluate the tree using the given mapping of variables to numbers
+    // virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
+    //     //detect return and end
+    //     statement->convertIR(dstreg, myContext, IRlist);//make it so that statement only uses the dstreg if has return!
+    //     if(myBranchList!=NULL){
+    //         myBranchList->convertIR(dstreg, myContext, IRlist);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
+    //     }
+    // }
 };
 
 class ParamList : public ASTNode
@@ -66,10 +66,7 @@ public:
 
     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-
-    }
+    
 };
 
 /*class ArrayList: public ASTNode
