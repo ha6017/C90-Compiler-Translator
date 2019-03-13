@@ -46,8 +46,8 @@ class Number
 public:
     int value;
     
-    Number(int _value)
-        : value(_value)
+    Number(int value)
+        : value(value)
     {}
 
     
