@@ -1,0 +1,7 @@
+In our initial plan we aimed to finish by today. We both almost finished our respective parts (parsing and code generation). The most unexpected loss of time so far was in the debugging process. As a result, our initial plan was very optimistic. Another loss of time was the change of plan to go directly to MIPS instead of through an intermediate representation. We had to spend around 5 hours a week more time than expected to accomplish what we have done until today.
+
+The next stage is for us to create tests and debug. We also aim to add more operators from the "advanced" features such as the address ( & ) and the dereference ( * ) operator.
+
+Our commits have been very regular with 50 commits since Feb 19 (over a 22 day period).
+
+We have roughly stuck by our timetable. Our new finishing date is March 18. We will devote another 18 hours each over the weekend to reach this new objective. I believe this new plan not to be optimistic but rather achievable.

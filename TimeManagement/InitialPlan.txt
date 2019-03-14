@@ -1,0 +1,11 @@
+We aim to finish the project by March 13 to give us time for revision before exams. As a result we need to start working early. In terms of days of work this would require 3 weeks. We were aware that this was improbable but given both of our experiences with the MIPS simulator we knew that we would only finish on time if we forced an earlier deadline on ourselves.
+
+Hardik wanted to primarily focus on lexer/ parser and Christian wanted to primarily focus on class creation and code generation. 
+
+In order to coordinate the parser with the classes. We had 3 2.5 hour initial meetings to talk about the structure of the AST. One of the results of these talks was the excel spreadsheet (also in this directory) showing our initial class names in order of associativity. 
+
+The .jpg file in the same directory shows Christian's timetable created on Feb 25. The areas highlighted in pink show 3/4 hours spent on the compiler in the morning or afternoon. We worked together therefore the areas highlighted in pink show how both of us planned our hours initially. One can also see time allocated towards other courseworks.
+
+We aimed to have Python translation and basic parsing (assignment, conditions, arithmetic) finished by March 2.
+
+Our initial goal was to complete all intermediate features except for enum.
