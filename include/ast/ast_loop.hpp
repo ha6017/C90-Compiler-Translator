@@ -25,6 +25,12 @@ public:
         , branch(_branch)
     {}
 
+    ~For(){
+        delete initialisation;
+        delete condition;
+        delete postLoopExp;
+        delete branch;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"for(";
@@ -82,11 +88,12 @@ public:
         , branch(_branch)
     {}
 
-    virtual ~While()
+    ~While()
     {
         delete condition;
         delete branch;
     }
+    
     virtual void printC(std::ostream &outStream) const {
         outStream<<"while(";
         condition->printC(outStream);
@@ -139,7 +146,7 @@ public:
         , branch(_branch)
     {}
 
-    virtual ~DoWhile()
+   ~DoWhile()
     {
         delete condition;
         delete branch;
@@ -195,7 +202,7 @@ public:
     Break()
     {}
 
-    virtual ~Break()
+    ~Break()
     {}
 
     virtual void printC(std::ostream &outStream) const {
@@ -226,7 +233,7 @@ public:
     Continue()
     {}
 
-    virtual ~Continue()
+    ~Continue()
     {}
 
     virtual void printC(std::ostream &outStream) const {

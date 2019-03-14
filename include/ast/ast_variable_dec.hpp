@@ -42,7 +42,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    LocalInitInt(std::string _var, nodePtr _exp)
+    LocalInitInt(std::string &_var, nodePtr _exp)
         :   var(_var)
         ,   exp(_exp)
     {}
@@ -80,11 +80,15 @@ protected:
     int size;
     nodePtr myArrayList;
 public:
-    LocalInitArray(std::string _var, int _size, nodePtr _myArrayList)
+    LocalInitArray(std::string &_var, int _size, nodePtr _myArrayList)
         :   var(_var)
         ,   size(_size)
         ,   myArrayList(_myArrayList)
     {}
+
+    ~LocalInitArray(){
+        delete myArrayList;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<"["<<size<<"] = {";
@@ -118,7 +122,7 @@ protected:
     std::string var;
     nodePtr exp;
 public:
-    GlobalInitInt(std::string _var, nodePtr _exp)
+    GlobalInitInt(std::string &_var, nodePtr _exp)
         :   var(_var)
         ,   exp(_exp)
     {}
@@ -158,11 +162,15 @@ protected:
     int size;
     nodePtr myArrayList;
 public:
-    GlobalInitArray(std::string _var, int _size, nodePtr _myArrayList)
+    GlobalInitArray(std::string &_var, int _size, nodePtr _myArrayList)
         :   var(_var)
         ,   size(_size)
         ,   myArrayList(_myArrayList)
     {}
+
+    ~GlobalInitArray(){
+        delete myArrayList;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         outStream<<"int "<<var<<"["<<size<<"] = {";

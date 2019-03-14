@@ -24,6 +24,11 @@ public:
         , right(_right)
     {}
 
+    virtual ~ArithOperator(){
+        delete left;
+        delete right;
+    }
+
     virtual void printC(std::ostream &outStream) const =0;
 
     virtual void printPython(std::ostream &outStream) const {
@@ -45,9 +50,11 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
+        outStream<<"( ";
         left->printC(outStream);
         outStream<<" + ";
         right->printC(outStream);
+        outStream<<" )";
     }
 
     virtual void printPython(std::ostream &outStream) const override{
@@ -80,9 +87,11 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
+        outStream<<"( ";
         left->printC(outStream);
-        outStream<<" - " ;
+        outStream<<" - ";
         right->printC(outStream);
+        outStream<<" )";
     }
 
     virtual void printPython(std::ostream &outStream) const override{
@@ -114,9 +123,11 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
+        outStream<<"( ";
         left->printC(outStream);
         outStream<<" * ";
         right->printC(outStream);
+        outStream<<" )";
     }
 
     virtual void printPython(std::ostream &outStream) const override{
@@ -155,9 +166,11 @@ public:
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+        outStream<<"( ";
+        left->printC(outStream);
         outStream<<" / ";
-        right->printPython(outStream);
+        right->printC(outStream);
+        outStream<<" )";
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -183,9 +196,11 @@ public:
     
     
     virtual void printC(std::ostream &outStream) const override{
+        outStream<<"( ";
         left->printC(outStream);
         outStream<<" % ";
         right->printC(outStream);
+        outStream<<" )";
     }
 
     virtual void printPython(std::ostream &outStream) const override{

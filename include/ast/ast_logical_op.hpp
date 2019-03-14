@@ -44,11 +44,7 @@ public:
     LogAnd(nodePtr _left, nodePtr _right)
         : LogicalOperator(_left, _right)
     {}
-    virtual ~LogAnd()
-    {
-        delete left;
-        delete right;
-    }
+    
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -95,11 +91,7 @@ public:
         : LogicalOperator(_left, _right)
     {}
 
-    virtual ~LogOr()
-    {
-        delete left;
-        delete right;
-    }
+    
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -147,10 +139,7 @@ public:
     LogNot(nodePtr _exp)
         : exp(_exp)
     {}
-    virtual ~LogNot()
-    {
-        delete exp;
-    }
+    
     
     virtual void printC(std::ostream &outStream) const override{
         outStream<<"!";

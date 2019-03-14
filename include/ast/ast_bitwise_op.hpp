@@ -26,6 +26,7 @@ public:
         delete left;
         delete right;
     }
+
     virtual void printC(std::ostream &outStream) const =0;
 
     virtual void printPython(std::ostream &outStream) const {
@@ -47,11 +48,6 @@ public:
     BitAnd(nodePtr _left, nodePtr _right)
         : BitwiseOperator(_left, _right)
     {}
-    virtual ~BitAnd()
-    {
-        delete left;
-        delete right;
-    }
     
     
     virtual void printC(std::ostream &outStream) const override{
@@ -86,11 +82,11 @@ public:
     BitOr(nodePtr _left, nodePtr _right)
         : BitwiseOperator(_left, _right)
     {}
-    virtual ~BitOr()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~BitOr()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -124,11 +120,11 @@ public:
         : BitwiseOperator(_left, _right)
     {}
 
-    virtual ~BitXor()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~BitXor()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -162,10 +158,10 @@ public:
     BitNot(nodePtr _exp)
         : exp(_exp)
     {}
-    virtual ~BitNot()
-    {
-        delete exp;
-    }
+    // virtual ~BitNot()
+    // {
+    //     delete exp;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         outStream<<"~";
@@ -193,11 +189,11 @@ public:
     LShift(nodePtr _left, nodePtr _right)
         : BitwiseOperator(_left, _right)
     {}
-    virtual ~LShift()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~LShift()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -231,11 +227,11 @@ public:
         : BitwiseOperator(_left, _right)
     {}
 
-    virtual ~RShift()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~RShift()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);

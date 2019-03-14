@@ -49,11 +49,11 @@ public:
     CondEqual(nodePtr _left, nodePtr _right)
         : ConditionalOperator(_left, _right)
     {}
-    virtual ~CondEqual()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~CondEqual()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -94,11 +94,11 @@ public:
         : ConditionalOperator(_left, _right)
     {}
 
-    virtual ~NotEqual()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~NotEqual()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -139,11 +139,11 @@ public:
         : ConditionalOperator(_left, _right)
     {}
 
-    virtual ~Less()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~Less()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -180,11 +180,11 @@ public:
         : ConditionalOperator(_left, _right)
     {}
 
-    virtual ~Greater()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~Greater()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -222,11 +222,11 @@ public:
         : ConditionalOperator(_left, _right)
     {}
 
-    virtual ~LessOrEqual()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~LessOrEqual()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);
@@ -269,11 +269,11 @@ public:
         : ConditionalOperator(_left, _right)
     {}
 
-    virtual ~GreaterOrEqual()
-    {
-        delete left;
-        delete right;
-    }
+    // virtual ~GreaterOrEqual()
+    // {
+    //     delete left;
+    //     delete right;
+    // }
     
     virtual void printC(std::ostream &outStream) const override{
         left->printC(outStream);

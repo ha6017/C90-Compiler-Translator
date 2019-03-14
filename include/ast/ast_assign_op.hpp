@@ -42,6 +42,10 @@ public:
         , exp(_exp)
     {}
 
+    ~BinaryAssignOperator(){
+        delete exp;
+    }
+
     virtual void printC(std::ostream &outStream) const =0;
 
     virtual void printPython(std::ostream &outStream) const {
@@ -205,13 +209,12 @@ public:
 class AssignEqual //this is only for the case a=5,   int a=5 is dealt with seperately
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     AssignEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
+
 
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var<<"=";
@@ -242,16 +245,15 @@ public:
 class PlusEqual 
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     PlusEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
 
+
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"+=";
+        outStream<<var<<" += ";
         exp->printC(outStream);
     }
 
@@ -287,13 +289,12 @@ public:
 class SubEqual 
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     SubEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
+
 
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var<<"-=";
@@ -328,13 +329,12 @@ public:
 class MultEqual 
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     MultEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
+
 
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var<<"*=";
@@ -370,13 +370,12 @@ public:
 class DivEqual 
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     DivEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
+
 
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var<<"/=";
@@ -413,13 +412,12 @@ public:
 class RemEqual 
     : public BinaryAssignOperator
 {
-protected:
-    std::string var;
-    nodePtr exp;
+
 public:
     RemEqual(std::string &_var, nodePtr _exp)
         : BinaryAssignOperator(_var, _exp)
     {}
+
 
     virtual void printC(std::ostream &outStream) const override{
         outStream<<var<<"%=";

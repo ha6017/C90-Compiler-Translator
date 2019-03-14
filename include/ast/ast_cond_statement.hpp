@@ -86,9 +86,13 @@ public:
         outStream<<"if(";
         condition->printC(outStream);
         outStream<<"){";
+        outStream<<std::endl;
         branchA->printC(outStream);
+        outStream<<std::endl;
         outStream<<"} else {";
+        outStream<<std::endl;
         branchB->printC(outStream);
+        outStream<<std::endl;
         outStream<<"}";
     }
 
@@ -119,6 +123,155 @@ public:
         branchB->printMips(dstreg, newContext, outStream);
         outStream<<my_labelB<<std::endl;
     }
+};
+
+class ReturnStatement: public ASTNode
+{
+    public:
+        nodePtr expr;
+        nodePtr AdditionalStatements;
+
+     ReturnStatement(nodePtr _expr, nodePtr _AdditionalStatements )
+	:	expr (_expr)
+	,	AdditionalStatements(_AdditionalStatements){}
+    
+    ~ReturnStatement()
+    {
+        delete expr;
+        delete AdditionalStatements;
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+       
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+};
+
+class ReturnList: public ASTNode
+{
+    public:
+        nodePtr expr;
+        nodePtr MoreStatements;
+
+     ReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+	:	expr (_expr)
+	,	MoreStatements(_AdditionalStatements){}
+    
+    ~ReturnList()
+    {
+        delete expr;
+        delete MoreStatements;
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+       
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+};
+
+class MinReturnList: public ASTNode
+{
+    public:
+        nodePtr expr;
+        nodePtr MoreStatements;
+
+     MinReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+	:	expr (_expr)
+	,	MoreStatements(_AdditionalStatements){}
+    
+    ~MinReturnList()
+    {
+        delete expr;
+        delete MoreStatements;
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+       
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+};
+
+class MulReturnList: public ASTNode
+{
+    public:
+        nodePtr expr;
+        nodePtr MoreStatements;
+
+     MulReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+	:	expr (_expr)
+	,	MoreStatements(_AdditionalStatements){}
+    
+    ~MulReturnList()
+    {
+        delete expr;
+        delete MoreStatements;
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+       
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+};
+
+class ParameterDef : public ASTNode
+{
+public:
+	nodePtr Variable2;
+	
+	virtual ~ParameterDef()
+    {}
+
+	
+    ParameterDef(nodePtr _Variable2)
+		: Variable2 (_Variable2)
+		{}
+	
+	virtual void printC(std::ostream &dst) const override
+    {
+       
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+
+
 };
 
 

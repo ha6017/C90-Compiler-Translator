@@ -8,7 +8,7 @@
 #include "ast_node.hpp"
 #include "ast_context.hpp"
 
-class BranchList: ASTNode
+class BranchList: public ASTNode
 {
 protected:
 
@@ -23,6 +23,11 @@ public:
         , myBranchList(_myBranchList)
     {}
 
+    ~BranchList(){
+        delete statement;
+        delete myBranchList;
+    }
+
     virtual void printC(std::ostream &outStream) const {
         statement->printC(outStream);//make it so that statement only uses the dstreg if has return!
         if(myBranchList!=NULL){
@@ -34,16 +39,6 @@ public:
 
     }
 
-<<<<<<< HEAD
-    // //! Evaluate the tree using the given mapping of variables to numbers
-    // virtual void convertIR(std::string dstreg, Context &myContext, std::vector<IntermediateRep> &IRlist) const {
-    //     //detect return and end
-    //     statement->convertIR(dstreg, myContext, IRlist);//make it so that statement only uses the dstreg if has return!
-    //     if(myBranchList!=NULL){
-    //         myBranchList->convertIR(dstreg, myContext, IRlist);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
-    //     }
-    // }
-=======
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         //detect return and end
@@ -52,7 +47,6 @@ public:
             myBranchList->printMips(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
     }
->>>>>>> fdaad02e2a8c27f1a28be96e98dbd841d9241312
 };
 
 class ParamList : public ASTNode
@@ -67,6 +61,11 @@ public:
         : param(_param)
         , myParamList(_myParamList)
     {}
+
+    ~ParamList(){
+        delete param;
+        delete myParamList;
+    }
 
     virtual void printC(std::ostream &outStream) const {
 
@@ -100,6 +99,10 @@ public:
         , myNameList(_myNameList)
     {}
 
+    ~NameList() {
+        delete myNameList;
+    }
+
     virtual void printC(std::ostream &outStream) const {
 
     }
@@ -108,9 +111,6 @@ public:
 
     }
 
-<<<<<<< HEAD
-    
-=======
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
@@ -120,7 +120,6 @@ public:
             myNameList->printMips(dstreg, myContext, outStream);//Does this list really nead the pointer
         }
     }
->>>>>>> fdaad02e2a8c27f1a28be96e98dbd841d9241312
 };
 
 class ArrayList: public ASTNode
@@ -138,7 +137,10 @@ public:
         ,   myArrayList(_myArrayList)
         {}
 
-    
+    ~ArrayList(){
+        delete exp;
+        delete myArrayList;
+    }
 
     virtual void printC(std::ostream &outStream) const {
         // std::cout<<"{";
@@ -197,7 +199,11 @@ public:
         delete proglist;
     }
 
-    virtual void printC(std::ostream &outStream) const {}
+    virtual void printC(std::ostream &outStream) const {
+        prog->printC(outStream);
+        outStream<<std::endl;
+        proglist->printC(outStream);
+    }
 
     virtual void printPython(std::ostream &outStream) const 
     {
@@ -214,5 +220,39 @@ public:
         }
     }
 };
+
+class Program : public ASTNode
+{
+public:
+	public:
+	nodePtr SingleProgram;
+ 
+	
+    Program(nodePtr _SingleProgram) :
+        SingleProgram(_SingleProgram) {}
+
+    ~Program()
+    {
+        delete SingleProgram;
+
+    }
+	
+	virtual void printC(std::ostream &outStream) const override{
+		//<<"hello world"<<std::endl;
+        SingleProgram->printC(outStream);
+        outStream<<std::endl;
+	}
+
+    virtual void printPython(std::ostream &dst) const override
+    {
+        
+    }
+   
+	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
+		
+	}
+
+};
+
 
 #endif

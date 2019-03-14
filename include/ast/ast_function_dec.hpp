@@ -25,8 +25,12 @@ public:
 
     virtual ~FuncProto()
     { }
-    
-    virtual void printC(std::ostream &outStream) const {}
+
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<type<<" ";
+        outStream<<id;
+        outStream<<"();"<<std::endl; 
+    }
 
     virtual void printPython(std::ostream &outStream) const 
     {
@@ -62,8 +66,21 @@ public:
         delete myBranch;
     }
 
-    virtual void printC(std::ostream &outStream) const {
-
+    virtual void printC(std::ostream &dst) const {
+        dst<<type;
+        dst<<" ";
+		dst << id;
+		dst << "(";
+		if (myNameList != NULL){
+			myNameList->printC(dst);
+		}
+		dst << ")";
+        dst<<" {" << std::endl;
+		if (myBranch!= NULL){
+			myBranch->printC(dst);
+			dst << std::endl;
+		}
+		dst<<" }" << std::endl;
     }
 
     virtual void printPython(std::ostream &outStream) const 
@@ -85,49 +102,49 @@ public:
     }
 };
 
-class FuncCall
-    : public ASTNode
-{
-protected:
-    std::string id;
-    nodePtr myParamList;  //<---- subject to change 
-public:
-    FuncCall(std::string &_id, nodePtr _myParamList)
-        : id(_id)
-        , myParamList(_myParamList)
-    {}
+// class FuncCall
+//     : public ASTNode
+// {
+// protected:
+//     std::string type;
+//     nodePtr myParamList;  //<---- subject to change 
+// public:
+//     FuncCall(std::string &_type, nodePtr _myParamList)
+//         : type(_type)
+//         , myParamList(_myParamList)
+//     {}
 
-    virtual ~FuncCall()
-    {
-        delete myParamList;
-    }
+//     virtual ~FuncCall()
+//     {
+//         delete myParamList;
+//     }
 
-    virtual void printC(std::ostream &outStream) const {
+//     virtual void printC(std::ostream &outStream) const {
 
-    }
+//     }
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        Context newContext(myContext);
-        myParamList->printMips(dstreg, newContext, outStream);
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+//         Context newContext(myContext);
+//         myParamList->printMips(dstreg, newContext, outStream);
         
-        outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
-        newContext.enterFunction();
+//         outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
+//         newContext.enterFunction();
 
-        // newContext.updateStackOffset();
-        // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
-        // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
-        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
-        outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
-        outStream<<"JAL "<<id<<std::endl;
-        outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
-    }
-};
+//         // newContext.updateStackOffset();
+//         // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
+//         // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
+//         outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
+//         outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
+//         outStream<<"JAL "<<type<<std::endl;
+//         outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
+//     }
+// };
 
 #endif

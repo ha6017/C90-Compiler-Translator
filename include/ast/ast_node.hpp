@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include "ast_context.hpp"
+
 class ASTNode;
 
 typedef const ASTNode *nodePtr;
