@@ -68,7 +68,11 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
-
+        param->printC(outStream);
+        if(myParamList!=NULL){
+            outStream<<", ";
+            myParamList->printC(outStream);
+        }
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -104,7 +108,10 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
-
+        outStream<<name<<", ";
+        if(myNameList!=NULL){
+            myNameList->printC(outStream);
+        }
     }
 
     virtual void printPython(std::ostream &outStream) const {

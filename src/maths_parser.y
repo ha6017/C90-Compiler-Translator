@@ -1,7 +1,6 @@
 %code requires{
 
   #include "ast.hpp"
-  #include "ast/ast_node.hpp"
 
   #include <cassert>
 
