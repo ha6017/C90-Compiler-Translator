@@ -16,7 +16,6 @@ class FuncProto
 protected:
     std::string type;
     std::string id;
-    //nodePtr myParamList;  //<---- subject to change 
 public:
     FuncProto(std::string &_type, std::string &_id)
         : type(_type)
@@ -98,49 +97,49 @@ public:
     }
 };
 
-// class FuncCall
-//     : public ASTNode
-// {
-// protected:
-//     std::string type;
-//     nodePtr myParamList;  //<---- subject to change 
-// public:
-//     FuncCall(std::string &_type, nodePtr _myParamList)
-//         : type(_type)
-//         , myParamList(_myParamList)
-//     {}
+class FuncCall
+    : public ASTNode
+{
+protected:
+    std::string type;
+    nodePtr myParamList;  //<---- subject to change 
+public:
+    FuncCall(std::string &_type, nodePtr _myParamList)
+        : type(_type)
+        , myParamList(_myParamList)
+    {}
 
-//     virtual ~FuncCall()
-//     {
-//         delete myParamList;
-//     }
+    virtual ~FuncCall()
+    {
+        delete myParamList;
+    }
 
-//     virtual void printC(std::ostream &outStream) const {
+    virtual void printC(std::ostream &outStream) const {
 
-//     }
+    }
 
-//     virtual void printPython(std::ostream &outStream) const 
-//     {
-//         throw std::runtime_error("No python Impl");
+    virtual void printPython(std::ostream &outStream) const 
+    {
+        throw std::runtime_error("No python Impl");
         
-//     }
+    }
 
-//     //! Evaluate the tree using the given mapping of variables to numbers
-//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-//         Context newContext(myContext);
-//         myParamList->printMips(dstreg, newContext, outStream);
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        Context newContext(myContext);
+        myParamList->printMips(dstreg, newContext, outStream);
         
-//         outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
-//         newContext.enterFunction();
+        outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
+        newContext.enterFunction();
 
-//         // newContext.updateStackOffset();
-//         // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
-//         // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
-//         outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
-//         outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
-//         outStream<<"JAL "<<type<<std::endl;
-//         outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
-//     }
-// };
+        // newContext.updateStackOffset();
+        // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
+        // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
+        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_sp)"<<std::endl;
+        outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
+        outStream<<"JAL "<<type<<std::endl;
+        outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
+    }
+};
 
 #endif
