@@ -37,11 +37,11 @@
 %token T_LAND T_LOR T_AND T_OR T_XOR T_NOT
 
 
-%type <expr> STATEMENT RETURN_STATEMENT PROGRAM FUNCTION_DECLARATION VARIABLE_DECLARATION ASSIGNMENT_STATEMENT
+%type <expr> STATEMENT EXPR_STATEMENT RETURN_STATEMENT PROGRAM FUNCTION_DECLARATION VARIABLE_DECLARATION ASSIGNMENT_STATEMENT
 %type <expr> SCOPE STATEMENT_LIST PARAMETER PARAMETER_LIST PROGRAM_LIST FOR_STATEMENT 
 %type <expr> IF_CONDITION_STATEMENT IF_ELSE_CONDITION_STATEMENT WHILE_CONDITION_STATEMENT VARIABLE_DECLARATION_FUNCTION
 %type <expr> RETURN_VALUE DO_WHILE_STATEMENT RETURN_LIST
-%type <expr> EXPR EXPR10 EXPR11 EXPR12 EXPR2 EXPR3 EXPR4 EXPR5 EXPR6 EXPR7 EXPR8 EXPR9 EXPR13 EXPR14 EXPR15
+%type <expr> EXPR EXPR10 EXPR11 EXPR12 EXPR2 EXPR3 EXPR4 EXPR5 EXPR6 EXPR7 EXPR8 EXPR9 EXPR13 EXPR14 EXPR15 TYPE
 %type <number> I_INT
 %type <string> T_VARIABLE T_INT T_VOID 
 // %type <Float> I_FLOAT
@@ -53,6 +53,93 @@
 /* --------------------------- START NODE  ------------------------------- */
 
 ROOT : PROGRAM_LIST { g_root = $1; }
+
+// PROGRAM_LIST: 	PROGRAM_LIST FUNCTION_DECLARATION 		  {	$$ = new Top_List($2, $1);}
+// 		|	PROGRAM_LIST VARIABLE_DECLARATION    { $$ = new Top_List($2,$1); }
+//         | 	FUNCTION_DECLARATION                  { $$ = new Top_List($1, NULL); }
+//         | 	VARIABLE_DECLARATION             { $$ = new Top_List($1, NULL); }
+
+// FUNCTION_DECLARATION : 		TYPE T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET { $$ = new FuncDef(*$1, *$2, $4, $7); }
+//         				 | 	TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCUBRACKET { $$ = new FuncDef(*$1, *$2, NULL, $6); }
+//        					 | 	TYPE T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_SEMI_COLON { $$ = new FuncCall(*$1, *$2, $4); }
+//        					 | 	TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON { $$ = new FuncCall(*$1, *$2, NULL); }
+
+// PARAMETER_LIST : PARAMETER_LIST T_COMMA TYPE T_VARIABLE         { $$ = new Argument(*$3, *$4, $1); }
+//         | TYPE T_VARIABLE                                     { $$ = new Argument(*$1, *$2, NULL); }
+
+// PARAMETER_LIST_NO_TYPE : PARAMETER_LIST_NO_TYPE T_COMMA EXPR15    { $$ = new ArgumentNoType($3, $1); }
+//         | EXPR15                                                { $$ = new ArgumentNoType($1, NULL); }                                         
+
+// TYPE : 	T_CHAR                  { $$ = $1; }
+//         | T_SIGNED         		{ $$ = $1; }
+//         | T_UNSIGNED        	{ $$ = $1; }
+//         | T_SHORT               { $$ = $1; }
+//         | T_INT                 { $$ = $1; }      
+//         | T_LONG                { $$ = $1; }
+//         | T_FLOAT               { $$ = $1; }
+//         | T_DOUBLE              { $$ = $1; }
+//         | T_VOID                { $$ = $1; }
+
+// SCOPE : SCOPE STATEMENT           { $$ = new BranchList($2,$1); }
+//         | STATEMENT             { $$ = new BranchList($1, NULL); }
+    
+// STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
+//         | DEC_STATEMENT                 { $$ = $1; }
+//         | EXPR_STATEMENT                { $$ = $1; }
+//         | IF_OR_ELSE                    { $$ = $1; }
+//         | WHILE_STATEMENT               { $$ = $1; }
+//         | DO_STATEMENT                  { $$ = $1; }
+//         | NEW_SCOPE                     { $$ = $1; }
+//         | FOR_STATEMENT                 { $$ = $1; }
+
+// EXPR_STATEMENT : EXPR15 T_SEMI_COLON             { $$ = new ExprStatement($1); }
+//         | T_SEMI_COLON                           { $$ = new ExprStatement(NULL); }
+
+// FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT       { $$ = new For($3,$4,$5,$7);}
+//         | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT            { $$ = new For($3,$4,$5,$7);}
+//         | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                    { $$ = new For($3,$4,$6, NULL);}
+//         | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                   { $$ = new For($3,$4,$6), NULL;}
+
+// NEW_SCOPE : T_LCBRACKET SCOPE T_RCUBRACKET      { $$ = new NewScope($2); }
+
+// RETURN_STATEMENT : T_RETURN EXPR15 T_SEMI_COLON          { $$ = new ReturnStatement($2); }
+//         | T_RETURN T_SEMI_COLON                          { $$ = new ReturnStatement(); }
+
+// DEC_STATEMENT : TYPE DEC_VAR_LIST T_SEMI_COLON      { $$ = new DeclareStatement(*$1, $2); }
+//         | TYPE T_VARIABLE T_LSQBRACKET T_NUMBER T_RSQBRACKET    { $$ = new DeclareArray(*$1, *$2, $4); }
+//         | TYPE T_VARIABLE T_LSQBRACKET T_MINUS T_NUMBER T_RSQBRACKET    { $$ = new DeclareArray(*$1, *$2, -$5); }
+//         | TYPE T_VARIABLE T_LSQBRACKET T_NUMBER T_RSQBRACKET T_ASSIGN T_LCBRACKET VAL_LIST T_RCUBRACKET    { $$ = new DeclareArray(*$1, *$2, $4, $8); }
+//         | TYPE T_VARIABLE T_LSQBRACKET T_MINUS T_NUMBER T_RSQBRACKET T_ASSIGN T_LCBRACKET VAL_LIST T_RCUBRACKET    { $$ = new DeclareArray(*$1, *$2, -$5, $9); }
+//         | TYPE T_VARIABLE T_LSQBRACKET T_RSQBRACKET T_ASSIGN T_LCBRACKET VAL_LIST T_RCUBRACKET    { $$ = new DeclareArray(0,*$1, *$2, $7); }
+
+// VAL_LIST : EXPR_2                               { $$ = new ValList($1); }
+//         | VAL_LIST T_COMMA EXPR_2               { $$ = new ValList($3,$1); }
+//         | %empty                                { $$ = new ValList(); }
+
+// DEC_VAR_LIST : DEC_VARIABLE                     { $$ = new Dec_Var_List($1); }
+//         | DEC_VAR_LIST T_COMMA DEC_VARIABLE     { $$ = new Dec_Var_List($3,$1); }
+
+// DEC_VARIABLE : T_VARIABLE T_ASSIGN EXPR_2             { $$ = new Declare(*$1, $3); }  
+//         | T_VARIABLE                                  { $$ = new Declare(*$1); }
+
+// VARIABLE_DECLARATION : TYPE GLO_DEC_VAR_LIST T_SEMI_COLON   { $$ = new DeclareStatement(*$1, $2); }
+
+// GLO_DEC_VAR_LIST : GLO_DEC_VARIABLE                     { $$ = new Dec_Var_List($1); }
+//         | GLO_DEC_VAR_LIST T_COMMA GLO_DEC_VARIABLE     { $$ = new Dec_Var_List($3,$1); }
+
+// GLO_DEC_VARIABLE : T_VARIABLE T_ASSIGN T_NUMBER                       { $$ = new GlobalDeclare(*$1, $3); } 
+//         | T_VARIABLE T_ASSIGN T_MINUS T_NUMBER                        { $$ = new GlobalDeclare(*$1, -$4); }
+//         | T_VARIABLE T_ASSIGN T_LBRACKET T_NUMBER T_RBRACKET          { $$ = new GlobalDeclare(*$1, $4); } 
+//         | T_VARIABLE T_ASSIGN T_LBRACKET T_MINUS T_NUMBER T_RBRACKET  { $$ = new GlobalDeclare(*$1, -$5); } 
+//         | T_VARIABLE                                                  { $$ = new GlobalDeclare(*$1); }
+
+// IF_OR_ELSE : T_IF EXPR_1 STATEMENT T_ELSE STATEMENT      { $$ = new IfElse_Statement ($2,$3,$5); }
+//         | T_IF EXPR_1 STATEMENT                                 { $$ = new If_Statement($2,$3); }
+
+// WHILE_STATEMENT : T_WHILE EXPR_1 STATEMENT                              { $$ = new While_Statement($2,$3); }
+
+// DO_STATEMENT : T_DO STATEMENT T_WHILE EXPR_1 T_SEMI_COLON                { $$ = new Do_While_Statement($2,$4); }
+
 
 PROGRAM_LIST: PROGRAM PROGRAM_LIST { $$ = new ProgList($1,$2);} 
 			| PROGRAM { $$ = new Program($1);}
@@ -69,13 +156,16 @@ FUNCTION_DECLARATION :	 T_INT T_VARIABLE T_LBRACKET T_RBRACKET T_SEMI_COLON { $$
 						| T_VOID T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET T_RCBRACKET {$$ = new FuncDef(*$1,*$2,NULL,NULL);}
 						| T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET {$$ = new FuncDef(*$1,*$2,$4,$7);}
 						| T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET {$$ = new FuncDef(*$1,*$2,$4,$7);}
+						| T_INT T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET T_RCBRACKET {$$ = new FuncDef(*$1,*$2,$4,NULL);}
+						| T_VOID T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET T_RCBRACKET {$$ = new FuncDef(*$1,*$2,$4,NULL);}
 	
+
 PARAMETER_LIST :  PARAMETER T_COMMA PARAMETER_LIST {$$ = new ParamList($1, $3);}
 				| PARAMETER { $$ = $1;}
 
-PARAMETER : EXPR {$$ = new ParameterDef($1);}
-		// T_INT T_VARIABLE { $$ = new LocalInitInt(*$1,$2);}
-		// | EXPR {$$ = new ParameterDef($1);}
+PARAMETER :// EXPR15 {$$ = new ParameterDef($1);}
+			T_INT T_VARIABLE { $$ = new LocalInitInt(*$1,*$2, NULL);}
+
 		
 SCOPE: STATEMENT_LIST { $$ = $1; }
 
@@ -117,12 +207,12 @@ FOR_STATEMENT : T_FOR T_LBRACKET VARIABLE_DECLARATION_FUNCTION T_SEMI_COLON EXPR
 // 			|	T_VARIABLE T_LBRACKET T_RBRACKET { $$ = new FuncCall(*$1,NULL); }  
 			
 // Local Variables	
-VARIABLE_DECLARATION_FUNCTION: 	T_INT T_VARIABLE { $$ = new LocalInitInt(*$2, NULL);}
-							| 	T_INT T_VARIABLE T_EQUAL EXPR  { $$ = new LocalInitInt(*$2,$4); }
+VARIABLE_DECLARATION_FUNCTION: 	T_INT T_VARIABLE { $$ = new LocalInitInt(*$1, *$2, NULL);}
+							| 	T_INT T_VARIABLE T_EQUAL EXPR  { $$ = new LocalInitInt(*$1, *$2, $4); }
 
 // //GLOBAL VARIABLE DECLARATION
-VARIABLE_DECLARATION:	T_INT T_VARIABLE T_SEMI_COLON { $$ = new GlobalInitInt(*$2, NULL);}
-					| 	T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON { $$ = new GlobalInitInt(*$2,$4); }
+VARIABLE_DECLARATION:	T_INT T_VARIABLE T_SEMI_COLON { $$ = new GlobalInitInt(*$1, *$2, NULL);}
+					| 	T_INT T_VARIABLE T_EQUAL EXPR T_SEMI_COLON { $$ = new GlobalInitInt(*$1,*$2,$4); }
 
 IF_CONDITION_STATEMENT : T_IF T_LBRACKET EXPR15 T_RBRACKET T_LCBRACKET STATEMENT_LIST T_RCBRACKET { $$ = new If($3,$6);} 
  						| T_IF T_LBRACKET EXPR15 T_RBRACKET STATEMENT { $$ = new If($3,$5);} 
@@ -134,12 +224,12 @@ WHILE_CONDITION_STATEMENT : T_WHILE T_LBRACKET EXPR15 T_RBRACKET T_LCBRACKET STA
 DO_WHILE_STATEMENT : T_DO T_LCBRACKET STATEMENT T_RCBRACKET T_WHILE T_LBRACKET EXPR15 T_RBRACKET { $$ = new DoWhile($7, $3);} 
 
 EXPR15: 		EXPR {$$ = $1;}
-			|	T_VARIABLE T_EQUAL EXPR { $$ = new AssignEqual(*$1,$3);}
-			|	T_VARIABLE T_PLUS T_EQUAL EXPR { $$ =  new PlusEqual(*$1,$4);}  
-		 	| 	T_VARIABLE T_MINUS T_EQUAL EXPR { $$ =  new SubEqual(*$1,$4);}  
-			| 	T_VARIABLE T_TIMES T_EQUAL EXPR { $$ =  new MultEqual(*$1,$4);}  
-			| 	T_VARIABLE T_DIVIDE T_EQUAL EXPR { $$ =  new DivEqual(*$1,$4);}  
-			| 	T_VARIABLE T_REM T_EQUAL EXPR { $$ =  new RemEqual(*$1,$4);} 
+			|	T_VARIABLE T_EQUAL EXPR15 { $$ = new AssignEqual(*$1,$3);}
+			|	T_VARIABLE T_PLUS T_EQUAL EXPR15 { $$ =  new PlusEqual(*$1,$4);}  
+		 	| 	T_VARIABLE T_MINUS T_EQUAL EXPR15 { $$ =  new SubEqual(*$1,$4);}  
+			| 	T_VARIABLE T_TIMES T_EQUAL EXPR15 { $$ =  new MultEqual(*$1,$4);}  
+			| 	T_VARIABLE T_DIVIDE T_EQUAL EXPR15 { $$ =  new DivEqual(*$1,$4);}  
+			| 	T_VARIABLE T_REM T_EQUAL EXPR15 { $$ =  new RemEqual(*$1,$4);} 
 			// and assign?
 			// or assign?
 			// left assign?

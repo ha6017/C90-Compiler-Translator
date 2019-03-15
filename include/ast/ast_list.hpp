@@ -25,14 +25,16 @@ public:
 
     ~BranchList(){
         delete statement;
-        delete myBranchList;
+        if(myBranchList!=NULL){delete myBranchList;}
     }
 
     virtual void printC(std::ostream &outStream) const {
-        statement->printC(outStream);//make it so that statement only uses the dstreg if has return!
+        
         if(myBranchList!=NULL){
             myBranchList->printC(outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
+        statement->printC(outStream);//make it so that statement only uses the dstreg if has return!
+        outStream<<std::endl;
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -69,10 +71,15 @@ public:
 
     virtual void printC(std::ostream &outStream) const {
         param->printC(outStream);
+<<<<<<< HEAD
+        outStream << ",";
+        myParamList->printC(outStream);
+=======
         if(myParamList!=NULL){
             outStream<<", ";
             myParamList->printC(outStream);
         }
+>>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -241,7 +248,6 @@ public:
     ~Program()
     {
         delete SingleProgram;
-
     }
 	
 	virtual void printC(std::ostream &outStream) const override{
@@ -261,5 +267,71 @@ public:
 
 };
 
+class Argument: public ASTNode
+{
+    public: 
+        std::string argType;
+        std::string argId;
+        nodePtr nextArguments;
+
+        Argument(std::string &_argType, std::string &_argId, nodePtr _nextArguments):
+            argType(_argType), argId(_argId), nextArguments(_nextArguments){}
+
+    ~Argument()
+    {
+        if(nextArguments!=NULL){delete nextArguments;}
+    }
+	
+	virtual void printC(std::ostream &outStream) const override{
+		if(nextArguments!=NULL){
+            nextArguments->printC(outStream);
+            outStream<<",";
+        }
+        outStream<<argType<<" "<<argId;
+	}
+
+    virtual void printPython(std::ostream &dst) const override
+    {
+        
+    }
+   
+	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
+		
+	}
+};
+
+class ArgumentNoType : public ASTNode
+{
+    public:
+        nodePtr arg;
+        nodePtr nextArguments;
+    
+    ArgumentNoType( nodePtr _arg, nodePtr _nextArguments):
+            arg(_arg), nextArguments(_nextArguments){}
+
+    ~ArgumentNoType()
+    {
+        if(nextArguments!=NULL){delete nextArguments;}
+    }
+	
+	virtual void printC(std::ostream &outStream) const override{
+		 if(arg!=NULL){
+                if(nextArguments!=NULL){
+                    nextArguments->printC(outStream);
+                    outStream<<",";
+                }
+                arg->printC(outStream);
+            }
+	}
+
+    virtual void printPython(std::ostream &dst) const override
+    {
+        
+    }
+   
+	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
+		
+	}
+};
 
 #endif

@@ -29,7 +29,7 @@ public:
         delete initialisation;
         delete condition;
         delete postLoopExp;
-        delete branch;
+        if(branch!=NULL) {delete branch;}
     }
 
     virtual void printC(std::ostream &outStream) const {
@@ -40,7 +40,9 @@ public:
         outStream<<";";
         postLoopExp->printC(outStream);
         outStream<<") {"<<std::endl;
-        branch->printC(outStream);
+        if(branch!=NULL){
+             branch->printC(outStream);
+        }
         outStream<<"}";
     }
 
@@ -93,7 +95,7 @@ public:
         delete condition;
         delete branch;
     }
-    
+
     virtual void printC(std::ostream &outStream) const {
         outStream<<"while(";
         condition->printC(outStream);

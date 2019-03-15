@@ -55,7 +55,11 @@ extern int yydebug;
   int yylex(void);
   void yyerror(const char *);
 
+<<<<<<< HEAD
+#line 63 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+=======
 #line 59 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
+>>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -139,14 +143,22 @@ extern int yydebug;
 
 union YYSTYPE
 {
+<<<<<<< HEAD
+#line 18 "src/maths_parser.y" /* yacc.c:1927  */
+=======
 #line 18 "src/maths_parser.y" /* yacc.c:1909  */
+>>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
 
   nodePtr expr;
   int number;
   std::string *string;
   
 
+<<<<<<< HEAD
+#line 154 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+=======
 #line 150 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
+>>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
 };
 
 typedef union YYSTYPE YYSTYPE;
