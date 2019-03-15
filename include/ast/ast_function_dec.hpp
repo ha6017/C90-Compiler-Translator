@@ -66,21 +66,17 @@ public:
         if(myBranch!=NULL) {delete myBranch;}
     }
 
-    virtual void printC(std::ostream &dst) const {
-        dst<<type;
-        dst<<" ";
-		dst << id;
-		dst << "(";
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<type<<" "<< id<<"(";
 		if (myNameList != NULL){
-			myNameList->printC(dst);
+			myNameList->printC(outStream);
 		}
-		dst << ")";
-        dst<<" {" << std::endl;
+		outStream << ")"<<" {" << std::endl;
 		if (myBranch!= NULL){
-			myBranch->printC(dst);
-			dst << std::endl;
+			myBranch->printC(outStream);
+			outStream << std::endl;
 		}
-		dst<<" }" << std::endl;
+		outStream<<" }" << std::endl;
     }
 
     virtual void printPython(std::ostream &outStream) const 
