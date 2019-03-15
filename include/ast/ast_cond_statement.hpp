@@ -155,6 +155,38 @@ class ReturnStatement: public ASTNode
     }
 };
 
+class ExprStatement: public ASTNode
+{
+    public:
+        nodePtr expr;
+        
+
+     ExprStatement(nodePtr _expr)
+	:	expr (_expr){}
+    
+    ~ExprStatement()
+    {
+        if (expr!=NULL) {delete expr;}
+       
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+       if(expr!=NULL){ 
+                expr->printC(dst);
+                dst<<";";
+            }
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+};
+
 class ReturnList: public ASTNode
 {
     public:
@@ -249,18 +281,19 @@ class ParameterDef : public ASTNode
 {
 public:
 	nodePtr Variable2;
-	
-	virtual ~ParameterDef()
-    {}
 
 	
     ParameterDef(nodePtr _Variable2)
 		: Variable2 (_Variable2)
 		{}
 	
+    virtual ~ParameterDef(){
+        delete Variable2;
+    }
+
 	virtual void printC(std::ostream &dst) const override
     {
-       
+       Variable2->printC(dst);
     }
 
     virtual void printPython(std::ostream &dst) const override{

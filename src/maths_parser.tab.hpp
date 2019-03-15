@@ -48,7 +48,6 @@ extern int yydebug;
 
 
   #include "ast.hpp"
-  #include "ast/ast_node.hpp"
 
   #include <cassert>
 
@@ -60,7 +59,7 @@ extern int yydebug;
   int yylex(void);
   void yyerror(const char *);
 
-#line 64 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 63 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -144,14 +143,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 19 "src/maths_parser.y" /* yacc.c:1927  */
+#line 18 "src/maths_parser.y" /* yacc.c:1927  */
 
   nodePtr expr;
   int number;
   std::string *string;
   
 
-#line 155 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
+#line 154 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
 };
 
 typedef union YYSTYPE YYSTYPE;
