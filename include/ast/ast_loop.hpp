@@ -262,7 +262,8 @@ protected:
 nodePtr body;
 
 public:
-    NewScope()
+    NewScope(nodePtr _body):
+        body(_body)
     {}
 
     ~NewScope()

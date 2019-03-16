@@ -95,27 +95,8 @@ public:
     }
 };
 
-<<<<<<< HEAD
-class FuncCall
-    : public ASTNode
-{
-protected:
-    std::string type;
-    nodePtr myParamList;  //<---- subject to change 
-public:
-    FuncCall(std::string &_type, nodePtr _myParamList)
-        : type(_type)
-        , myParamList(_myParamList)
-    {}
 
-    virtual ~FuncCall()
-    {
-        delete myParamList;
-    }
 
-    virtual void printC(std::ostream &outStream) const {
-
-=======
 class Top_List : public ASTNode{
 
     public:
@@ -133,7 +114,6 @@ class Top_List : public ASTNode{
             dst<<std::endl;
         }
         func->printC(dst);
->>>>>>> 0553b77468247b3ad501efa0eb79243ef595e5d6
     }
 
     virtual void printPython(std::ostream &outStream) const 
@@ -144,11 +124,8 @@ class Top_List : public ASTNode{
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-<<<<<<< HEAD
         Context newContext(myContext);
-        myParamList->printMips(dstreg, newContext, outStream);
         
-=======
         
     }
 
@@ -189,18 +166,13 @@ public:
         Context newContext(myContext);
         myParamList->printMips(dstreg, newContext, outStream);
         
->>>>>>> 0553b77468247b3ad501efa0eb79243ef595e5d6
         outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
         newContext.enterFunction();
 
         // newContext.updateStackOffset();
         // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
         // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
-<<<<<<< HEAD
         outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_sp)"<<std::endl;
-=======
-        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_fp)"<<std::endl;
->>>>>>> 0553b77468247b3ad501efa0eb79243ef595e5d6
         outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
         outStream<<"JAL "<<type<<std::endl;
         outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
