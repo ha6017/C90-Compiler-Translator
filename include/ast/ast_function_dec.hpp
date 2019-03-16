@@ -10,15 +10,14 @@
 #include "ast_node.hpp"
 #include "ast_context.hpp"
 
-class FuncProto
-    : public ASTNode
+class FuncProto: public ASTNode
 {
 protected:
     std::string type;
     std::string id;
     //nodePtr myParamList;  //<---- subject to change 
 public:
-    FuncProto(std::string &_type, std::string &_id)
+    FuncProto(const std::string &_type, std::string &_id)
         : type(_type)
         , id(_id)
     {}
@@ -34,7 +33,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+        //throw std::runtime_error("No python Impl");
         
     }
 
@@ -44,16 +43,15 @@ public:
     }
 };
 
-class FuncDef
-    : public ASTNode
+class FuncDef: public ASTNode
 {
-protected:
+public:
     std::string type;
     std::string id;
     nodePtr myNameList;  //<---- subject to change 
     nodePtr myBranch;
-public:
-    FuncDef(std::string &_type, std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
+
+    FuncDef(const std::string &_type, const std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
         : type(_type)
         , id(_id)
         , myNameList(_myNameList)
@@ -130,15 +128,14 @@ class Top_List : public ASTNode{
 
 };
 
-class FuncCall
-    : public ASTNode
+class FuncCall: public ASTNode
 {
 protected:
     std::string type;
     std::string id;
     nodePtr myParamList;  //<---- subject to change 
 public:
-    FuncCall(std::string &_type, std::string &_id, nodePtr _myParamList)
+    FuncCall(const std::string &_type,const std::string &_id, nodePtr _myParamList)
         : type(_type)
         , id(_id)
         , myParamList(_myParamList)

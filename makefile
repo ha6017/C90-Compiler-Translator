@@ -20,4 +20,6 @@ clean :
 	rm -f src/*.o
 	rm -f bin/*
 	rm -f src/*.tab.cpp
+	rm -f src/*.tab.hpp
+	rm -f *.output
 	rm -f src/*.yy.cpp

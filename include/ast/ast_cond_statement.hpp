@@ -22,7 +22,7 @@ public:
         , branch(_branch)
     {}
 
-    virtual ~If()
+    ~If()
     {
         delete condition;
         delete branch;
@@ -129,21 +129,24 @@ class ReturnStatement: public ASTNode
 {
     public:
         nodePtr expr;
-        nodePtr AdditionalStatements;
+        //nodePtr AdditionalStatements;
 
-     ReturnStatement(nodePtr _expr, nodePtr _AdditionalStatements )
-	:	expr (_expr)
-	,	AdditionalStatements(_AdditionalStatements){}
+     ReturnStatement(nodePtr _expr )
+	:	expr (_expr){}
     
     ~ReturnStatement()
     {
-        delete expr;
-        delete AdditionalStatements;
+        if(expr!=NULL){delete expr;}   
     }
 
     virtual void printC(std::ostream &dst) const override
     {
-       
+            dst<<"return";
+            if(expr!=NULL){
+                dst<<" ";
+                expr->printC(dst);
+            }
+            dst<<";";
     }
 
     virtual void printPython(std::ostream &dst) const override{
@@ -187,25 +190,24 @@ class ExprStatement: public ASTNode
     }
 };
 
-class ReturnList: public ASTNode
+class DeclareStatement: public ASTNode
 {
     public:
-        nodePtr expr;
-        nodePtr MoreStatements;
+        std::string type;
+        nodePtr declist;
 
-     ReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
-	:	expr (_expr)
-	,	MoreStatements(_AdditionalStatements){}
-    
-    ~ReturnList()
-    {
-        delete expr;
-        delete MoreStatements;
+    DeclareStatement(std::string &_type, nodePtr _declist)
+    : type(_type), declist(_declist){}
+
+    ~DeclareStatement(){
+        if (declist!=NULL){ delete declist;}
     }
 
     virtual void printC(std::ostream &dst) const override
     {
-       
+            dst<<type<<" ";
+            declist->printC(dst);
+            dst<<";";
     }
 
     virtual void printPython(std::ostream &dst) const override{
@@ -215,27 +217,29 @@ class ReturnList: public ASTNode
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
 
     }
+
 };
 
-class MinReturnList: public ASTNode
+class Declare: public ASTNode
 {
     public:
+        std::string id;
         nodePtr expr;
-        nodePtr MoreStatements;
 
-     MinReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
-	:	expr (_expr)
-	,	MoreStatements(_AdditionalStatements){}
-    
-    ~MinReturnList()
-    {
-        delete expr;
-        delete MoreStatements;
+    Declare(std::string &_id, nodePtr _expr)
+    : id(_id), expr(_expr){}
+
+    ~Declare(){
+        if (expr!=NULL){ delete expr;}
     }
 
     virtual void printC(std::ostream &dst) const override
     {
-       
+            dst<<id;
+            if(expr!=NULL){
+                dst<<"=";
+                expr->printC(dst);
+            }
     }
 
     virtual void printPython(std::ostream &dst) const override{
@@ -245,37 +249,98 @@ class MinReturnList: public ASTNode
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
 
     }
+
 };
 
-class MulReturnList: public ASTNode
-{
-    public:
-        nodePtr expr;
-        nodePtr MoreStatements;
+// class ReturnList: public ASTNode
+// {
+//     public:
+//         nodePtr expr;
+//         nodePtr MoreStatements;
 
-     MulReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
-	:	expr (_expr)
-	,	MoreStatements(_AdditionalStatements){}
+//      ReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+// 	:	expr (_expr)
+// 	,	MoreStatements(_AdditionalStatements){}
     
-    ~MulReturnList()
-    {
-        delete expr;
-        delete MoreStatements;
-    }
+//     ~ReturnList()
+//     {
+//         delete expr;
+//         delete MoreStatements;
+//     }
 
-    virtual void printC(std::ostream &dst) const override
-    {
+//     virtual void printC(std::ostream &dst) const override
+//     {
        
-    }
+//     }
 
-    virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &dst) const override{
 
-    }
+//     }
 
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
 
-    }
-};
+//     }
+// };
+
+// class MinReturnList: public ASTNode
+// {
+//     public:
+//         nodePtr expr;
+//         nodePtr MoreStatements;
+
+//      MinReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+// 	:	expr (_expr)
+// 	,	MoreStatements(_AdditionalStatements){}
+    
+//     ~MinReturnList()
+//     {
+//         delete expr;
+//         delete MoreStatements;
+//     }
+
+//     virtual void printC(std::ostream &dst) const override
+//     {
+       
+//     }
+
+//     virtual void printPython(std::ostream &dst) const override{
+
+//     }
+
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+//     }
+// };
+
+// class MulReturnList: public ASTNode
+// {
+//     public:
+//         nodePtr expr;
+//         nodePtr MoreStatements;
+
+//      MulReturnList(nodePtr _expr, nodePtr _AdditionalStatements )
+// 	:	expr (_expr)
+// 	,	MoreStatements(_AdditionalStatements){}
+    
+//     ~MulReturnList()
+//     {
+//         delete expr;
+//         delete MoreStatements;
+//     }
+
+//     virtual void printC(std::ostream &dst) const override
+//     {
+       
+//     }
+
+//     virtual void printPython(std::ostream &dst) const override{
+
+//     }
+
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+//     }
+// };
 
 class ParameterDef : public ASTNode
 {
@@ -287,7 +352,7 @@ public:
 		: Variable2 (_Variable2)
 		{}
 	
-    virtual ~ParameterDef(){
+    ~ParameterDef(){
         delete Variable2;
     }
 

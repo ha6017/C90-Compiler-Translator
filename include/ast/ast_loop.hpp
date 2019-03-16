@@ -255,4 +255,37 @@ public:
      }
 };
 
+class NewScope
+    : public ASTNode
+{
+protected: 
+nodePtr body;
+
+public:
+    NewScope()
+    {}
+
+    ~NewScope()
+    {
+        if(body!=NULL){ delete body; }
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<"{"<<std::endl; 
+        body->printC(outStream);
+        outStream<<"}";
+    }
+
+    virtual void printPython(std::ostream &outStream) const 
+    {
+       
+        
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+       
+     }
+};
+
 #endif

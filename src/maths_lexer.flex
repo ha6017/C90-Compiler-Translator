@@ -59,7 +59,7 @@ bool DEBUG = true;
 [-]             { debug(); yylval.string = new std::string("-");  return T_MINUS; }
 [/]             { debug();  return T_DIVIDE; }
 [+]             { debug();  return T_PLUS; }
-[=]				      {debug();  return T_EQUAL; }
+[=]				 {debug();  return T_EQUAL; }
 
 [(]             { debug();  return T_LBRACKET; }
 [)]             { debug();  return T_RBRACKET; }

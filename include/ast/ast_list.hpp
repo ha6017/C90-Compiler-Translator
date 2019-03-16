@@ -71,15 +71,10 @@ public:
 
     virtual void printC(std::ostream &outStream) const {
         param->printC(outStream);
-<<<<<<< HEAD
-        outStream << ",";
-        myParamList->printC(outStream);
-=======
         if(myParamList!=NULL){
             outStream<<", ";
             myParamList->printC(outStream);
         }
->>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
     }
 
     virtual void printPython(std::ostream &outStream) const {
@@ -251,7 +246,7 @@ public:
     }
 	
 	virtual void printC(std::ostream &outStream) const override{
-		//<<"hello world"<<std::endl;
+		
         SingleProgram->printC(outStream);
         outStream<<std::endl;
 	}
