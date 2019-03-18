@@ -331,7 +331,11 @@ class Comma: public ASTNode
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-       
+            outStream<<"(";
+            expr1->printPython(outStream);
+            outStream<<" , ";
+            expr2->printPython(outStream);
+            outStream<<")";
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{

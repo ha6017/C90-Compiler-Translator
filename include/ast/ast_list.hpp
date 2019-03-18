@@ -38,7 +38,13 @@ public:
     }
 
     virtual void printPython(std::ostream &outStream) const {
-
+        if(statement!=NULL){
+            if(myBranchList!=NULL){
+                    myBranchList->printPython(outStream);
+            }
+            statement->printPython(outStream);
+            outStream<<std::endl;
+        }
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -287,7 +293,11 @@ class Argument: public ASTNode
 
     virtual void printPython(std::ostream &dst) const override
     {
-        
+        if(nextArguments!=NULL){
+            nextArguments->printPython(dst);
+            dst<<",";
+        }
+        dst<<argId;
     }
    
 	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
@@ -321,7 +331,13 @@ class ArgumentNoType : public ASTNode
 
     virtual void printPython(std::ostream &dst) const override
     {
-        
+        if(arg!=NULL){
+            if(nextArguments!=NULL){
+                nextArguments->printPython(dst);
+                dst<<",";
+            }
+            arg->printPython(dst);
+        }
     }
    
 	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {

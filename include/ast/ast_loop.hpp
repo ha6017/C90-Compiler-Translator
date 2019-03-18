@@ -48,7 +48,14 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+            initialisation->printPython(outStream);
+            outStream<<std::endl;
+            outStream<<"While ";
+            condition->printPython(outStream);
+            outStream<<" :"<<std::endl;
+            branch->printPython(outStream);
+            if(postLoopExp!=NULL){ postLoopExp->printPython(outStream); }
+            outStream<<std::endl;
         
     }
 
@@ -106,8 +113,10 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+            outStream<<"while (";
+            condition->printPython(outStream);
+            outStream<<") :"<<std::endl;
+            branch->printPython(outStream);  
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -166,7 +175,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+        
         
     }
 
@@ -260,9 +269,9 @@ class NewScope
 {
 protected: 
 nodePtr body;
-
 public:
-    NewScope()
+    NewScope(nodePtr _body):
+        body(_body)
     {}
 
     ~NewScope()
@@ -278,8 +287,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-       
-        
+       body->printPython(outStream);     
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

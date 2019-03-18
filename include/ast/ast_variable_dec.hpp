@@ -109,7 +109,11 @@ public:
     }
 
     virtual void printPython(std::ostream &outStream) const {
-        
+        if(next_dec!=NULL){
+                next_dec->printPython(outStream);
+                outStream<<std::endl;
+            }
+            current_dec->printPython(outStream);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -127,16 +131,6 @@ class GlobalDeclare
         double input;
         bool noInput;
 
-        // GlobalDeclare(std::string &_id, double _input):
-        // id(_id), input(_input)
-        // {
-        //     if(!input){
-        //         noInput = true;
-        //     }else{
-        //         noInput = false;
-        //     }
-        // }
-
         GlobalDeclare(std::string &_id, double _input):
         id(_id), input(_input), noInput(false){}
         GlobalDeclare(std::string &_id):
@@ -152,7 +146,12 @@ class GlobalDeclare
     }
 
     virtual void printPython(std::ostream &outStream) const {
-        
+            outStream<<id;
+            if(noInput==false){
+                outStream<<"="<<input;
+            } else {
+                outStream<<"=0";
+            }
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

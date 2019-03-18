@@ -39,8 +39,10 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+            outStream<<"if (";
+            condition->printPython(outStream);
+            outStream<<") :"<<std::endl;
+            branch->printPython(outStream);      
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -98,8 +100,15 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+            outStream<<"if (";
+            condition->printPython(outStream);
+            outStream<<") :"<<std::endl;
+            branchA->printPython(outStream);
+            outStream<<std::endl;
+            outStream<<"else :";
+            outStream<<std::endl;
+            branchB->printPython(outStream);
+            outStream<<std::endl;
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -125,7 +134,8 @@ public:
     }
 };
 
-class ReturnStatement: public ASTNode
+class ReturnStatement: 
+    public ASTNode
 {
     public:
         nodePtr expr;
@@ -149,8 +159,12 @@ class ReturnStatement: public ASTNode
             dst<<";";
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-
+    virtual void printPython(std::ostream &outStream) const override{
+            outStream<<"return";
+            if(expr!=NULL){
+                outStream<<" ";
+                expr->printPython(outStream);
+            }
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -173,16 +187,18 @@ class ExprStatement: public ASTNode
        
     }
 
-    virtual void printC(std::ostream &dst) const override
+    virtual void printC(std::ostream &outStream) const override
     {
        if(expr!=NULL){ 
-                expr->printC(dst);
-                dst<<";";
+                expr->printC(outStream);
+                outStream<<";";
             }
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-
+    virtual void printPython(std::ostream &outStream) const override{
+        if(expr!=NULL){
+                expr->printPython(outStream);
+            }
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -211,7 +227,7 @@ class DeclareStatement: public ASTNode
     }
 
     virtual void printPython(std::ostream &dst) const override{
-
+        declist->printPython(dst);
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -243,7 +259,49 @@ class Declare: public ASTNode
     }
 
     virtual void printPython(std::ostream &dst) const override{
+            dst<<id;
+            if(expr!=NULL){
+                dst<<"=";
+                expr->printPython(dst);
+            } else {
+                dst<<"=0";
+            }
+    }
 
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+
+    }
+
+};
+
+class FunctionStatementInExpr: public ASTNode
+{
+    public:
+        std::string id;
+        nodePtr arg;
+
+    FunctionStatementInExpr(std::string &_id, nodePtr _arg)
+    : id(_id), arg(_arg){}
+
+    ~FunctionStatementInExpr(){
+        if (arg!=NULL){ delete arg;}
+    }
+
+    virtual void printC(std::ostream &dst) const override
+    {
+            dst<<id<<"(";
+            if(arg!=NULL){
+                arg->printC(dst);
+            }
+            dst<<")";
+    }
+
+    virtual void printPython(std::ostream &dst) const override{
+            dst<<id<<"(";
+            if(arg!=NULL){
+                arg->printPython(dst);
+            }  
+            dst<<")";
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
