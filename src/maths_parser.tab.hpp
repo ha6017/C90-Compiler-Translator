@@ -55,11 +55,7 @@ extern int yydebug;
   int yylex(void);
   void yyerror(const char *);
 
-<<<<<<< HEAD
-#line 63 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
-=======
 #line 59 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
->>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -104,37 +100,43 @@ extern int yydebug;
     T_EXPONENT = 293,
     T_EQUAL = 294,
     T_LEXCLAIM = 295,
-    T_LBRACKET = 296,
-    T_RBRACKET = 297,
-    T_LCBRACKET = 298,
-    T_RCBRACKET = 299,
-    T_LSBRACKET = 300,
-    T_RSBRACKET = 301,
-    T_LOG = 302,
-    T_EXP = 303,
-    T_SQRT = 304,
-    T_LSHIFT = 305,
-    T_RSHIFT = 306,
-    T_NUMBER = 307,
-    T_VARIABLE = 308,
-    T_COMMA = 309,
-    T_SEMI_COLON = 310,
-    T_COLON = 311,
-    T_GO_TO = 312,
-    T_CONTINUE = 313,
-    T_LE = 314,
-    T_GE = 315,
-    T_EQ = 316,
-    T_NEQ = 317,
-    T_LT = 318,
-    T_GT = 319,
-    T_BREAK = 320,
-    T_LAND = 321,
-    T_LOR = 322,
-    T_AND = 323,
-    T_OR = 324,
-    T_XOR = 325,
-    T_NOT = 326
+    T_INC = 296,
+    T_DEC = 297,
+    T_LBRACKET = 298,
+    T_RBRACKET = 299,
+    T_LCBRACKET = 300,
+    T_RCBRACKET = 301,
+    T_LSBRACKET = 302,
+    T_RSBRACKET = 303,
+    T_LOG = 304,
+    T_EXP = 305,
+    T_SQRT = 306,
+    T_LSHIFT = 307,
+    T_RSHIFT = 308,
+    T_ADDASSIGN = 309,
+    T_SUBASSIGN = 310,
+    T_MULASSIGN = 311,
+    T_DIVASSIGN = 312,
+    T_MODASSIGN = 313,
+    T_VARIABLE = 314,
+    T_COMMA = 315,
+    T_SEMI_COLON = 316,
+    T_COLON = 317,
+    T_GO_TO = 318,
+    T_CONTINUE = 319,
+    T_LE = 320,
+    T_GE = 321,
+    T_EQ = 322,
+    T_NEQ = 323,
+    T_LT = 324,
+    T_GT = 325,
+    T_BREAK = 326,
+    T_LAND = 327,
+    T_LOR = 328,
+    T_AND = 329,
+    T_OR = 330,
+    T_XOR = 331,
+    T_NOT = 332
   };
 #endif
 
@@ -143,22 +145,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-<<<<<<< HEAD
-#line 18 "src/maths_parser.y" /* yacc.c:1927  */
-=======
 #line 18 "src/maths_parser.y" /* yacc.c:1909  */
->>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
 
+	std::string *string;
   nodePtr expr;
-  int number;
-  std::string *string;
+  float number;
   
 
-<<<<<<< HEAD
-#line 154 "src/maths_parser.tab.hpp" /* yacc.c:1927  */
-=======
-#line 150 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
->>>>>>> 0ae666df345b4c7c1c2fe3aabe67c951a1d6f420
+#line 156 "src/maths_parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -306,4 +306,41 @@ public:
     }
 };
 
+class Comma: public ASTNode
+{
+    public:
+        nodePtr expr1;
+        nodePtr expr2;
+
+    Comma(nodePtr _expr1, nodePtr _expr2)
+        : expr1(_expr1)
+        , expr2(_expr2)
+    {}
+
+    ~Comma(){
+        delete expr1;
+        delete expr2;
+    }
+
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<"(";
+        expr1->printC(outStream);
+        outStream<<" , ";
+        expr2->printC(outStream);
+        outStream<<")";
+    }
+
+    virtual void printPython(std::ostream &outStream) const override{
+            outStream<<"(";
+            expr1->printPython(outStream);
+            outStream<<" , ";
+            expr2->printPython(outStream);
+            outStream<<")";
+    }
+
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+       
+    }
+};
+
 #endif

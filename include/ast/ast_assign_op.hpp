@@ -71,8 +71,7 @@ public:
     }
 
     virtual void printPython(std::ostream &outStream) const override{
-        // need to research python
-
+        outStream<<"++"<<var;
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -111,7 +110,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const override{
         // need to research python
-
+        outStream<<"--"<<var;
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -149,7 +148,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const override{
         // need to research python
-
+        outStream<<var<<"++";
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -186,7 +185,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const override{
         // need to research python
-
+        outStream<<var<<"--";
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{

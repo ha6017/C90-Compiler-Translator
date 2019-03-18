@@ -10,14 +10,13 @@
 #include "ast_node.hpp"
 #include "ast_context.hpp"
 
-class FuncProto
-    : public ASTNode
+class FuncProto: public ASTNode
 {
 protected:
     std::string type;
     std::string id;
 public:
-    FuncProto(std::string &_type, std::string &_id)
+    FuncProto(const std::string &_type, std::string &_id)
         : type(_type)
         , id(_id)
     {}
@@ -33,7 +32,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+        //throw std::runtime_error("No python Impl");
         
     }
 
@@ -43,16 +42,15 @@ public:
     }
 };
 
-class FuncDef
-    : public ASTNode
+class FuncDef: public ASTNode
 {
-protected:
+public:
     std::string type;
     std::string id;
     nodePtr myNameList;  //<---- subject to change 
     nodePtr myBranch;
-public:
-    FuncDef(std::string &_type, std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
+
+    FuncDef(const std::string &_type, const std::string &_id, nodePtr _myNameList, nodePtr _myBranch )
         : type(_type)
         , id(_id)
         , myNameList(_myNameList)
@@ -76,11 +74,18 @@ public:
 			outStream << std::endl;
 		}
 		outStream<<" }" << std::endl;
+    
     }
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+        outStream<<"def "<<id<<"(";
+        if (myNameList != NULL){
+            myNameList->printPython(outStream);
+        }
+            outStream<<"):"<<std::endl;
+
+            myBranch->printPython(outStream);
         
     }
 
@@ -118,8 +123,11 @@ class Top_List : public ASTNode{
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+        if(nextfunc!=NULL){
+            nextfunc->printPython(outStream);
+            outStream<<std::endl;
+        }
+        func->printPython(outStream);   
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -129,15 +137,14 @@ class Top_List : public ASTNode{
 
 };
 
-class FuncCall
-    : public ASTNode
+class FuncCall: public ASTNode
 {
 protected:
     std::string type;
     std::string id;
     nodePtr myParamList;  //<---- subject to change 
 public:
-    FuncCall(std::string &_type, std::string &_id, nodePtr _myParamList)
+    FuncCall(const std::string &_type,const std::string &_id, nodePtr _myParamList)
         : type(_type)
         , id(_id)
         , myParamList(_myParamList)
@@ -149,15 +156,20 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
-        outStream<<type<<" "<<"(";
-        myParamList->printC(outStream);
+        outStream<<type<<" "<<id<<"(";
+         if(myParamList!=NULL){
+             myParamList->printC(outStream);
+         }
         outStream<<");"<<std::endl;
     }
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+        outStream<<"def "<<id<<"(";
+        if(myParamList!=NULL){
+             myParamList->printPython(outStream);
+        }
+        outStream<<")"<<std::endl; 
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

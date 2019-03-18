@@ -10,5 +10,10 @@ int main(int argc, char *argv[])
     ast->printC(std::cout);
     std::cout<<std::endl;
 
+    std::cout<<"PRINTING PYTHON"<<std::endl;
+
+    ast->printPython(std::cout);
+    std::cout<<std::endl;
+
     return 0;
 }

@@ -8,7 +8,7 @@ extern "C" int fileno(FILE *stream);
 
 
 void debug();
-bool DEBUG = true;
+bool DEBUG = false;
 %}
 
 
@@ -59,7 +59,7 @@ bool DEBUG = true;
 [-]             { debug(); yylval.string = new std::string("-");  return T_MINUS; }
 [/]             { debug();  return T_DIVIDE; }
 [+]             { debug();  return T_PLUS; }
-[=]				      {debug();  return T_EQUAL; }
+[=]				 {debug();  return T_EQUAL; }
 
 [(]             { debug();  return T_LBRACKET; }
 [)]             { debug();  return T_RBRACKET; }
@@ -87,6 +87,14 @@ bool DEBUG = true;
 [<][<]			{ debug();  return T_LSHIFT; }
 [>][>]			{ debug();  return T_RSHIFT; }
 
+"++"    	{ return T_INC; }
+"--"    	{ return T_DEC; }
+"+="    { return T_ADDASSIGN; }
+"-="    { return T_SUBASSIGN; }
+"*="    { return T_MULASSIGN; }
+"/="    { return T_DIVASSIGN; }
+"%="    { return T_MODASSIGN; }
+
 [&]				{ debug();  return T_AND; }
 [|]				{ debug();  return T_OR; }
 [%]				{ debug();  return T_REM; }
@@ -96,7 +104,7 @@ bool DEBUG = true;
 
 [-]?[0-9]+		{ debug(); yylval.number=strtod(yytext, 0); return I_INT; }
 
-[-]?[0-9]+([.][0-9]*)? { debug(); yylval.number=strtod(yytext, 0); return I_FLOAT;}
+[-]?[0-9]+([.][0-9]*) { debug(); yylval.number=strtod(yytext, 0); return I_FLOAT;}
 
 log             { return T_LOG;   }
 exp             { return T_EXP; }

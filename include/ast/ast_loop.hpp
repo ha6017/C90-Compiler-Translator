@@ -48,7 +48,14 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+            initialisation->printPython(outStream);
+            outStream<<std::endl;
+            outStream<<"While ";
+            condition->printPython(outStream);
+            outStream<<" :"<<std::endl;
+            branch->printPython(outStream);
+            if(postLoopExp!=NULL){ postLoopExp->printPython(outStream); }
+            outStream<<std::endl;
         
     }
 
@@ -106,8 +113,10 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
-        
+            outStream<<"while (";
+            condition->printPython(outStream);
+            outStream<<") :"<<std::endl;
+            branch->printPython(outStream);  
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -166,7 +175,7 @@ public:
 
     virtual void printPython(std::ostream &outStream) const 
     {
-        throw std::runtime_error("No python Impl");
+        
         
     }
 
@@ -252,6 +261,38 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string my_label="top_"+myContext.makeScopedLabelID();
         outStream<<"J "<<my_label<<std::endl;
+     }
+};
+
+class NewScope
+    : public ASTNode
+{
+protected: 
+nodePtr body;
+public:
+    NewScope(nodePtr _body):
+        body(_body)
+    {}
+
+    ~NewScope()
+    {
+        if(body!=NULL){ delete body; }
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<"{"<<std::endl; 
+        body->printC(outStream);
+        outStream<<"}";
+    }
+
+    virtual void printPython(std::ostream &outStream) const 
+    {
+       body->printPython(outStream);     
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+       
      }
 };
 

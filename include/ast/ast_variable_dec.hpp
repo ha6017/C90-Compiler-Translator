@@ -80,6 +80,88 @@ public:
     }
 };
 
+class Dec_Var_List
+    : public ASTNode
+{
+protected:
+    nodePtr current_dec;
+    nodePtr next_dec;
+public:
+    Dec_Var_List(nodePtr _current_dec, nodePtr _next_dec)
+        :   current_dec(_current_dec)
+        ,   next_dec(_next_dec)  
+    {}
+
+    ~Dec_Var_List()
+    {
+        if(next_dec!=NULL){
+            delete next_dec;
+        }   
+        delete current_dec;
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+        if(next_dec!=NULL){
+                next_dec->printC(outStream);
+                outStream<<",";
+            }
+            current_dec->printC(outStream);
+    }
+
+    virtual void printPython(std::ostream &outStream) const {
+        if(next_dec!=NULL){
+                next_dec->printPython(outStream);
+                outStream<<std::endl;
+            }
+            current_dec->printPython(outStream);
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        
+    }
+};
+
+
+class GlobalDeclare
+    : public ASTNode
+{
+    public:
+        std::string id;
+        double input;
+        bool noInput;
+
+        GlobalDeclare(std::string &_id, double _input):
+        id(_id), input(_input), noInput(false){}
+        GlobalDeclare(std::string &_id):
+        id(_id), noInput(true){}
+
+    ~GlobalDeclare(){}
+
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<id;
+            if(noInput==false){
+                outStream<<"="<<input;
+            }
+    }
+
+    virtual void printPython(std::ostream &outStream) const {
+            outStream<<id;
+            if(noInput==false){
+                outStream<<"="<<input;
+            } else {
+                outStream<<"=0";
+            }
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        
+    }
+};
+
+
+
 // class LocalInitArray
 //     : public ASTNode
 // {
