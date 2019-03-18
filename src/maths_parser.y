@@ -296,6 +296,9 @@ EXPR14 :		T_LBRACKET EXPR16 T_RBRACKET { $$ = $2; }
 			| 	I_INT   { $$ = new Number( $1, 0); } 
 			//| 	T_MINUS I_INT   { $$ = new Number( 0, $2); } 
 
+
+  EXPR16: 	EXPR15 {$$=$1;}
+	|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
 %%
 
 
