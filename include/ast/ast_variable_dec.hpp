@@ -156,7 +156,7 @@ class GlobalDeclare
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        
+
     }
 };
 

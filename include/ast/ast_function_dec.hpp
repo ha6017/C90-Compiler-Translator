@@ -91,10 +91,16 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+
         outStream<<id<<std::endl;
         //still need to use paramlist
-        myNameList->printMips(dstreg,myContext,outStream);
-        myBranch->printMips("reg_2", myContext, outStream);
+        if(myNameList!=NULL){
+            myNameList->printMips(dstreg,myContext,outStream);
+        }
+        if(myBranch!=NULL){
+            myBranch->printMips("reg_2", myContext, outStream);
+        }
+        
         
         outStream<<"LW "<<"reg_fp"<<", "<<"0"<<" (reg_fp)"<<std::endl;
         
@@ -123,6 +129,7 @@ class Top_List : public ASTNode{
 
     virtual void printPython(std::ostream &outStream) const 
     {
+
         if(nextfunc!=NULL){
             nextfunc->printPython(outStream);
             outStream<<std::endl;
@@ -132,7 +139,12 @@ class Top_List : public ASTNode{
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        
+        if(nextfunc!=NULL){
+            //may have to consider putting a new context 
+            nextfunc->printMips(dstreg,myContext,outStream);
+            outStream<<std::endl;
+        }
+        func->printMips(dstreg,myContext,outStream);  
     }
 
 };

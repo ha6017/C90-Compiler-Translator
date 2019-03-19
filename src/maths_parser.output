@@ -41,8 +41,16 @@ Terminals unused in grammar
    T_BREAK
 
 
+Rules useless in parser due to conflicts
+
+  109 EXPR16: EXPR15
+  110       | EXPR16 T_COMMA EXPR15
+
+
 State 27 conflicts: 3 shift/reduce
+State 51 conflicts: 24 reduce/reduce
 State 61 conflicts: 3 shift/reduce
+State 126 conflicts: 24 reduce/reduce
 State 171 conflicts: 1 shift/reduce
 
 
@@ -194,6 +202,9 @@ Grammar
   107       | T_VARIABLE
   108       | I_INT
 
+  109 EXPR16: EXPR15
+  110       | EXPR16 T_COMMA EXPR15
+
 
 Terminals, with rules where they appear
 
@@ -204,6 +215,7 @@ T_EXTERN (259)
 T_STATIC (260)
 T_REGISTER (261)
 T_AUTO (262)
+T_INT (263) 18
 T_VOID (264) 22
 T_CHAR (265) 14
 T_SHORT (266) 17
@@ -224,6 +236,27 @@ T_FOR (280) 35 36 37 38
 T_REM (281) 96
 T_DO (282) 58
 T_SWITCH (283)
+T_STRUCT (284)
+T_CASE (285)
+T_ENUM (286)
+T_UNION (287)
+T_UNSIGNED (288) 16
+T_TIMES (289) 95
+T_DIVIDE (290) 94
+T_PLUS (291) 91
+T_MINUS (292) 51 53 92
+T_EXPONENT (293)
+T_EQUAL (294) 45 50 51 52 53 62
+T_LEXCLAIM (295)
+T_INC (296) 98 101
+T_DEC (297) 99 102
+T_LBRACKET (298) 6 7 8 9 35 36 37 38 52 53 103 104 106
+T_RBRACKET (299) 6 7 8 9 35 36 37 38 52 53 103 104 106
+T_LCBRACKET (300) 6 7 39
+T_RCBRACKET (301) 6 7 39
+T_LSBRACKET (302)
+T_RSBRACKET (303)
+T_LOG (304)
 T_EXP (305)
 T_SQRT (306)
 T_LSHIFT (307) 88
@@ -235,7 +268,7 @@ T_DIVASSIGN (312) 66
 T_MODASSIGN (313) 67
 T_VARIABLE (314) 6 7 8 9 10 11 45 46 50 51 52 53 54 62 63 64 65 66
     67 98 99 101 102 103 104 107
-T_COMMA (315) 10 12 44 49 60
+T_COMMA (315) 10 12 44 49 60 110
 T_SEMI_COLON (316) 8 9 33 34 40 41 42 47 58
 T_COLON (317)
 T_GO_TO (318)
@@ -253,47 +286,6 @@ T_AND (329) 78
 T_OR (330) 74
 T_XOR (331) 76
 T_NOT (332) 68
-=======
-T_UNSIGNED (288) 14
-T_TIMES (289) 61 91
-T_DIVIDE (290) 62 90
-T_PLUS (291) 59 87 95 98
-T_MINUS (292) 49 51 60 88 96 99
-T_EXPONENT (293)
-T_EQUAL (294) 43 48 49 50 51 58 59 60 61 62 63
-T_LEXCLAIM (295)
-T_LBRACKET (296) 6 7 8 9 33 34 35 36 50 51 100
-T_RBRACKET (297) 6 7 8 9 33 34 35 36 50 51 100
-T_LCBRACKET (298) 6 7 37
-T_RCBRACKET (299) 6 7 37
-T_LSBRACKET (300)
-T_RSBRACKET (301)
-T_LOG (302)
-T_EXP (303)
-T_SQRT (304)
-T_LSHIFT (305) 84
-T_RSHIFT (306) 85
-T_VARIABLE (307) 6 7 8 9 10 11 43 44 48 49 50 51 52 58 59 60 61 62
-    63 95 96 98 99 101
-T_COMMA (308) 10 42 47 104
-T_SEMI_COLON (309) 8 9 31 32 38 39 40 45 56
-T_COLON (310)
-T_GO_TO (311)
-T_CONTINUE (312)
-T_LE (313) 79
-T_GE (314) 80
-T_EQ (315) 76
-T_NEQ (316) 77
-T_LT (317) 81
-T_GT (318) 82
-T_BREAK (319)
-T_LAND (320) 68
-T_LOR (321) 66
-T_AND (322) 74
-T_OR (323) 70
-T_XOR (324) 72
-T_NOT (325) 64
->>>>>>> 577c4f001574e38d20187fa06dfbfc73f76cb320
 
 
 Nonterminals, with rules where they appear
@@ -343,10 +335,11 @@ WHILE_STATEMENT (97)
 DO_WHILE_STATEMENT (98)
     on left: 58, on right: 30
 EXPR16 (99)
-    on left: 59 60, on right: 33 35 36 40 55 56 57 58 60 106
+    on left: 59 60 109 110, on right: 33 35 36 40 55 56 57 58 60 106
+    110
 EXPR15 (100)
     on left: 61 62 63 64 65 66 67, on right: 12 13 45 59 60 62 63 64
-    65 66 67
+    65 66 67 109 110
 EXPR (101)
     on left: 68 69, on right: 61
 EXPR2 (102)
@@ -938,6 +931,7 @@ State 50
 
    60 EXPR16: EXPR16 . T_COMMA EXPR15
   106 EXPR14: T_LBRACKET EXPR16 . T_RBRACKET
+  110 EXPR16: EXPR16 . T_COMMA EXPR15
 
     T_RBRACKET  shift, and go to state 89
     T_COMMA     shift, and go to state 90
@@ -946,8 +940,57 @@ State 50
 State 51
 
    59 EXPR16: EXPR15 .
+  109       | EXPR15 .
 
-    $default  reduce using rule 59 (EXPR16)
+    T_INT         reduce using rule 59 (EXPR16)
+    T_INT         [reduce using rule 109 (EXPR16)]
+    T_VOID        reduce using rule 59 (EXPR16)
+    T_VOID        [reduce using rule 109 (EXPR16)]
+    T_CHAR        reduce using rule 59 (EXPR16)
+    T_CHAR        [reduce using rule 109 (EXPR16)]
+    T_SHORT       reduce using rule 59 (EXPR16)
+    T_SHORT       [reduce using rule 109 (EXPR16)]
+    T_LONG        reduce using rule 59 (EXPR16)
+    T_LONG        [reduce using rule 109 (EXPR16)]
+    T_FLOAT       reduce using rule 59 (EXPR16)
+    T_FLOAT       [reduce using rule 109 (EXPR16)]
+    T_DOUBLE      reduce using rule 59 (EXPR16)
+    T_DOUBLE      [reduce using rule 109 (EXPR16)]
+    T_SIGNED      reduce using rule 59 (EXPR16)
+    T_SIGNED      [reduce using rule 109 (EXPR16)]
+    T_RETURN      reduce using rule 59 (EXPR16)
+    T_RETURN      [reduce using rule 109 (EXPR16)]
+    I_INT         reduce using rule 59 (EXPR16)
+    I_INT         [reduce using rule 109 (EXPR16)]
+    T_IF          reduce using rule 59 (EXPR16)
+    T_IF          [reduce using rule 109 (EXPR16)]
+    T_WHILE       reduce using rule 59 (EXPR16)
+    T_WHILE       [reduce using rule 109 (EXPR16)]
+    T_FOR         reduce using rule 59 (EXPR16)
+    T_FOR         [reduce using rule 109 (EXPR16)]
+    T_DO          reduce using rule 59 (EXPR16)
+    T_DO          [reduce using rule 109 (EXPR16)]
+    T_UNSIGNED    reduce using rule 59 (EXPR16)
+    T_UNSIGNED    [reduce using rule 109 (EXPR16)]
+    T_INC         reduce using rule 59 (EXPR16)
+    T_INC         [reduce using rule 109 (EXPR16)]
+    T_DEC         reduce using rule 59 (EXPR16)
+    T_DEC         [reduce using rule 109 (EXPR16)]
+    T_LBRACKET    reduce using rule 59 (EXPR16)
+    T_LBRACKET    [reduce using rule 109 (EXPR16)]
+    T_RBRACKET    reduce using rule 59 (EXPR16)
+    T_RBRACKET    [reduce using rule 109 (EXPR16)]
+    T_LCBRACKET   reduce using rule 59 (EXPR16)
+    T_LCBRACKET   [reduce using rule 109 (EXPR16)]
+    T_VARIABLE    reduce using rule 59 (EXPR16)
+    T_VARIABLE    [reduce using rule 109 (EXPR16)]
+    T_COMMA       reduce using rule 59 (EXPR16)
+    T_COMMA       [reduce using rule 109 (EXPR16)]
+    T_SEMI_COLON  reduce using rule 59 (EXPR16)
+    T_SEMI_COLON  [reduce using rule 109 (EXPR16)]
+    T_NOT         reduce using rule 59 (EXPR16)
+    T_NOT         [reduce using rule 109 (EXPR16)]
+    $default      reduce using rule 59 (EXPR16)
 
 
 State 52
@@ -1601,6 +1644,7 @@ State 89
 State 90
 
    60 EXPR16: EXPR16 T_COMMA . EXPR15
+  110       | EXPR16 T_COMMA . EXPR15
 
     I_INT       shift, and go to state 23
     T_INC       shift, and go to state 24
@@ -2016,8 +2060,57 @@ State 125
 State 126
 
    60 EXPR16: EXPR16 T_COMMA EXPR15 .
+  110       | EXPR16 T_COMMA EXPR15 .
 
-    $default  reduce using rule 60 (EXPR16)
+    T_INT         reduce using rule 60 (EXPR16)
+    T_INT         [reduce using rule 110 (EXPR16)]
+    T_VOID        reduce using rule 60 (EXPR16)
+    T_VOID        [reduce using rule 110 (EXPR16)]
+    T_CHAR        reduce using rule 60 (EXPR16)
+    T_CHAR        [reduce using rule 110 (EXPR16)]
+    T_SHORT       reduce using rule 60 (EXPR16)
+    T_SHORT       [reduce using rule 110 (EXPR16)]
+    T_LONG        reduce using rule 60 (EXPR16)
+    T_LONG        [reduce using rule 110 (EXPR16)]
+    T_FLOAT       reduce using rule 60 (EXPR16)
+    T_FLOAT       [reduce using rule 110 (EXPR16)]
+    T_DOUBLE      reduce using rule 60 (EXPR16)
+    T_DOUBLE      [reduce using rule 110 (EXPR16)]
+    T_SIGNED      reduce using rule 60 (EXPR16)
+    T_SIGNED      [reduce using rule 110 (EXPR16)]
+    T_RETURN      reduce using rule 60 (EXPR16)
+    T_RETURN      [reduce using rule 110 (EXPR16)]
+    I_INT         reduce using rule 60 (EXPR16)
+    I_INT         [reduce using rule 110 (EXPR16)]
+    T_IF          reduce using rule 60 (EXPR16)
+    T_IF          [reduce using rule 110 (EXPR16)]
+    T_WHILE       reduce using rule 60 (EXPR16)
+    T_WHILE       [reduce using rule 110 (EXPR16)]
+    T_FOR         reduce using rule 60 (EXPR16)
+    T_FOR         [reduce using rule 110 (EXPR16)]
+    T_DO          reduce using rule 60 (EXPR16)
+    T_DO          [reduce using rule 110 (EXPR16)]
+    T_UNSIGNED    reduce using rule 60 (EXPR16)
+    T_UNSIGNED    [reduce using rule 110 (EXPR16)]
+    T_INC         reduce using rule 60 (EXPR16)
+    T_INC         [reduce using rule 110 (EXPR16)]
+    T_DEC         reduce using rule 60 (EXPR16)
+    T_DEC         [reduce using rule 110 (EXPR16)]
+    T_LBRACKET    reduce using rule 60 (EXPR16)
+    T_LBRACKET    [reduce using rule 110 (EXPR16)]
+    T_RBRACKET    reduce using rule 60 (EXPR16)
+    T_RBRACKET    [reduce using rule 110 (EXPR16)]
+    T_LCBRACKET   reduce using rule 60 (EXPR16)
+    T_LCBRACKET   [reduce using rule 110 (EXPR16)]
+    T_VARIABLE    reduce using rule 60 (EXPR16)
+    T_VARIABLE    [reduce using rule 110 (EXPR16)]
+    T_COMMA       reduce using rule 60 (EXPR16)
+    T_COMMA       [reduce using rule 110 (EXPR16)]
+    T_SEMI_COLON  reduce using rule 60 (EXPR16)
+    T_SEMI_COLON  [reduce using rule 110 (EXPR16)]
+    T_NOT         reduce using rule 60 (EXPR16)
+    T_NOT         [reduce using rule 110 (EXPR16)]
+    $default      reduce using rule 60 (EXPR16)
 
 
 State 127
@@ -2431,6 +2524,7 @@ State 149
 
    33 EXPR_STATEMENT: EXPR16 . T_SEMI_COLON
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_COMMA       shift, and go to state 90
     T_SEMI_COLON  shift, and go to state 167
@@ -2531,6 +2625,7 @@ State 156
 
    40 RETURN_STATEMENT: T_RETURN EXPR16 . T_SEMI_COLON
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_COMMA       shift, and go to state 90
     T_SEMI_COLON  shift, and go to state 170
@@ -2541,6 +2636,7 @@ State 157
    55 IF_OR_ELSE: T_IF EXPR16 . STATEMENT T_ELSE STATEMENT
    56           | T_IF EXPR16 . STATEMENT
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_INT         shift, and go to state 1
     T_VOID        shift, and go to state 2
@@ -2598,6 +2694,7 @@ State 158
 
    57 WHILE_STATEMENT: T_WHILE EXPR16 . STATEMENT
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_INT         shift, and go to state 1
     T_VOID        shift, and go to state 2
@@ -2927,8 +3024,8 @@ State 173
     EXPR13          go to state 42
     EXPR14          go to state 43
 
-    $default  reduce using rule 55 (WHILE_STATEMENT)
 
+State 174
 
    35 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT
    37              | T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT T_RBRACKET STATEMENT
@@ -3150,6 +3247,7 @@ State 183
 
    58 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 . T_SEMI_COLON
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_COMMA       shift, and go to state 90
     T_SEMI_COLON  shift, and go to state 190
@@ -3228,6 +3326,7 @@ State 187
 
    36 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR16 . T_RBRACKET STATEMENT
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_RBRACKET  shift, and go to state 192
     T_COMMA     shift, and go to state 90
@@ -3292,6 +3391,7 @@ State 189
 
    35 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR16 . T_RBRACKET STATEMENT
    60 EXPR16: EXPR16 . T_COMMA EXPR15
+  110       | EXPR16 . T_COMMA EXPR15
 
     T_RBRACKET  shift, and go to state 194
     T_COMMA     shift, and go to state 90

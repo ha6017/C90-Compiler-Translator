@@ -41,8 +41,8 @@ public:
         scopeCountPerScope=0;
 
         //CREATE FOR LOOP TO FREE THE TEMPS
-
     }
+    
     Context(const Context &inContext){
         //I NEED TO CREATE COPY CONSTRUCTOR AND CHANGE EVERYTHING TO PASS BY REFERENCE. THEN FIGURE OUT FUNCTION LABEL MAPPINGS
         globals=inContext.globals;
