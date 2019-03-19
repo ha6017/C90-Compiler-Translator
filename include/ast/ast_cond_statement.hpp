@@ -37,12 +37,17 @@ public:
         outStream<<"}";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"if (";
-            condition->printPython(outStream);
+            condition->printPython(outStream, tab);
             outStream<<") :"<<std::endl;
-            branch->printPython(outStream);      
+            tab.indent++;
+            branch->printPython(outStream, tab);      
+            tab.indent--;
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -85,6 +90,7 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
+        
         outStream<<"if(";
         condition->printC(outStream);
         outStream<<"){";
@@ -98,17 +104,27 @@ public:
         outStream<<"}";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"if (";
-            condition->printPython(outStream);
+            condition->printPython(outStream, tab);
             outStream<<") :"<<std::endl;
-            branchA->printPython(outStream);
+            tab.indent++;
+            branchA->printPython(outStream, tab);
             outStream<<std::endl;
+            tab.indent--;
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"else :";
             outStream<<std::endl;
-            branchB->printPython(outStream);
+            tab.indent++;
+            branchB->printPython(outStream, tab);
             outStream<<std::endl;
+            tab.indent--;
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -159,11 +175,15 @@ class ReturnStatement:
             dst<<";";
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override
+    {
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"return";
             if(expr!=NULL){
                 outStream<<" ";
-                expr->printPython(outStream);
+                expr->printPython(outStream, tab);
             }
     }
 
@@ -190,15 +210,19 @@ class ExprStatement: public ASTNode
     virtual void printC(std::ostream &outStream) const override
     {
        if(expr!=NULL){ 
+            
                 expr->printC(outStream);
                 outStream<<";";
             }
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         if(expr!=NULL){
-                expr->printPython(outStream);
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
             }
+            expr->printPython(outStream, tab);
+        }
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -226,8 +250,11 @@ class DeclareStatement: public ASTNode
             dst<<";";
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-        declist->printPython(dst);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        for(int i=tab.indent;i!=0;i--){
+            outStream<<"\t";
+        }
+        declist->printPython(outStream, tab);
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -258,11 +285,11 @@ class Declare: public ASTNode
             }
     }
 
-    virtual void printPython(std::ostream &dst) const override{
+    virtual void printPython(std::ostream &dst, IndentAdd &tab) const override{
             dst<<id;
             if(expr!=NULL){
                 dst<<"=";
-                expr->printPython(dst);
+                expr->printPython(dst, tab);
             } else {
                 dst<<"=0";
             }
@@ -296,10 +323,10 @@ class FunctionStatementInExpr: public ASTNode
             dst<<")";
     }
 
-    virtual void printPython(std::ostream &dst) const override{
+    virtual void printPython(std::ostream &dst, IndentAdd &tab) const override{
             dst<<id<<"(";
             if(arg!=NULL){
-                arg->printPython(dst);
+                arg->printPython(dst, tab);
             }  
             dst<<")";
     }
@@ -400,35 +427,35 @@ class FunctionStatementInExpr: public ASTNode
 //     }
 // };
 
-class ParameterDef : public ASTNode
-{
-public:
-	nodePtr Variable2;
+// class ParameterDef : public ASTNode
+// {
+// public:
+// 	nodePtr Variable2;
 
 	
-    ParameterDef(nodePtr _Variable2)
-		: Variable2 (_Variable2)
-		{}
+//     ParameterDef(nodePtr _Variable2)
+// 		: Variable2 (_Variable2)
+// 		{}
 	
-    ~ParameterDef(){
-        delete Variable2;
-    }
+//     ~ParameterDef(){
+//         delete Variable2;
+//     }
 
-	virtual void printC(std::ostream &dst) const override
-    {
-       Variable2->printC(dst);
-    }
+// 	virtual void printC(std::ostream &dst) const override
+//     {
+//        Variable2->printC(dst);
+//     }
 
-    virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &dst) const override{
 
-    }
+//     }
 
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
 
-    }
+//     }
 
 
-};
+// };
 
 
 #endif

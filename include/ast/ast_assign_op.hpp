@@ -21,7 +21,7 @@ public:
 
     virtual void printC(std::ostream &outStream) const =0;
 
-    virtual void printPython(std::ostream &outStream) const {
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
         throw std::runtime_error("No python Impl");
     }
 
@@ -70,7 +70,7 @@ public:
         outStream<<"++"<<var;
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<"++"<<var;
     }
 
@@ -108,7 +108,7 @@ public:
         outStream<<"--"<<var;
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         // need to research python
         outStream<<"--"<<var;
     }
@@ -146,7 +146,7 @@ public:
         outStream<<var<<"++";
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         // need to research python
         outStream<<var<<"++";
     }
@@ -183,7 +183,7 @@ public:
         outStream<<var<<"--";
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         // need to research python
         outStream<<var<<"--";
     }
@@ -220,9 +220,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -256,9 +256,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"+=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -300,9 +300,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"-=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -340,9 +340,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"*=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -381,9 +381,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"/=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -423,9 +423,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<var<<"%=";
-        exp->printPython(outStream);
+        exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -447,6 +447,63 @@ public:
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
+};
+
+class UnaryNeg: public ASTNode
+{
+    protected:
+        nodePtr expr;
+
+    public:
+    UnaryNeg(nodePtr _expr)
+        :expr(_expr){}
+
+    ~UnaryNeg(){
+        delete expr;
+    }
+
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<"-(";
+        expr->printC(outStream);
+        outStream<<")";
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        outStream<<"-(";
+        expr->printPython(outStream, tab);
+        outStream<<")";
+    }
+
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{}
+};
+
+class UnaryPos: public ASTNode
+{
+    protected:
+        nodePtr expr;
+
+    public:
+
+    UnaryPos(nodePtr _expr)
+        :expr(_expr){}
+
+    ~UnaryPos(){
+        delete expr;
+    }
+
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<"+(";
+        expr->printC(outStream);
+        outStream<<")";
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        outStream<<"+(";
+        expr->printPython(outStream, tab);
+        outStream<<")";
+    }
+    
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{}
 };
 
 #endif

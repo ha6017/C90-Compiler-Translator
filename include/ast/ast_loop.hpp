@@ -46,15 +46,23 @@ public:
         outStream<<"}";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
-            initialisation->printPython(outStream);
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
+            initialisation->printPython(outStream, tab);
             outStream<<std::endl;
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"While ";
-            condition->printPython(outStream);
+            condition->printPython(outStream, tab);
             outStream<<" :"<<std::endl;
-            branch->printPython(outStream);
-            if(postLoopExp!=NULL){ postLoopExp->printPython(outStream); }
+            tab.indent++;
+            branch->printPython(outStream , tab);
+            tab.indent--;
+            if(postLoopExp!=NULL){ postLoopExp->printPython(outStream, tab); }
             outStream<<std::endl;
         
     }
@@ -111,12 +119,17 @@ public:
         outStream<<"}";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
             outStream<<"while (";
-            condition->printPython(outStream);
+            condition->printPython(outStream, tab);
             outStream<<") :"<<std::endl;
-            branch->printPython(outStream);  
+            tab.indent++;
+            branch->printPython(outStream, tab); 
+            tab.indent--; 
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -173,7 +186,7 @@ public:
         outStream<<")";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
         
         
@@ -220,7 +233,7 @@ public:
         outStream<<"break";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
         outStream<<"break";
         
@@ -251,7 +264,7 @@ public:
         outStream<<"continue";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
         outStream<<"continue";
         
@@ -285,9 +298,10 @@ public:
         outStream<<"}";
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
-       body->printPython(outStream);     
+        
+        body->printPython(outStream, tab);     
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
