@@ -53,7 +53,7 @@ public:
         if(myBranchList!=NULL){
             myBranchList->printMips(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
-        statement->printMips("$0", myContext, outStream);//problem is with the
+        statement->printMips(dstreg, myContext, outStream);//problem is with the
     }
 };
 
@@ -302,7 +302,7 @@ class Argument: public ASTNode
     }
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(argId)<<"($0)"<<std::endl;
+        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(argId)<<"($fp)"<<std::endl;
 
         if(nextArguments!=NULL){
             nextArguments->printMips(dstreg, myContext, outStream);

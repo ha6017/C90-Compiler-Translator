@@ -60,9 +60,10 @@ public:
 
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"$0"<<my_label<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<", $0, "<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
         branch->printMips(dstreg, newContext, outStream);
-        outStream<<my_label<<std::endl;
+        outStream<<my_label<<":"<<std::endl;
 
     }
 };
@@ -141,13 +142,14 @@ public:
 
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"$0"<<my_labelA<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         branchA->printMips(dstreg, newContext, outStream);
         outStream<<"J "<<my_labelB<<std::endl;
         outStream<<"nop"<<std::endl;
-        outStream<<my_labelA<<std::endl;
+        outStream<<my_labelA<<":"<<std::endl;
         branchB->printMips(dstreg, newContext, outStream);
-        outStream<<my_labelB<<std::endl;
+        outStream<<my_labelB<<":"<<std::endl;
     }
 };
 
@@ -357,12 +359,13 @@ class FunctionStatementInExpr: public ASTNode
         // newContext.updateStackOffset();
         // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
         // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
-        outStream<<"SW "<<"$fp"<<", "<<myContext.createLocalInt("framePointer")<<" ($sp)"<<std::endl;
+        outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
+        
         outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
+
         outStream<<"JAL "<<id<<std::endl;
         outStream<<"nop"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<"$2, "<<"$0"<<std::endl;
-
+        outStream<<"ADDU "<<dstreg<<", $2, "<<"$0"<<std::endl;
     }
 
 };

@@ -46,7 +46,7 @@ public:
     Context(const Context &inContext){
         //I NEED TO CREATE COPY CONSTRUCTOR AND CHANGE EVERYTHING TO PASS BY REFERENCE. THEN FIGURE OUT FUNCTION LABEL MAPPINGS
         globals=inContext.globals;
-        globals=inContext.locals;
+        locals=inContext.locals;
         // funcNameToLabel=inContext.funcNameToLabel;
         // funcLabelCounter=inContext.funcLabelCounter;
         for(int i=0;i<32;i++){
@@ -71,7 +71,6 @@ public:
         //set number of labels in scope  =0 
     }
     void enterFunction(){
-        scope_counter++;
         currentLocalPointer=0;
         locals.clear();
     }
@@ -80,18 +79,13 @@ public:
     // }
 
     std::string findTemp(){
-        for(int i=8;i<16;i++){
+        for(int i=8;i<26;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
                 return "$"+std::to_string(i);
             }
         }
-        for(int i=24;i<26;i++){
-            if(freeRegs[i]==1){
-                freeRegs[i]=0;
-                return "$"+std::to_string(i);
-            }
-        }
+
     }
     
     std::string findParam(){
@@ -159,7 +153,7 @@ public:
         return currentLocalPointer-4*size;
     }
     unsigned int findLocalArrayElement(std::string name, int index){
-        return globals[name]+4*index;
+        return locals[name]+4*index;
     }
     unsigned int findGlobalArrayElement(std::string name, int index){
         return locals[name]+4*index;

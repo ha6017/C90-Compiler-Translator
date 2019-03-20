@@ -85,7 +85,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -162,7 +162,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -199,7 +199,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -235,7 +235,8 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+
+            outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }        
@@ -286,7 +287,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -329,7 +330,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -371,7 +372,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -414,7 +415,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -456,7 +457,7 @@ public:
         if(myContext.localIntExists(var)){
             outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   

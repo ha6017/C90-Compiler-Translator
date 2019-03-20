@@ -107,14 +107,23 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
+        myContext.enterFunction();
+        myContext.createLocalInt(std::to_string(label_counter++));//this makes it such that the fp can be in address 0 with no over lap
         outStream<<id<<":"<<std::endl;
+        outStream<<"SW "<<"$31"<<", "<<myContext.createLocalInt(std::to_string(label_counter++))<<" ($fp)"<<std::endl;
+
         if(myNameList!=NULL){
             myNameList->printMips(dstreg,myContext,outStream);
         }
         if(myBranch!=NULL){
-            myBranch->printMips(dstreg, myContext, outStream);
+            std::string new_dest_reg = myContext.findTemp();
+            myBranch->printMips(new_dest_reg, myContext, outStream);
+            myContext.UnlockReg(new_dest_reg);
+
         }
+        outStream<<"LW "<<"$31"<<", "<<"4"<<" ($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+
         outStream<<"LW "<<"$fp"<<", "<<"0"<<" ($fp)"<<std::endl;
         outStream<<"nop"<<std::endl;
         outStream<<"JR $31"<<std::endl;
@@ -210,11 +219,13 @@ public:
         // newContext.updateStackOffset();
         // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
         // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
-        outStream<<"SW "<<"$fp"<<", "<<myContext.createLocalInt("framePointer")<<" ($sp)"<<std::endl;
+        outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
+        // outStream<<"SW "<<"$31"<<", "<<"4"<<" ($sp)"<<std::endl;
         outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
+
         outStream<<"JAL "<<id<<std::endl;
         outStream<<"nop"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<"$2, "<<"$0"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", $2, "<<"sp"<<std::endl;
     }
 };
 

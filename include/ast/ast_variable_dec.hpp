@@ -162,6 +162,14 @@ class GlobalDeclare
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
+        std::string var_reg = myContext.findTemp();
+        if(noInput){
+            outStream<<"ADDI "<<var_reg<<", "<<"reg_0"<<", 0"<<std::endl;
+        }else{
+            outStream<<"ADDI "<<var_reg<<", "<<"reg_0"<<", "<<(int)input<<std::endl;
+        }
+        outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(id)<<"(0)"<<std::endl;
+        myContext.UnlockReg(var_reg);
     }
 };
 

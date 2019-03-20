@@ -67,7 +67,9 @@ public:
 
         outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
         outStream<<"BEQ "<<left_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"BEQ "<<right_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"J "<<my_labelB<<std::endl;
         outStream<<"nop"<<std::endl;
 
@@ -117,7 +119,9 @@ public:
 
         outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
         outStream<<"BNE "<<left_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"BNE "<<right_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"J "<<my_labelB<<std::endl;
         outStream<<"nop"<<std::endl;
 
@@ -158,6 +162,7 @@ public:
         std::string my_label=myContext.makeLabelName();
         outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
         outStream<<"BEQ "<<exp_reg<<", $0,"<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
         outStream<<my_label<<std::endl;
         myContext.UnlockReg(exp_reg);

@@ -85,6 +85,7 @@ public:
         condition->printMips(compare_reg, newContext, outStream);
     
         outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         if(branch!=NULL){
             branch->printMips(dstreg, newContext, outStream);
@@ -153,6 +154,7 @@ public:
         condition->printMips(compare_reg, newContext, outStream);
     
         outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         if(branch!=NULL){
             branch->printMips(dstreg, newContext, outStream);
@@ -219,6 +221,7 @@ public:
         condition->printMips(compare_reg, newContext, outStream);
     
         outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         outStream<<"J "<<my_labelA<<std::endl;
         outStream<<"nop"<<std::endl;
