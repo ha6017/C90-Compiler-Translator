@@ -10,37 +10,37 @@
 #include "ast_node.hpp"
 #include "ast_context.hpp"
 
-class FuncProto: public ASTNode
-{
-protected:
-    std::string type;
-    std::string id;
-public:
-    FuncProto(const std::string &_type, std::string &_id)
-        : type(_type)
-        , id(_id)
-    {}
+// class FuncProto: public ASTNode
+// {
+// protected:
+//     std::string type;
+//     std::string id;
+// public:
+//     FuncProto(const std::string &_type, std::string &_id)
+//         : type(_type)
+//         , id(_id)
+//     {}
 
-    ~FuncProto()
-    { }
+//     ~FuncProto()
+//     { }
 
-    virtual void printC(std::ostream &outStream) const {
-        outStream<<type<<" ";
-        outStream<<id;
-        outStream<<"();"<<std::endl; 
-    }
+//     virtual void printC(std::ostream &outStream) const {
+//         outStream<<type<<" ";
+//         outStream<<id;
+//         outStream<<"();"<<std::endl; 
+//     }
 
-    virtual void printPython(std::ostream &outStream) const 
-    {
-        //throw std::runtime_error("No python Impl");
+//     virtual void printPython(std::ostream &outStream) const 
+//     {
+//         //throw std::runtime_error("No python Impl");
         
-    }
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         
-    }
-};
+//     }
+// };
 
 class FuncDef: public ASTNode
 {
@@ -77,16 +77,32 @@ public:
     
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
         outStream<<"def "<<id<<"(";
         if (myNameList != NULL){
-            myNameList->printPython(outStream);
+            myNameList->printPython(outStream, tab);
         }
             outStream<<"):"<<std::endl;
+            tab.indent++;
+        for(int i=0;i<tab.global_var.size();i++){
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
+            outStream<<"global "<<tab.global_var[i]<<std::endl;
+        }
+            myBranch->printPython(outStream, tab);
+            tab.indent--;
 
-            myBranch->printPython(outStream);
-        
+        // if(id=="main"){
+        //     std::cout<<std::endl;
+        //     std::cout<<"# Boilerplat"<<std::endl;
+        //     std::cout<<"if __name__ == \"__main__\":"<<std::endl;
+        //     std::cout<<"    import sys"<<std::endl;
+        //     std::cout<<"    ret=main()"<<std::endl;
+        //     std::cout<<"    sys.exit(ret)"<<std::endl;
+        // }
+
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -125,14 +141,14 @@ class Top_List : public ASTNode{
         func->printC(dst);
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
 
         if(nextfunc!=NULL){
-            nextfunc->printPython(outStream);
+            nextfunc->printPython(outStream, tab);
             outStream<<std::endl;
         }
-        func->printPython(outStream);   
+        func->printPython(outStream, tab);   
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -174,11 +190,11 @@ public:
         // outStream<<");"<<std::endl;
     }
 
-    virtual void printPython(std::ostream &outStream) const 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
         outStream<<"def "<<id<<"("; //this is wrong, this is for a definition not a call
         if(myParamList!=NULL){
-             myParamList->printPython(outStream);
+             myParamList->printPython(outStream, tab);
         }
         outStream<<")"<<std::endl; 
     }

@@ -13,8 +13,10 @@ int main(int argc, char *argv[])
     // std::cout<<std::endl;
 
     std::cout<<"PRINTING PYTHON"<<std::endl;
+    
+    IndentAdd tab;
 
-    ast->printPython(std::cout);
+    ast->printPython(std::cout, tab);
     std::cout<<std::endl;
     std::cout<<"PRINTING MIPS"<<std::endl;
     Context initContext;

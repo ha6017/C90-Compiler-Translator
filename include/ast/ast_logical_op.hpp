@@ -27,7 +27,7 @@ public:
     }
     virtual void printC(std::ostream &outStream) const =0;
 
-    virtual void printPython(std::ostream &outStream) const =0; 
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const =0; 
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const =0;
@@ -49,10 +49,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" && ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -97,10 +97,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" || ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -145,9 +145,9 @@ public:
         exp->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
         outStream<<"!";
-        exp->printC(outStream);
+        exp->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{

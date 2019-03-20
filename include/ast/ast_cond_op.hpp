@@ -30,7 +30,7 @@ public:
 
     virtual void printC(std::ostream &outStream) const =0;
 
-    virtual void printPython(std::ostream &outStream) const {
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
         throw std::runtime_error("No python Impl");
         
 
@@ -61,10 +61,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" == ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -106,10 +106,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" != ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
@@ -151,10 +151,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" < ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -192,10 +192,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" > ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -234,10 +234,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" <= ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -281,10 +281,10 @@ public:
         right->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
-        left->printPython(outStream);
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+        left->printPython(outStream, tab);
         outStream<<" >= ";
-        right->printPython(outStream);
+        right->printPython(outStream, tab);
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -330,11 +330,11 @@ class Comma: public ASTNode
         outStream<<")";
     }
 
-    virtual void printPython(std::ostream &outStream) const override{
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
             outStream<<"(";
-            expr1->printPython(outStream);
+            expr1->printPython(outStream, tab);
             outStream<<" , ";
-            expr2->printPython(outStream);
+            expr2->printPython(outStream, tab);
             outStream<<")";
     }
 

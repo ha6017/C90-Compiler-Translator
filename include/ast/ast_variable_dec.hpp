@@ -35,50 +35,50 @@ public:
     }
 };*/
 
-class LocalInitInt
-    : public ASTNode
-{
-protected:
-    std::string type;
-    std::string var;
-    nodePtr exp;
-public:
-    LocalInitInt(std::string &_type, std::string &_var, nodePtr _exp)
-        :   var(_var)
-        ,   exp(_exp)
-        ,   type(_type)
-    {}
+// class LocalInitInt
+//     : public ASTNode
+// {
+// protected:
+//     std::string type;
+//     std::string var;
+//     nodePtr exp;
+// public:
+//     LocalInitInt(std::string &_type, std::string &_var, nodePtr _exp)
+//         :   var(_var)
+//         ,   exp(_exp)
+//         ,   type(_type)
+//     {}
 
-    ~LocalInitInt()
-    {
-        if(exp!=NULL){
-            delete exp;
-        }   
-    }
+//     ~LocalInitInt()
+//     {
+//         if(exp!=NULL){
+//             delete exp;
+//         }   
+//     }
 
-    virtual void printC(std::ostream &outStream) const {
-        outStream<<type<<" "<<var;
-        if(exp!=NULL){
-            outStream<<std::endl;
-            exp->printC(outStream);
-        }
-        outStream<<";"<<std::endl;
-    }
+//     virtual void printC(std::ostream &outStream) const {
+//         outStream<<type<<" "<<var;
+//         if(exp!=NULL){
+//             outStream<<std::endl;
+//             exp->printC(outStream);
+//         }
+//         outStream<<";"<<std::endl;
+//     }
 
-    virtual void printPython(std::ostream &outStream) const {
-        outStream<<var<<" = ";
-        exp->printPython(outStream);
-    }
+//     virtual void printPython(std::ostream &outStream) const {
+//         outStream<<var<<" = ";
+//         exp->printPython(outStream);
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        std::string exp_reg = myContext.findTemp();
-        exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<" ($fp)"<<std::endl;
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+//         std::string exp_reg = myContext.findTemp();
+//         exp->printMips(exp_reg, myContext, outStream);
+//         outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<" (reg_fp)"<<std::endl;
 
-        myContext.UnlockReg(exp_reg);
-    }
-};
+//         myContext.UnlockReg(exp_reg);
+//     }
+// };
 
 class Dec_Var_List
     : public ASTNode
@@ -108,12 +108,12 @@ public:
             current_dec->printC(outStream);
     }
 
-    virtual void printPython(std::ostream &outStream) const {
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
         if(next_dec!=NULL){
-            next_dec->printPython(outStream);
-            outStream<<std::endl;
-        }
-        current_dec->printPython(outStream);
+                next_dec->printPython(outStream, tab);
+                outStream<<std::endl;
+            }
+            current_dec->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -149,7 +149,8 @@ class GlobalDeclare
             }
     }
 
-    virtual void printPython(std::ostream &outStream) const {
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+            tab.global_var.push_back(id);
             outStream<<id;
             if(noInput==false){
                 outStream<<"="<<input;
@@ -209,53 +210,53 @@ class GlobalDeclare
 //     }
 // };
 
-class GlobalInitInt
-    : public ASTNode
-{
-protected:
-    std::string type;
-    std::string var;
-    nodePtr exp;
-public:
-    GlobalInitInt(std::string &_type, std::string &_var, nodePtr _exp)
-        :  type(_type)
-        , var(_var)
-        ,   exp(_exp)   
-    {}
+// class GlobalInitInt
+//     : public ASTNode
+// {
+// protected:
+//     std::string type;
+//     std::string var;
+//     nodePtr exp;
+// public:
+//     GlobalInitInt(std::string &_type, std::string &_var, nodePtr _exp)
+//         :  type(_type)
+//         , var(_var)
+//         ,   exp(_exp)   
+//     {}
 
-    virtual ~GlobalInitInt()
-    {
-        if(exp!=NULL)
-        {
-               delete exp;
-        }
+//     virtual ~GlobalInitInt()
+//     {
+//         if(exp!=NULL)
+//         {
+//                delete exp;
+//         }
         
-    }
+//     }
 
-    virtual void printC(std::ostream &outStream) const {
-        outStream<<type<<" "<<var<<" = ";
-        if(exp!=NULL){
-            exp->printC(outStream);
-        }
+//     virtual void printC(std::ostream &outStream) const {
+//         outStream<<type<<" "<<var<<" = ";
+//         if(exp!=NULL){
+//             exp->printC(outStream);
+//         }
         
-    }
+//     }
 
-    virtual void printPython(std::ostream &outStream) const {
-        outStream<<var<<" = ";
-        exp->printPython(outStream);
-    }
+//     virtual void printPython(std::ostream &outStream) const {
+//         outStream<<var<<" = ";
+//         exp->printPython(outStream);
+//     }
 
-    //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        std::string exp_reg = myContext.findTemp();
-        exp->printMips(exp_reg, myContext, outStream);
-        std::string var_reg = myContext.findTemp();
-        outStream<<"ADDU "<<var_reg<<", "<<"$0"<<", "<< exp_reg<<std::endl;
-        outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(var)<<"(0)"<<std::endl;
-        myContext.UnlockReg(var_reg);
-        myContext.UnlockReg(exp_reg);
-    }
-};
+//     //! Evaluate the tree using the given mapping of variables to numbers
+//      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+//         std::string exp_reg = myContext.findTemp();
+//         exp->printMips(exp_reg, myContext, outStream);
+//         std::string var_reg = myContext.findTemp();
+//         outStream<<"ADDU "<<var_reg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
+//         outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(var)<<"(0)"<<std::endl;
+//         myContext.UnlockReg(var_reg);
+//         myContext.UnlockReg(exp_reg);
+//     }
+// };
 
 // class GlobalInitArray
 //     : public ASTNode

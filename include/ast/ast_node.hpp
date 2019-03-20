@@ -12,6 +12,21 @@
 
 class ASTNode;
 
+class IndentAdd
+{
+public:
+    int indent;
+
+    std::vector<std::string> global_var;
+
+    //std::string currentType;
+
+    IndentAdd():
+        indent(0) {}
+
+    ~IndentAdd(){}
+};
+
 typedef const ASTNode *nodePtr;
 
 class ASTNode
@@ -24,13 +39,15 @@ public:
 
     }
 
-    virtual void printPython(std::ostream &outStream) const {
-        throw std::runtime_error("No python Impl");
-    
-    }
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {};
 
     //! Evaluate the tree using the given mapping of variables to numbers
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {}
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {};
+
+    // void printPython(std::ostream &outStream){
+    //     IndentAdd tab;
+    //     printPython(outStream, tab);
+    // }
 };
 
 

@@ -55,8 +55,8 @@ bool DEBUG = false;
 
 [A-Za-z_]([A-Za-z_]|[0-9])*  	{debug();  yylval.string=new std::string(yytext); return T_VARIABLE; }
 
-[*]             { debug(); yylval.string = new std::string("*");  return T_TIMES; }
-[-]             { debug(); yylval.string = new std::string("-");  return T_MINUS; }
+[*]             { debug();   return T_TIMES; }
+[-]             { debug();  return T_MINUS; }
 [/]             { debug();  return T_DIVIDE; }
 [+]             { debug();  return T_PLUS; }
 [=]				 {debug();  return T_EQUAL; }
@@ -101,10 +101,7 @@ bool DEBUG = false;
 [\^]				{  debug(); return T_XOR; }
 
 [~]				{  debug();return T_NOT; }
-
-[-]?[0-9]+		{ debug(); yylval.number=strtod(yytext, 0); return I_INT; }
-
-[-]?[0-9]+([.][0-9]*) { debug(); yylval.number=strtod(yytext, 0); return I_FLOAT;}
+[0-9]+([.][0-9]*)? { debug(); yylval.number=strtod(yytext, 0); return I_FLOAT;}
 
 log             { return T_LOG;   }
 exp             { return T_EXP; }
