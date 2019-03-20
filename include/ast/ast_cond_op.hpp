@@ -75,9 +75,9 @@ public:
         right->printMips(right_reg, myContext, outStream);
         std::string my_label=myContext.makeLabelName();
 
-        outStream<<"ADDI "<<dstreg<<", reg_0, 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 0"<<std::endl;
         outStream<<"BNE "<<left_reg<<", "<<right_reg<<", "<<my_label<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
         outStream<<my_label<<std::endl;
 
         myContext.UnlockReg(left_reg);
@@ -120,9 +120,9 @@ public:
         right->printMips(right_reg, myContext, outStream);
         std::string my_label=myContext.makeLabelName();
 
-        outStream<<"ADDI "<<dstreg<<", reg_0, 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 0"<<std::endl;
         outStream<<"BEQ "<<left_reg<<", "<<right_reg<<", "<<my_label<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
         outStream<<my_label<<std::endl;
 
         myContext.UnlockReg(left_reg);
@@ -250,7 +250,7 @@ public:
 
         outStream<<"SLT "<<dstreg<<", "<<right_reg<<", "<<left_reg<<std::endl;
         std::string one_reg = myContext.findTemp();
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
         outStream<<"SLT "<<dstreg<<", "<<dstreg<<", "<<one_reg<<std::endl;
 
 
@@ -296,7 +296,7 @@ public:
 
         outStream<<"SLT "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
         std::string one_reg = myContext.findTemp();
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
         outStream<<"SLT "<<dstreg<<", "<<dstreg<<", "<<one_reg<<std::endl;
 
 

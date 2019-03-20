@@ -83,13 +83,13 @@ public:
         for(int i=8;i<16;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
         for(int i=24;i<26;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
     }
@@ -98,19 +98,19 @@ public:
         for(int i=4;i<8;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
     }
     void UnlockReg(std::string RegName){
-        int index=std::stoi(RegName.substr(4));
+        int index=std::stoi(RegName.substr(1));
         freeRegs[index]=1;
     }
     std::string retrieveParam(){
         for(int i=4;i<8;i++){
             if(freeRegs[i]==0){
                 freeRegs[i]=1;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
         throw "Incorrect number of parameters.";
@@ -125,12 +125,12 @@ public:
         currentLocalPointer=currentLocalPointer+4;
         return currentLocalPointer-4;
     }
-    std::string findGlobalInt(std::string name){
-        return "reg_"+std::to_string(globals[name]);
+   unsigned int findGlobalInt(std::string name){
+        return globals[name];
     }
 
-    std::string findLocalInt(std::string name){
-        return "reg_"+std::to_string(locals[name]);
+    unsigned int findLocalInt(std::string name){
+        return locals[name];
     }
     bool globalIntExists(std::string name){
         if(globals.count(name)>0){

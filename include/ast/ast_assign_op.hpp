@@ -77,15 +77,15 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
-
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0, "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0, "<< var_reg<<std::endl;
 
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -116,15 +116,15 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
-
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
 
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -154,14 +154,15 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -190,14 +191,15 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }
@@ -229,11 +231,11 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< exp_reg<<std::endl;
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }        
@@ -267,14 +269,24 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+
+        //need a local int check here
+        if(myContext.localIntExists(var)){
+            outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+            outStream<<"nop"<<std::endl;
+        }else if(myContext.globalIntExists(var)){
+            outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl;
+            outStream<<"nop"<<std::endl;
+        }else{
+            throw "Variable has not yet been declared";
+        }   
         outStream<<"ADDU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
 
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -310,13 +322,14 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"SUBU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -350,14 +363,15 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -392,14 +406,15 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -433,14 +448,15 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(0)"<<std::endl;
+        outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFHI "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"reg_0"<<", "<< var_reg<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         if(myContext.localIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl;
+            outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"(reg_fp)"<<std::endl; 
+            outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($fp)"<<std::endl; 
         }else{
             throw "Variable has not yet been declared";
         }   

@@ -31,7 +31,7 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        outStream.push_back(IntermediateRep("ADDI", var, "reg_0", "0"));
+        outStream.push_back(IntermediateRep("ADDI", var, "$0", "0"));
     }
 };*/
 
@@ -74,7 +74,7 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<" (reg_fp)"<<std::endl;
+        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(var)<<" ($fp)"<<std::endl;
 
         myContext.UnlockReg(exp_reg);
     }
@@ -110,15 +110,19 @@ public:
 
     virtual void printPython(std::ostream &outStream) const {
         if(next_dec!=NULL){
-                next_dec->printPython(outStream);
-                outStream<<std::endl;
-            }
-            current_dec->printPython(outStream);
+            next_dec->printPython(outStream);
+            outStream<<std::endl;
+        }
+        current_dec->printPython(outStream);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        current_dec->printMips(dstreg,myContext,outStream);
+        if(next_dec!=NULL){
+            next_dec->printMips(dstreg,myContext,outStream);
+            outStream<<std::endl;
+        }
     }
 };
 
@@ -199,7 +203,7 @@ class GlobalDeclare
 //             myArrayList->printMips(dstreg, myContext, outStream);
 //         }else{
 //             for(int i=0;i<size;i++){
-//                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(reg_fp)"<<std::endl; 
+//                 outStream<<"LW "<<"$0"<<", "<<(arrayLocation+i*4)<<"($fp)"<<std::endl; 
 //             }
 //         }
 //     }
@@ -246,7 +250,7 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
-        outStream<<"ADDU "<<var_reg<<", "<<"reg_0"<<", "<< exp_reg<<std::endl;
+        outStream<<"ADDU "<<var_reg<<", "<<"$0"<<", "<< exp_reg<<std::endl;
         outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(var)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);
@@ -290,7 +294,7 @@ public:
 //             myArrayList->printMips(dstreg, myContext, outStream);
 //         }else{
 //             for(int i=0;i<size;i++){
-//                 outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
+//                 outStream<<"LW "<<"$0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
 //             }
 //         }
 //     }

@@ -50,10 +50,10 @@ public:
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         //detect return and end
-        statement->printMips(dstreg, myContext, outStream);//THIS WONT WORK BECAUSE IF THE STATEMENT IS A VAR DEC AND MY CONTEXT IS ONLY BY COPY THEN ITS GONE.
         if(myBranchList!=NULL){
             myBranchList->printMips(dstreg, myContext, outStream);//need to account for the case where return is in the statement and also in the statement list, u want the first return.
         }
+        statement->printMips("$0", myContext, outStream);//problem is with the
     }
 };
 
@@ -129,7 +129,7 @@ public:
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
-        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(name)<<"(0)"<<std::endl;
+        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(name)<<"($0)"<<std::endl;
 
         if(myNameList!=NULL){
             myNameList->printMips(dstreg, myContext, outStream);//Does this list really nead the pointer
@@ -186,7 +186,8 @@ public:
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
+        outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl;
+        outStream<<"nop"<<std::endl;
         myContext.UnlockReg(exp_reg);
 
         if(myArrayList!=NULL){
@@ -299,10 +300,16 @@ class Argument: public ASTNode
         }
         dst<<argId;
     }
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+
+        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(argId)<<"($0)"<<std::endl;
+
+        if(nextArguments!=NULL){
+            nextArguments->printMips(dstreg, myContext, outStream);
+        }
+    }
    
-	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
-		
-	}
+
 };
 
 class ArgumentNoType : public ASTNode
@@ -340,9 +347,13 @@ class ArgumentNoType : public ASTNode
         }
     }
    
-	virtual void printMips(std::ostream &dst, Context &cont, int RegisterLock) const {
-		
-	}
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        std::string param_var=myContext.findParam();
+        arg->printMips(param_var, myContext, outStream);
+        if(nextArguments!=NULL){
+            nextArguments->printMips(dstreg, myContext, outStream);
+        }
+    }
 };
 
 #endif

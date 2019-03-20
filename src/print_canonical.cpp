@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     std::cout<<std::endl;
     std::cout<<"PRINTING MIPS"<<std::endl;
     Context initContext;
-    ast->printMips("name",initContext,std::cout);
+    ast->printMips("I SHOULDNT BE SHOWN, IM IN PRINT CANONICAL.",initContext,std::cout);
 
 
     return 0;

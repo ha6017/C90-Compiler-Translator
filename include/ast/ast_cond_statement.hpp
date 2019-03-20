@@ -55,7 +55,7 @@ public:
 
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_label<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<"$0"<<my_label<<std::endl;
         branch->printMips(dstreg, newContext, outStream);
         outStream<<my_label<<std::endl;
 
@@ -125,9 +125,10 @@ public:
 
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelA<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<"$0"<<my_labelA<<std::endl;
         branchA->printMips(dstreg, newContext, outStream);
         outStream<<"J "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<my_labelA<<std::endl;
         branchB->printMips(dstreg, newContext, outStream);
         outStream<<my_labelB<<std::endl;
@@ -149,14 +150,14 @@ class ReturnStatement:
         if(expr!=NULL){delete expr;}   
     }
 
-    virtual void printC(std::ostream &dst) const override
+    virtual void printC(std::ostream &outStream) const override
     {
-            dst<<"return";
+            outStream<<"return";
             if(expr!=NULL){
-                dst<<" ";
-                expr->printC(dst);
+                outStream<<" ";
+                expr->printC(outStream);
             }
-            dst<<";";
+            outStream<<";";
     }
 
     virtual void printPython(std::ostream &outStream) const override{
@@ -168,7 +169,7 @@ class ReturnStatement:
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
-
+        expr->printMips("$2", myContext, outStream);
     }
 };
 
@@ -202,6 +203,9 @@ class ExprStatement: public ASTNode
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+        if(expr!=NULL){
+            expr->printMips(dstreg,myContext,outStream);
+        }
 
     }
 };
@@ -219,18 +223,23 @@ class DeclareStatement: public ASTNode
         if (declist!=NULL){ delete declist;}
     }
 
-    virtual void printC(std::ostream &dst) const override
+    virtual void printC(std::ostream &outStream) const override
     {
-            dst<<type<<" ";
-            declist->printC(dst);
-            dst<<";";
+            outStream<<type<<" ";
+            declist->printC(outStream);
+            outStream<<";";
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-        declist->printPython(dst);
+    virtual void printPython(std::ostream &outStream) const override{
+        if(declist!=NULL){
+            declist->printPython(outStream);
+        }
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+        if(declist!=NULL){
+            declist->printMips(dstreg,myContext,outStream);
+        }
 
     }
 
@@ -249,28 +258,38 @@ class Declare: public ASTNode
         if (expr!=NULL){ delete expr;}
     }
 
-    virtual void printC(std::ostream &dst) const override
+    virtual void printC(std::ostream &outStream) const override
     {
-            dst<<id;
+            outStream<<id;
             if(expr!=NULL){
-                dst<<"=";
-                expr->printC(dst);
+                outStream<<"=";
+                expr->printC(outStream);
             }
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-            dst<<id;
+    virtual void printPython(std::ostream &outStream) const override{
+
+            outStream<<id;
             if(expr!=NULL){
-                dst<<"=";
-                expr->printPython(dst);
+                outStream<<"=";
+                expr->printPython(outStream);
             } else {
-                dst<<"=0";
+                outStream<<"=0";
             }
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+        std::string exp_reg = myContext.findTemp();
+        if(expr!=NULL){
+            expr->printMips(exp_reg, myContext, outStream);
+        }else{
+            outStream<<"ADDI "<<exp_reg<<", $0, 0"<<std::endl;
+        }
+        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(id)<<" ($fp)"<<std::endl;
 
+        myContext.UnlockReg(exp_reg);
     }
+
 
 };
 
@@ -287,24 +306,38 @@ class FunctionStatementInExpr: public ASTNode
         if (arg!=NULL){ delete arg;}
     }
 
-    virtual void printC(std::ostream &dst) const override
+    virtual void printC(std::ostream &outStream) const override
     {
-            dst<<id<<"(";
+            outStream<<id<<"(";
             if(arg!=NULL){
-                arg->printC(dst);
+                arg->printC(outStream);
             }
-            dst<<")";
+            outStream<<")";
     }
 
-    virtual void printPython(std::ostream &dst) const override{
-            dst<<id<<"(";
+    virtual void printPython(std::ostream &outStream) const override{
+            outStream<<id<<"(";
             if(arg!=NULL){
-                arg->printPython(dst);
+                arg->printPython(outStream);
             }  
-            dst<<")";
+            outStream<<")";
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+        Context newContext(myContext);
+        arg->printMips(dstreg, newContext, outStream);
+        
+        outStream<<"ADDI "<<"$sp, "<<"$fp, "<<newContext.currentLocalPointer<<std::endl;
+        newContext.enterFunction();
+
+        // newContext.updateStackOffset();
+        // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
+        // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
+        outStream<<"SW "<<"$fp"<<", "<<myContext.createLocalInt("framePointer")<<" ($sp)"<<std::endl;
+        outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
+        outStream<<"JAL "<<id<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<"$2, "<<"$0"<<std::endl;
 
     }
 
@@ -326,12 +359,12 @@ class FunctionStatementInExpr: public ASTNode
 //         delete MoreStatements;
 //     }
 
-//     virtual void printC(std::ostream &dst) const override
+//     virtual void printC(std::ostream &outStream) const override
 //     {
        
 //     }
 
-//     virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &outStream) const override{
 
 //     }
 
@@ -356,12 +389,12 @@ class FunctionStatementInExpr: public ASTNode
 //         delete MoreStatements;
 //     }
 
-//     virtual void printC(std::ostream &dst) const override
+//     virtual void printC(std::ostream &outStream) const override
 //     {
        
 //     }
 
-//     virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &outStream) const override{
 
 //     }
 
@@ -386,12 +419,12 @@ class FunctionStatementInExpr: public ASTNode
 //         delete MoreStatements;
 //     }
 
-//     virtual void printC(std::ostream &dst) const override
+//     virtual void printC(std::ostream &outStream) const override
 //     {
        
 //     }
 
-//     virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &outStream) const override{
 
 //     }
 
@@ -400,35 +433,35 @@ class FunctionStatementInExpr: public ASTNode
 //     }
 // };
 
-class ParameterDef : public ASTNode
-{
-public:
-	nodePtr Variable2;
+// class ParameterDef : public ASTNode
+// {
+// public:
+// 	nodePtr Variable2;
 
 	
-    ParameterDef(nodePtr _Variable2)
-		: Variable2 (_Variable2)
-		{}
+//     ParameterDef(nodePtr _Variable2)
+// 		: Variable2 (_Variable2)
+// 		{}
 	
-    ~ParameterDef(){
-        delete Variable2;
-    }
+//     ~ParameterDef(){
+//         delete Variable2;
+//     }
 
-	virtual void printC(std::ostream &dst) const override
-    {
-       Variable2->printC(dst);
-    }
+// 	virtual void printC(std::ostream &outStream) const override
+//     {
+//        Variable2->printC(outStream);
+//     }
 
-    virtual void printPython(std::ostream &dst) const override{
+//     virtual void printPython(std::ostream &outStream) const override{
 
-    }
+//     }
 
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
+//         outStream<<"\n Inside For\n";
+//     }
 
-    }
 
-
-};
+// };
 
 
 #endif
