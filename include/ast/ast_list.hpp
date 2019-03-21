@@ -480,12 +480,15 @@ public:
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
+        outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+
         myContext.UnlockReg(exp_reg);
 
         if(myArrayList!=NULL){
             myArrayList->printMips(dstreg, myContext,outStream);
         }
+        
     }
 };
 

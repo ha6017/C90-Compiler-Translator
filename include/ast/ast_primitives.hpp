@@ -76,8 +76,8 @@ public:
     int element;
     std::string id; 
 
-    ArrElement(std::string &_id, int element)
-        :   element(element)
+    ArrElement(std::string &_id, int _element)
+        :   element(_element)
         ,   id(_id)
     {}
     
@@ -90,7 +90,18 @@ public:
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(reg_fp)"<<std::endl;
+        
+        if(myContext.localIntExists(id)){
+                outStream<<"LW "<<dstreg<<", "<<myContext.findLocalArrayElement(id, element)<<"($fp)"<<std::endl;
+                outStream<<"nop"<<std::endl;
+        }else if(myContext.globalIntExists(id)){
+                outStream<<"LW "<<dstreg<<", "<<myContext.findGlobalArrayElement(id, element)<<"($0)"<<std::endl; 
+                outStream<<"nop"<<std::endl;
+            
+        }else{
+            throw "Variable has not yet been declared";
+        } 
+
     }
 
 };

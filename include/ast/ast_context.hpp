@@ -125,6 +125,7 @@ public:
 
     unsigned int findLocalInt(std::string name){
         return locals[name];
+        
     }
     bool globalIntExists(std::string name){
         if(globals.count(name)>0){
