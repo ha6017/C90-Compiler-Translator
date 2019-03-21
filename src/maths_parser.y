@@ -298,17 +298,25 @@ EXPR11 :		EXPR11 T_DIVIDE EXPR12  { $$ = new Div($1,$3);}
 			| 	EXPR11 T_REM EXPR12 { $$ = new Mod($1,$3);}  
 			| 	EXPR12 { $$ = $1;}
 
-EXPR12:  		T_INC T_VARIABLE { $$ = new PreIncrement(*$2);}  
-			| 	T_DEC T_VARIABLE { $$ = new PreDecrement(*$2);}
+EXPR12:  		T_INC T_VARIABLE { $$ = new PreIncrement(*$2, -1);}  
+			| 	T_DEC T_VARIABLE { $$ = new PreDecrement(*$2, -1);}
 			|	T_MINUS EXPR13 		{$$ = new UnaryNeg($2);}
 			|	T_PLUS EXPR13		{$$ = new UnaryPos($2);}
+			|   T_INC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET { $$ = new PreIncrement(*$2, $4);}
+			|   T_DEC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET { $$ = new PreDecrement(*$2, $4);}
+			|   T_INC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET { $$ = new PreIncrement(*$2, -$5);}
+			|   T_DEC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET { $$ = new PreDecrement(*$2, -$5);}
 			|	EXPR13 {$$ = $1;}
 	
 EXPR13: 		T_LBRACKET EXPR16 T_RBRACKET { $$ = $2; }
-			|	T_VARIABLE T_INC {$$ = new PostIncrement(*$1);}  
-			| 	T_VARIABLE T_DEC {$$ = new PostDecrement(*$1);} 
+			|	T_VARIABLE T_INC {$$ = new PostIncrement(*$1, -1);}  
+			| 	T_VARIABLE T_DEC {$$ = new PostDecrement(*$1, -1);} 
 			| 	T_VARIABLE T_LBRACKET PARAMETER_LIST_NO_TYPE T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1,$3); }
 			| 	T_VARIABLE T_LBRACKET T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1, NULL); }	
+			|   T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_INC { $$ = new PostIncrement(*$1, $3);}
+			|   T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DEC { $$ = new PostDecrement(*$1, $3);}
+			|   T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_INC { $$ = new PostIncrement(*$1, -$4);}
+			|   T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DEC { $$ = new PostDecrement(*$1, -$4);}
 			|	EXPR14 {$$ = $1;}
 
 EXPR14 :	 	T_VARIABLE {$$ = new Variable( *$1 ); } 

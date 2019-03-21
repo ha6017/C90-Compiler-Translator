@@ -59,19 +59,25 @@ public:
 class PreIncrement
     : public UnaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    PreIncrement(std::string &_var)
+    PreIncrement(std::string &_var, int _ArrayIndex)
         : UnaryAssignOperator(_var)
+        , ArrayIndex(_ArrayIndex)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<"++"<<var;
+       // outStream<<"++"<<var;
+        if(ArrayIndex==-1){ outStream<<"++"<<var; }
+            else { outStream<<"++"<<var<<"["<<ArrayIndex<<"]"; }
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<"++"<<var;
+        if(ArrayIndex==-1){ outStream<<"++"<<var; }
+            else { outStream<<"++"<<var<<"["<<ArrayIndex<<"]"; }
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -126,20 +132,24 @@ public:
 class PreDecrement
     : public UnaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    PreDecrement(std::string &_var)
+    PreDecrement(std::string &_var, int _ArrayIndex)
         : UnaryAssignOperator(_var)
+        , ArrayIndex(_ArrayIndex)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<"--"<<var;
+        if(ArrayIndex==-1){ outStream<<"--"<<var; }
+            else { outStream<<"--"<<var<<"["<<ArrayIndex<<"]"; }
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        // need to research python
-        outStream<<"--"<<var;
+       if(ArrayIndex==-1){ outStream<<"--"<<var; }
+            else { outStream<<"--"<<var<<"["<<ArrayIndex<<"]"; }
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -194,19 +204,24 @@ class PostIncrement //THIS IS MUCH HARDER BECAUSE NEEDS TO OCCUR AFTER THE FOR L
     : public UnaryAssignOperator
 {
 
+protected:
+    int ArrayIndex;
+
 public:
-    PostIncrement(std::string &_var)
+    PostIncrement(std::string &_var, int _ArrayIndex)
         : UnaryAssignOperator(_var)
+        , ArrayIndex(_ArrayIndex)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"++";
+        if(ArrayIndex==-1){ outStream<<"++"<<var; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"++"; }
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        // need to research python
-        outStream<<var<<"++";
+        if(ArrayIndex==-1){ outStream<<"++"<<var; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"++"; }
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
@@ -260,20 +275,24 @@ public:
 class PostDecrement //THIS IS MUCH HARDER BECAUSE NEEDS TO OCCUR AFTER THE FOR LOOP/ SEMICOLON / WHILE LOOP.
     : public UnaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    PostDecrement(std::string &_var)
+    PostDecrement(std::string &_var, int _ArrayIndex)
         : UnaryAssignOperator(_var)
+        , ArrayIndex(_ArrayIndex)
     {}
     
     
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"--";
+       if(ArrayIndex==-1){ outStream<<"--"<<var; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"--"; }
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        // need to research python
-        outStream<<var<<"--";
+       if(ArrayIndex==-1){ outStream<<"--"<<var; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"--"; }
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
