@@ -208,21 +208,26 @@ public:
 class AssignEqual //this is only for the case a=5,   int a=5 is dealt with seperately
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    AssignEqual(std::string &_var, nodePtr _exp)
+    AssignEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        ,  ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"=";
-        exp->printC(outStream);
+        if(ArrayIndex==-1){ outStream<<var<<"="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"=";
-        exp->printPython(outStream, tab);
+        if(ArrayIndex==-1){ outStream<<var<<"="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -244,21 +249,29 @@ public:
 class PlusEqual 
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
+
 
 public:
-    PlusEqual(std::string &_var, nodePtr _exp)
+    PlusEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        , ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<" += ";
-        exp->printC(outStream);
+        // outStream<<var<<" += ";
+        // exp->printC(outStream);
+         if(ArrayIndex==-1){ outStream<<var<<"+="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"+="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"+=";
-        exp->printPython(outStream, tab);
+       if(ArrayIndex==-1){ outStream<<var<<"+="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"+="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -288,21 +301,26 @@ public:
 class SubEqual 
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    SubEqual(std::string &_var, nodePtr _exp)
+    SubEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        , ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"-=";
-        exp->printC(outStream);
+       if(ArrayIndex==-1){ outStream<<var<<"-="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"-="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"-=";
-        exp->printPython(outStream, tab);
+        if(ArrayIndex==-1){ outStream<<var<<"-="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"-="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -328,21 +346,26 @@ public:
 class MultEqual 
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    MultEqual(std::string &_var, nodePtr _exp)
+    MultEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        , ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"*=";
-        exp->printC(outStream);
+        if(ArrayIndex==-1){ outStream<<var<<"*="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"*="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"*=";
-        exp->printPython(outStream, tab);
+       if(ArrayIndex==-1){ outStream<<var<<"*="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"*="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -369,21 +392,26 @@ public:
 class DivEqual 
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    DivEqual(std::string &_var, nodePtr _exp)
+    DivEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        , ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"/=";
-        exp->printC(outStream);
+        if(ArrayIndex==-1){ outStream<<var<<"/="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"/="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"/=";
-        exp->printPython(outStream, tab);
+        if(ArrayIndex==-1){ outStream<<var<<"/="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"/="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
@@ -411,21 +439,26 @@ public:
 class RemEqual 
     : public BinaryAssignOperator
 {
+protected:
+    int ArrayIndex;
 
 public:
-    RemEqual(std::string &_var, nodePtr _exp)
+    RemEqual(std::string &_var, nodePtr _exp, int _ArrayIndex)
         : BinaryAssignOperator(_var, _exp)
+        , ArrayIndex(_ArrayIndex)
     {}
 
 
     virtual void printC(std::ostream &outStream) const override{
-        outStream<<var<<"%=";
-        exp->printC(outStream);
+        if(ArrayIndex==-1){ outStream<<var<<"%="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"%="; }
+            exp->printC(outStream);
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-        outStream<<var<<"%=";
-        exp->printPython(outStream, tab);
+        if(ArrayIndex==-1){ outStream<<var<<"%="; }
+            else { outStream<<var<<"["<<ArrayIndex<<"]"<<"%="; }
+            exp->printPython(outStream, tab);
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

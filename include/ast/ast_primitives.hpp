@@ -67,31 +67,31 @@ public:
 
 };
 
-// class ArrElement
-//     : public ASTNode
-// {
-// public:
-//     int element;
-//     std::string id; 
+class ArrElement
+    : public ASTNode
+{
+public:
+    int element;
+    std::string id; 
 
-//     ArrElement(int element, std::string id)
-//         :   element(element)
-//         ,   id(id)
-//     {}
+    ArrElement(std::string &_id, int element)
+        :   element(element)
+        ,   id(_id)
+    {}
     
-//     virtual void printC(std::ostream &outStream) const override{
-//         outStream<<id<<"["<<element<<"]";
-//     }
+    virtual void printC(std::ostream &outStream) const override{
+        outStream<<id<<"["<<element<<"]";
+    }
 
-//     virtual void printPython(std::ostream &outStream , IndentAdd &tab) const override{
-//         outStream<<id<<"["<<element<<"]";
-//     }
+    virtual void printPython(std::ostream &outStream , IndentAdd &tab) const override{
+        outStream<<id<<"["<<element<<"]";
+    }
 
-//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-//         outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(reg_fp)"<<std::endl;
-//     }
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        outStream<<"LW "<<dstreg<<", "<<myContext.createLocalArray(id, element)<<"(reg_fp)"<<std::endl;
+    }
 
-// };
+};
 
 
 #endif
