@@ -1,0 +1,21 @@
+main:
+SW $31, 4 ($fp)
+SW $0, 8($fp)
+nop
+SW $0, 12($fp)
+nop
+SW $0, 16($fp)
+nop
+SW $0, 20($fp)
+nop
+SW $0, 24($fp)
+nop
+ADDI $9, $0, 69
+ADDU $8, $0, $9
+SW $8, 16($fp)
+LW $31, 4 ($fp)
+nop
+LW $fp, 0 ($fp)
+nop
+JR $31
+nop

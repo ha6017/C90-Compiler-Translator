@@ -164,9 +164,9 @@ class GlobalDeclare
 
         std::string var_reg = myContext.findTemp();
         if(noInput){
-            outStream<<"ADDI "<<var_reg<<", "<<"reg_0"<<", 0"<<std::endl;
+            outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", 0"<<std::endl;
         }else{
-            outStream<<"ADDI "<<var_reg<<", "<<"reg_0"<<", "<<(int)input<<std::endl;
+            outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", "<<(int)input<<std::endl;
         }
         outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(id)<<"(0)"<<std::endl;
         myContext.UnlockReg(var_reg);
@@ -223,14 +223,15 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        unsigned int arrayLocation=myContext.createLocalArray(var,size);
+        unsigned int arrayLocation=myContext.createLocalArray(var, size);
         if(myArrayList!=NULL){
             myContext.currentArrayElement=0;
             myContext.currentArrayName=var;
             myArrayList->printMips(dstreg, myContext, outStream);
         }else{
             for(int i=0;i<size;i++){
-                outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(reg_fp)"<<std::endl; 
+                outStream<<"SW "<<"$0"<<", "<<(arrayLocation+i*4)<<"($fp)"<<std::endl; 
+                outStream<<"nop"<<std::endl;
             }
         }
     }
