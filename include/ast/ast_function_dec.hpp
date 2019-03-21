@@ -126,8 +126,10 @@ public:
 
         outStream<<"LW "<<"$fp"<<", "<<"0"<<" ($fp)"<<std::endl;
         outStream<<"nop"<<std::endl;
-        outStream<<"JR $31"<<std::endl;
-        outStream<<"nop"<<std::endl;
+        if(id!="main"){ 
+            outStream<<"JR $31"<<std::endl;
+            outStream<<"nop"<<std::endl;
+        }
     }
 };
 

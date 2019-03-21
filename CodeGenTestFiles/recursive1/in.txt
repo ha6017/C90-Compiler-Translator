@@ -1,0 +1,10 @@
+int makeFive(int a){
+	return a;
+}
+
+
+int main(){     
+
+	int output= makeFive(1);
+		
+}
