@@ -21,25 +21,25 @@ for DRIVER in test_deliverable/test_cases/*_driver.c ; do
     echo "CASE $NAME"
 
     bin/c_compiler -S $CTEST -o output_files/$NAME.s 
-    if[[$? -ne 0 ]]; then
+    if [[ $? -ne 0 ]] ; then
         echo "ERROR : Compiler couldn't compile BWAHAHAHAHA"
         continue
     fi 
 
     mips-linux-gnu-gcc -c $DRIVER -o output_files/${NAME}_driver.o  
-    if[[$? -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
         echo "ERROR : driver program using gcc failed"
         continue
     fi 
 
-    mips-linux-gnu-gcc -c -static output_files/${NAME}_driver.o -o output_files/${NAME}_linked
-    if[[$? -ne 0 ]]; then
+    mips-linux-gnu-gcc -static output_files/${NAME}_driver.o -o output_files/${NAME}_linked
+    if [[ $? -ne 0 ]]; then
         echo "ERROR : Bitch link failed"
         continue
     fi 
 
     qemu-mips output_files/${NAME}_linked
-    if[[$? -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
         echo "ERROR : Failed testing dickhead"
         pass=pass-1
     else
