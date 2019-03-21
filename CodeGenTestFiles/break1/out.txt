@@ -1,0 +1,49 @@
+main:
+SW $31, 4 ($fp)
+ADDI $9, $0, 0
+SW $9, 8 ($fp)
+ADDI $9, $0, 0
+SW $9, 12 ($fp)
+
+top_1_0:
+LW $12, 12($fp)
+nop
+ADDI $16, $0, 10
+SLT $9, $12, $16
+BEQ $9, $0, bottom_1_0
+nop
+LW $12, 12($fp)
+nop
+LW $16, 8($fp)
+nop
+ADDU $16, $16, $12
+ADDU $8, $0, $16
+SW $16, 8($fp)
+LW $16, 12($fp)
+nop
+ADDI $17, $0, 5
+ADDI $12, $0, 0
+BNE $16, $17, L_3
+nop
+ADDI $12, $0, 1
+L_3:
+BEQ $12, $0, L_2
+nop
+J bottom_1_0
+nop
+L_2:
+LW $12, 12($fp)
+nop
+ADDU $8, $0, $12
+ADDI $12, $12, 1
+SW $12, 12($fp)
+J top_1_0
+nop
+
+bottom_1_0:
+LW $31, 4 ($fp)
+nop
+LW $fp, 0 ($fp)
+nop
+JR $31
+nop

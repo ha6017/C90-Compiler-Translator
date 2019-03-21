@@ -65,13 +65,16 @@ public:
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
-        outStream<<"BEQ "<<left_reg<<", reg_0,"<<my_labelA<<std::endl;
-        outStream<<"BEQ "<<right_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
+        outStream<<"BEQ "<<left_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"BEQ "<<right_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"J "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         outStream<<my_labelA<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
         outStream<<my_labelB<<std::endl;
 
         myContext.UnlockReg(left_reg);
@@ -114,13 +117,16 @@ public:
 
 
 
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
-        outStream<<"BNE "<<left_reg<<", reg_0,"<<my_labelA<<std::endl;
-        outStream<<"BNE "<<right_reg<<", reg_0,"<<my_labelA<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
+        outStream<<"BNE "<<left_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"BNE "<<right_reg<<", $0,"<<my_labelA<<std::endl;
+        outStream<<"nop"<<std::endl;
         outStream<<"J "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         outStream<<my_labelA<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
         outStream<<my_labelB<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
@@ -154,9 +160,10 @@ public:
         exp->printMips(exp_reg, myContext, outStream);
 
         std::string my_label=myContext.makeLabelName();
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 1"<<std::endl;
-        outStream<<"BEQ "<<exp_reg<<", reg_0,"<<my_label<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0"<<", 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
+        outStream<<"BEQ "<<exp_reg<<", $0,"<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
         outStream<<my_label<<std::endl;
         myContext.UnlockReg(exp_reg);
     }

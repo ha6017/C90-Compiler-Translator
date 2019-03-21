@@ -1,0 +1,16 @@
+PRINTING MIPS
+ADDI $8, reg_0, 10
+SW $8, 2097152(0)
+
+main:
+SW $31, 4 ($fp)
+ADDI $9, $0, 5
+SW $9, 8 ($fp)
+LW $9, 8($fp)
+nop
+SW $9, 12 ($fp)
+LW $31, 4 ($fp)
+LW $fp, 0 ($fp)
+nop
+JR $31
+nop

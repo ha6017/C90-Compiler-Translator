@@ -1,0 +1,16 @@
+int increment(){
+int c;
+int b;
+}
+
+int makeFive(){
+int b;
+int c;
+}
+
+
+int main(){  
+int a;
+int b;
+}
+

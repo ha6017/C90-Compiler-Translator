@@ -107,14 +107,27 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        outStream<<id<<std::endl;
-        //still need to use paramlist
-        myNameList->printMips(dstreg,myContext,outStream);
-        myBranch->printMips("reg_2", myContext, outStream);
-        
-        outStream<<"LW "<<"reg_fp"<<", "<<"0"<<" (reg_fp)"<<std::endl;
-        
-        outStream<<"JR reg_31"<<std::endl;
+        myContext.enterFunction();
+        myContext.createLocalInt(std::to_string(label_counter++));//this makes it such that the fp can be in address 0 with no over lap
+        outStream<<id<<":"<<std::endl;
+        outStream<<"SW "<<"$31"<<", "<<myContext.createLocalInt(std::to_string(label_counter++))<<" ($fp)"<<std::endl;
+
+        if(myNameList!=NULL){
+            myNameList->printMips(dstreg,myContext,outStream);
+        }
+        if(myBranch!=NULL){
+            std::string new_dest_reg = myContext.findTemp();
+            myBranch->printMips(new_dest_reg, myContext, outStream);
+            myContext.UnlockReg(new_dest_reg);
+
+        }
+        outStream<<"LW "<<"$31"<<", "<<"4"<<" ($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+
+        outStream<<"LW "<<"$fp"<<", "<<"0"<<" ($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"JR $31"<<std::endl;
+        outStream<<"nop"<<std::endl;
     }
 };
 
@@ -139,6 +152,7 @@ class Top_List : public ASTNode{
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
+
         if(nextfunc!=NULL){
             nextfunc->printPython(outStream, tab);
             outStream<<std::endl;
@@ -148,7 +162,12 @@ class Top_List : public ASTNode{
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        
+        if(nextfunc!=NULL){
+            //may have to consider putting a new context 
+            nextfunc->printMips(dstreg,myContext,outStream);
+            outStream<<std::endl;
+        }
+        func->printMips(dstreg,myContext,outStream);  
     }
 
 };
@@ -159,6 +178,7 @@ protected:
     std::string type;
     std::string id;
     nodePtr myParamList;  //<---- subject to change 
+
 public:
     FuncCall(const std::string &_type,const std::string &_id, nodePtr _myParamList)
         : type(_type)
@@ -172,16 +192,16 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
-        outStream<<type<<" "<<id<<"(";
-         if(myParamList!=NULL){
-             myParamList->printC(outStream);
-         }
-        outStream<<");"<<std::endl;
+        // outStream<<type<<" "<<id<<"(";
+        //  if(myParamList!=NULL){
+        //      myParamList->printC(outStream);
+        //  }
+        // outStream<<");"<<std::endl;
     }
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
-        outStream<<"def "<<id<<"(";
+        outStream<<"def "<<id<<"("; //this is wrong, this is for a definition not a call
         if(myParamList!=NULL){
              myParamList->printPython(outStream, tab);
         }
@@ -193,16 +213,19 @@ public:
         Context newContext(myContext);
         myParamList->printMips(dstreg, newContext, outStream);
         
-        outStream<<"ADDI "<<"reg_sp, "<<"reg_fp, "<<newContext.currentLocalPointer<<std::endl;
+        outStream<<"ADDI "<<"$sp, "<<"$fp, "<<newContext.currentLocalPointer<<std::endl;
         newContext.enterFunction();
 
         // newContext.updateStackOffset();
-        // outStream<<"SW "<<"reg_fp"<<", "<<"reg_fp"<<myContext.createLocalInt(id)<<std::endl;
-        // outStream<<"SW "<<"reg_fp, "<<"reg_sp, "<<"reg_0"<<std::endl;
-        outStream<<"SW "<<"reg_fp"<<", "<<myContext.createLocalInt("framePointer")<<" (reg_sp)"<<std::endl;
-        outStream<<"ADDI "<<"reg_fp, "<<"reg_sp, "<<" 0"<<std::endl;
-        outStream<<"JAL "<<type<<std::endl;
-        outStream<<"ADDU "<<dstreg<<"reg_2, "<<"reg_0"<<std::endl;
+        // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
+        // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
+        outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
+        // outStream<<"SW "<<"$31"<<", "<<"4"<<" ($sp)"<<std::endl;
+        outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
+
+        outStream<<"JAL "<<id<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDU "<<dstreg<<", $2, "<<"sp"<<std::endl;
     }
 };
 

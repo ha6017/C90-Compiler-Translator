@@ -41,12 +41,12 @@ public:
         scopeCountPerScope=0;
 
         //CREATE FOR LOOP TO FREE THE TEMPS
-
     }
+    
     Context(const Context &inContext){
         //I NEED TO CREATE COPY CONSTRUCTOR AND CHANGE EVERYTHING TO PASS BY REFERENCE. THEN FIGURE OUT FUNCTION LABEL MAPPINGS
         globals=inContext.globals;
-        globals=inContext.locals;
+        locals=inContext.locals;
         // funcNameToLabel=inContext.funcNameToLabel;
         // funcLabelCounter=inContext.funcLabelCounter;
         for(int i=0;i<32;i++){
@@ -71,7 +71,6 @@ public:
         //set number of labels in scope  =0 
     }
     void enterFunction(){
-        scope_counter++;
         currentLocalPointer=0;
         locals.clear();
     }
@@ -80,37 +79,32 @@ public:
     // }
 
     std::string findTemp(){
-        for(int i=8;i<16;i++){
+        for(int i=8;i<26;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
-        for(int i=24;i<26;i++){
-            if(freeRegs[i]==1){
-                freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
-            }
-        }
+
     }
     
     std::string findParam(){
         for(int i=4;i<8;i++){
             if(freeRegs[i]==1){
                 freeRegs[i]=0;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
     }
     void UnlockReg(std::string RegName){
-        int index=std::stoi(RegName.substr(4));
+        int index=std::stoi(RegName.substr(1));
         freeRegs[index]=1;
     }
     std::string retrieveParam(){
         for(int i=4;i<8;i++){
             if(freeRegs[i]==0){
                 freeRegs[i]=1;
-                return "reg_"+std::to_string(i);
+                return "$"+std::to_string(i);
             }
         }
         throw "Incorrect number of parameters.";
@@ -125,12 +119,12 @@ public:
         currentLocalPointer=currentLocalPointer+4;
         return currentLocalPointer-4;
     }
-    std::string findGlobalInt(std::string name){
-        return "reg_"+std::to_string(globals[name]);
+   unsigned int findGlobalInt(std::string name){
+        return globals[name];
     }
 
-    std::string findLocalInt(std::string name){
-        return "reg_"+std::to_string(locals[name]);
+    unsigned int findLocalInt(std::string name){
+        return locals[name];
     }
     bool globalIntExists(std::string name){
         if(globals.count(name)>0){
@@ -159,7 +153,7 @@ public:
         return currentLocalPointer-4*size;
     }
     unsigned int findLocalArrayElement(std::string name, int index){
-        return globals[name]+4*index;
+        return locals[name]+4*index;
     }
     unsigned int findGlobalArrayElement(std::string name, int index){
         return locals[name]+4*index;

@@ -75,10 +75,11 @@ public:
         right->printMips(right_reg, myContext, outStream);
         std::string my_label=myContext.makeLabelName();
 
-        outStream<<"ADDI "<<dstreg<<", reg_0, 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 0"<<std::endl;
         outStream<<"BNE "<<left_reg<<", "<<right_reg<<", "<<my_label<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
-        outStream<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
+        outStream<<my_label<<":"<<std::endl;
 
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
@@ -120,10 +121,11 @@ public:
         right->printMips(right_reg, myContext, outStream);
         std::string my_label=myContext.makeLabelName();
 
-        outStream<<"ADDI "<<dstreg<<", reg_0, 0"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 0"<<std::endl;
         outStream<<"BEQ "<<left_reg<<", "<<right_reg<<", "<<my_label<<std::endl;
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
-        outStream<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, 1"<<std::endl;
+        outStream<<my_label<<":"<<std::endl;
 
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
@@ -163,7 +165,6 @@ public:
         left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
-        std::string my_label=myContext.makeLabelName();
 
         outStream<<"SLT "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
         myContext.UnlockReg(left_reg);
@@ -203,7 +204,6 @@ public:
         left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
-        std::string my_label=myContext.makeLabelName();
 
         outStream<<"SLT "<<dstreg<<", "<<right_reg<<", "<<left_reg<<std::endl;
         myContext.UnlockReg(left_reg);
@@ -246,11 +246,10 @@ public:
         left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
-        std::string my_label=myContext.makeLabelName();
 
         outStream<<"SLT "<<dstreg<<", "<<right_reg<<", "<<left_reg<<std::endl;
         std::string one_reg = myContext.findTemp();
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<one_reg<<", $0, 1"<<std::endl;
         outStream<<"SLT "<<dstreg<<", "<<dstreg<<", "<<one_reg<<std::endl;
 
 
@@ -292,11 +291,10 @@ public:
         left->printMips(left_reg, myContext, outStream);
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
-        std::string my_label=myContext.makeLabelName();
 
         outStream<<"SLT "<<dstreg<<", "<<left_reg<<", "<<right_reg<<std::endl;
         std::string one_reg = myContext.findTemp();
-        outStream<<"ADDI "<<dstreg<<", reg_0, 1"<<std::endl;
+        outStream<<"ADDI "<<one_reg<<", $0, 1"<<std::endl;
         outStream<<"SLT "<<dstreg<<", "<<dstreg<<", "<<one_reg<<std::endl;
 
 
@@ -339,7 +337,7 @@ class Comma: public ASTNode
     }
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-       
+         outStream<<"COMMA IS USED"<<std::endl;
     }
 };
 

@@ -81,15 +81,20 @@ public:
         std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
        
        
-        outStream<<my_labelA<<std::endl;
+        outStream<<std::endl<<my_labelA<<":"<<std::endl;
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
-        branch->printMips(dstreg, newContext, outStream);
+        if(branch!=NULL){
+            branch->printMips(dstreg, newContext, outStream);
+        }
+
         postLoopExp->printMips(dstreg, newContext, outStream);
         outStream<<"J "<<my_labelA<<std::endl;
-        outStream<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<std::endl<<my_labelB<<":"<<std::endl;
     }
 };
 
@@ -145,14 +150,18 @@ public:
         std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
        
        
-        outStream<<my_labelA<<std::endl;
+        outStream<<std::endl<<my_labelA<<":"<<std::endl;
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
-        branch->printMips(dstreg, newContext, outStream);
+        if(branch!=NULL){
+            branch->printMips(dstreg, newContext, outStream);
+        }
         outStream<<"J "<<my_labelA<<std::endl;
-        outStream<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<std::endl<<my_labelB<<":"<<std::endl;
         //dont need to unlock reg because newContext is about to go out of scope.
      }
 };
@@ -205,15 +214,18 @@ public:
         std::string my_labelB="bottom_"+newContext.makeScopedLabelID();
        
        
-        outStream<<my_labelA<<std::endl;
-        branch->printMips(dstreg, newContext, outStream);
-
+        outStream<<std::endl<<my_labelA<<":"<<std::endl;
+        if(branch!=NULL){
+            branch->printMips(dstreg, newContext, outStream);
+        }
         condition->printMips(compare_reg, newContext, outStream);
     
-        outStream<<"BEQ "<<compare_reg<<"reg_0"<<my_labelB<<std::endl;
+        outStream<<"BEQ "<<compare_reg<<", $0, "<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
 
         outStream<<"J "<<my_labelA<<std::endl;
-        outStream<<my_labelB<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<std::endl<<my_labelB<<":"<<std::endl;
      }
 };
 
@@ -247,6 +259,7 @@ public:
 
         std::string my_label="bottom_"+myContext.makeScopedLabelID();
         outStream<<"J "<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
         
      }
 };
@@ -279,6 +292,7 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         std::string my_label="top_"+myContext.makeScopedLabelID();
         outStream<<"J "<<my_label<<std::endl;
+        outStream<<"nop"<<std::endl;
      }
 };
 
@@ -310,9 +324,12 @@ public:
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-       
-     }
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        if(body!=NULL){
+            body->printMips(dstreg, myContext, outStream);
+        }
+        
+    }
 };
 
 #endif

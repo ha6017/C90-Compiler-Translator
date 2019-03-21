@@ -29,9 +29,11 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         if(myContext.localIntExists(var)){
-            outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"(reg_fp)"<<std::endl; //no global?
+            outStream<<"LW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl; //no global?
+            outStream<<"nop"<<std::endl;
         }else if(myContext.globalIntExists(var)){
-            outStream<<"LW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"(0)"<<std::endl; //no global?
+            outStream<<"LW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; //no global?
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
         }
@@ -61,7 +63,7 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
-        outStream<<"ADDI "<<dstreg<<", "<<"reg_0"<<", "<< value<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", "<<"$0"<<", "<< value<<std::endl;
 
     }
 

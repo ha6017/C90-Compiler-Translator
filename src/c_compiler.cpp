@@ -28,7 +28,8 @@ int main(int argc = 4, char *argv[] = NULL)
 
   } 
   else if (test == "-S") {
-    //ast->printMips(std::cout);
+    Context initContext;
+    ast->printMips("I SHOULDNT BE SHOWN, IM IN PRINT CANONICAL.",initContext,std::cout);
   }
 
 

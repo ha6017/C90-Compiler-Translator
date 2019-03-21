@@ -1,0 +1,23 @@
+PRINTING MIPS
+main:
+SW $31, 4 ($fp)
+ADDI $9, $0, 12
+SW $9, 8 ($fp)
+LW $12, 8($fp)
+nop
+ADDI $24, $0, 12
+ADDI $9, $0, 0
+BNE $12, $24, L_3
+ADDI $9, $0, 1
+L_3:
+BEQ $9, $0, L_2
+ADDI $12, $0, 69
+ADDU $8, $0, $12
+SW $8, 8($fp)
+L_2:
+LW $31, 4 ($fp)
+nop
+LW $fp, 0 ($fp)
+nop
+JR $31
+nop
