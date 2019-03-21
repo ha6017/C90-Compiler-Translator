@@ -247,6 +247,9 @@ public:
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
+        for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+        }
         outStream<<"break";
         
     }
@@ -279,8 +282,10 @@ public:
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
-        outStream<<"continue";
-        
+        for(int i=tab.indent;i!=0;i--){
+            outStream<<"\t";
+        }
+        outStream<<"continue";    
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

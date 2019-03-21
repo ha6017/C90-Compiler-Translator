@@ -435,63 +435,59 @@ class ArgumentNoType : public ASTNode
 //     }
 // };
 
-// class ArrayList: public ASTNode
-// {
-// protected:
+class ArrayList: public ASTNode
+{
+protected:
 
-//     nodePtr exp;
-//     nodePtr myArrayList;
+    nodePtr exp;
+    nodePtr myArrayList;
 
-// public:
-
-
-//     ArrayList(nodePtr _exp,nodePtr _myArrayList)
-//         :   exp(_exp)
-//         ,   myArrayList(_myArrayList)
-//         {}
-
-//     ~ArrayList(){
-//         delete exp;
-//         delete myArrayList;
-//     }
-
-//     virtual void printC(std::ostream &outStream) const {
-//         // std::cout<<"{";
-//         // for(int i = 0; i < myArrayList.size();i++){
-//         //     myArrayList[i]->printC(outStream);
-//         //     if(i!=myArrayList.size()-1){
-//         //         std::cout<<", "<<std::endl;
-//         //     }
-//         // }
-//         // std::cout<<"}";
-
-//     }
-
-//     virtual void printPython(std::ostream &outStream) const {
-
-//         // std::cout<<"{";
-//         // for(int i = 0; i < myArrayList.size();i++){
-//         //     myArrayList[i]->printC(outStream);
-//         //     if(i!=myArrayList.size()-1){
-//         //         std::cout<<", ";
-//         //     }
-//         // }
-//         // std::cout<<"}";
-//     }
+public:
 
 
-//     //! Evaluate the tree using the given mapping of variables to numbers
-//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-//         std::string exp_reg = myContext.findTemp();
-//         exp->printMips(exp_reg, myContext, outStream);
-//         outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
-//         myContext.UnlockReg(exp_reg);
+    ArrayList(nodePtr _exp,nodePtr _myArrayList)
+        :   exp(_exp)
+        ,   myArrayList(_myArrayList)
+        {}
 
-//         if(myArrayList!=NULL){
-//             myArrayList->printMips(dstreg, myContext,outStream);
-//         }
-//     }
-// };
+    ~ArrayList(){
+        if(exp!=NULL){delete exp;}
+        if(myArrayList!=NULL){ delete myArrayList;}
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+        if(exp!=NULL){
+            if(myArrayList!=NULL){
+                myArrayList->printC(outStream);
+                outStream<<",";
+            }
+            exp->printC(outStream);
+        }
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+        if(exp!=NULL){
+            if(myArrayList!=NULL){
+                myArrayList->printPython(outStream, tab);
+                outStream<<",";
+            }
+            exp->printPython(outStream, tab);
+        }
+    }
+
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        std::string exp_reg = myContext.findTemp();
+        exp->printMips(exp_reg, myContext, outStream);
+        outStream<<"LW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"(0)"<<std::endl;
+        myContext.UnlockReg(exp_reg);
+
+        if(myArrayList!=NULL){
+            myArrayList->printMips(dstreg, myContext,outStream);
+        }
+    }
+};
 
 
 // class ProgList

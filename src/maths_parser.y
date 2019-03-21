@@ -114,8 +114,15 @@ NEW_SCOPE : T_LCBRACKET SCOPE T_RCBRACKET      { $$ = new NewScope($2); }
 RETURN_STATEMENT : T_RETURN EXPR16 T_SEMI_COLON          { $$ = new ReturnStatement($2); }
         | T_RETURN T_SEMI_COLON                          { $$ = new ReturnStatement(NULL); }
 	
-DEC_STATEMENT : TYPE_NAME DEC_VAR_LIST T_SEMI_COLON      { $$ = new DeclareStatement(*$1, $2); }
-       
+DEC_STATEMENT : 	TYPE_NAME DEC_VAR_LIST T_SEMI_COLON      { $$ = new DeclareStatement(*$1, $2); }
+				|	TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET	{$$ = new LocalInitArray(*$1, *$2, $4, NULL);}
+				|	TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET	{$$ = new LocalInitArray(*$1, *$2, $4, $8); }
+				|	TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET	{$$ = new LocalInitArray(*$1, *$2, -$5, $9); }
+				|	TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET	{$$ = new LocalInitArray(*$1, *$2, 0, $7); }
+
+VAL_LIST :		EXPR16	{$$= new ArrayList($1, NULL);}
+			|	VAL_LIST T_COMMA EXPR16	{$$ = new ArrayList($1, $3); }
+
 DEC_VAR_LIST : VARIABLE_DECLARATION                     { $$ = new Dec_Var_List($1, NULL); }
         | DEC_VAR_LIST T_COMMA VARIABLE_DECLARATION     { $$ = new Dec_Var_List($3,$1); }
 
@@ -226,17 +233,29 @@ EXPR16: 	EXPR15 {$$=$1;}
  		|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
 
 EXPR15: 		EXPR {$$ = $1;}
-			|	T_VARIABLE T_EQUAL EXPR15 { $$ = new AssignEqual(*$1,$3);}
-			|	T_VARIABLE T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1,$3);}  
-		 	| 	T_VARIABLE T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1,$3);}  
-			| 	T_VARIABLE T_MULASSIGN EXPR15 { $$ =  new MultEqual(*$1,$3);}  
-			| 	T_VARIABLE T_DIVASSIGN EXPR15 { $$ =  new DivEqual(*$1,$3);}  
-			| 	T_VARIABLE T_MODASSIGN EXPR15 { $$ =  new RemEqual(*$1,$3);} 
+			|	T_VARIABLE T_EQUAL EXPR15 { $$ = new AssignEqual(*$1,$3, -1);}
+			|	T_VARIABLE T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1,$3, -1);}  
+		 	| 	T_VARIABLE T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1,$3, -1);}  
+			| 	T_VARIABLE T_MULASSIGN EXPR15 { $$ =  new MultEqual(*$1,$3, -1);}  
+			| 	T_VARIABLE T_DIVASSIGN EXPR15 { $$ =  new DivEqual(*$1,$3, -1);}  
+			| 	T_VARIABLE T_MODASSIGN EXPR15 { $$ =  new RemEqual(*$1,$3, -1);} 
 			// and assign?
 			// or assign?
 			// left assign?
 			// right assighn?
 			// xor assighn?
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL EXPR15 { $$ = new AssignEqual(*$1,$6, $3); }
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1, $6, $3);}
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1, $6, $3); }
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MULASSIGN EXPR15 { $$ =  new MultEqual(*$1, $6, $3); }
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15 { $$ =  new DivEqual(*$1, $6, $3); }
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15 { $$ =  new RemEqual(*$1, $6, $3); }
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL EXPR15 { $$ = new AssignEqual(*$1, $7, -$4); }
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1, $7, -$4);}
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1, $7, -$4); }
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MULASSIGN EXPR15 { $$ =  new MultEqual(*$1, $7, -$4); }
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15 { $$ =  new DivEqual(*$1, $7, -$4); }
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15 { $$ =  new RemEqual(*$1, $7, -$4); }
 	
 EXPR : 			T_NOT EXPR2 {$$ = new  LogNot($2);}  
 			| 	EXPR2 { $$ = $1;}
@@ -295,6 +314,8 @@ EXPR13: 		T_LBRACKET EXPR16 T_RBRACKET { $$ = $2; }
 EXPR14 :	 	T_VARIABLE {$$ = new Variable( *$1 ); } 
 			| 	I_FLOAT   { $$ = new Number( $1, 0); } 
 			| 	T_MINUS I_FLOAT   { $$ = new Number( 0, $2); } 
+			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET {$$ = new ArrElement(*$1, $3);}
+			|	T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET {$$ = new ArrElement(*$1, -$4);}
 
 
 //   EXPR16: 	EXPR15 {$$=$1;}

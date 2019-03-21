@@ -175,48 +175,66 @@ class GlobalDeclare
 
 
 
-// class LocalInitArray
-//     : public ASTNode
-// {
-// protected:
-//     std::string var;
-//     int size;
-//     nodePtr myArrayList;
-// public:
-//     LocalInitArray(std::string &_var, int _size, nodePtr _myArrayList)
-//         :   var(_var)
-//         ,   size(_size)
-//         ,   myArrayList(_myArrayList)
-//     {}
+class LocalInitArray: public ASTNode
+{
+protected:
+    std::string var;
+    std::string type;
+    int size;
+    nodePtr myArrayList;
+public:
+    LocalInitArray(std::string &_type, std::string &_var, int _size, nodePtr _myArrayList)
+        :   type(_type) 
+        ,   var(_var)
+        ,   size(_size)
+        ,   myArrayList(_myArrayList)
+    {}
 
-//     ~LocalInitArray(){
-//         delete myArrayList;
-//     }
+    ~LocalInitArray(){
+        if(myArrayList!=NULL){delete myArrayList;}
+    }
 
-//     virtual void printC(std::ostream &outStream) const {
-//         outStream<<"int "<<var<<"["<<size<<"] = {";
-//         myArrayList->printC(outStream);
-//         outStream<<"}";
-//     }
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<type<<" "<<var<<"[";
+        if(size!=-1){
+            outStream<<size; 
+        }
+        outStream<<"]";
+        if(myArrayList!=NULL){
+            outStream<<" = {";
+            myArrayList->printC(outStream);
+            outStream<<"};";
+        } else { outStream<<";"; }
+    }
 
-//     virtual void printPython(std::ostream &outStream) const {
-//         //nothing
-//     }
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+        for(int i=tab.indent;i!=0;i--){
+            outStream<<"\t";
+        }
+        outStream<<var;
+        if(myArrayList!=NULL){
+            outStream<<" = [";
+            myArrayList->printPython(outStream, tab);
+            outStream<<"]";
+        } else {
+            outStream<<" = []";
+        }
+    }
 
-//     //! Evaluate the tree using the given mapping of variables to numbers
-//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-//         unsigned int arrayLocation=myContext.createLocalArray(var,size);
-//         if(myArrayList!=NULL){
-//             myContext.currentArrayElement=0;
-//             myContext.currentArrayName=var;
-//             myArrayList->printMips(dstreg, myContext, outStream);
-//         }else{
-//             for(int i=0;i<size;i++){
-//                 outStream<<"LW "<<"$0"<<", "<<(arrayLocation+i*4)<<"($fp)"<<std::endl; 
-//             }
-//         }
-//     }
-// };
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        unsigned int arrayLocation=myContext.createLocalArray(var,size);
+        if(myArrayList!=NULL){
+            myContext.currentArrayElement=0;
+            myContext.currentArrayName=var;
+            myArrayList->printMips(dstreg, myContext, outStream);
+        }else{
+            for(int i=0;i<size;i++){
+                outStream<<"LW "<<"reg_0"<<", "<<(arrayLocation+i*4)<<"(reg_fp)"<<std::endl; 
+            }
+        }
+    }
+};
 
 // class GlobalInitInt
 //     : public ASTNode
