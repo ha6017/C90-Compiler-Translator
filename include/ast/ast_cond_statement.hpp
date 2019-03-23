@@ -234,6 +234,12 @@ class ReturnStatement:
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
         expr->printMips("$2", myContext, outStream);
+
+        outStream<<"LW "<<"$31"<<", "<<"-4"<<" ($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"LW "<<"$fp"<<", "<<"0"<<" ($fp)"<<std::endl;
+        outStream<<"nop"<<std::endl;
+        outStream<<"ADDI $sp, $fp,  0"<<std::endl;
         outStream<<"JR $31"<<std::endl;
         outStream<<"nop"<<std::endl;
     }
