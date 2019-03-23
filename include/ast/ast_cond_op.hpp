@@ -336,7 +336,8 @@ class Comma: public ASTNode
             outStream<<")";
     }
 
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{\
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        outStream<<"COMMA "<<std::endl;
         std::string exp_reg = myContext.findTemp();
         expr1->printMips(exp_reg, myContext, outStream);
         if(myContext.localIntExists(myContext.currentArrayName)){
@@ -348,11 +349,24 @@ class Comma: public ASTNode
         else{
             throw "Variable has not yet been declared";
         }   
-
+        
         myContext.UnlockReg(exp_reg);
         if(expr2!=NULL){
             expr2->printMips(dstreg, myContext,outStream);
         }
+
+
+
+        // std::string exp_reg = myContext.findTemp();
+        // exp->printMips(exp_reg, myContext, outStream);
+
+        // outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($0)"<<std::endl;
+        // myContext.currentArrayElement++;
+        // myContext.UnlockReg(exp_reg);
+
+        // if(myArrayList!=NULL){
+        //     myArrayList->printMips(dstreg, myContext,outStream);
+        // }
     }
 };
 

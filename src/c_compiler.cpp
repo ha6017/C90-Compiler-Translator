@@ -1,6 +1,7 @@
 #include "../include/ast.hpp"
 #include <string>
 #include <stdio.h>
+#include <exception>
 
 int main(int argc = 4, char *argv[] = NULL)
 {
@@ -32,8 +33,11 @@ int main(int argc = 4, char *argv[] = NULL)
     // std::cout<<"nop"<<std::endl;
 
     Context initContext;
-
-    ast->printMips("I SHOULDNT BE SHOWN, IM IN PRINT CANONICAL.",initContext,std::cout);
+    // try{
+      ast->printMips("I SHOULDNT BE SHOWN, IM IN PRINT CANONICAL.",initContext,std::cout);
+    // }catch(const std::exception &e){
+    //   std::cout<<e.what()<<std::endl;
+    // }
   }
 
 

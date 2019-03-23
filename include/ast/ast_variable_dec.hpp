@@ -244,7 +244,6 @@ public:
         }else{
             for(int i=0;i<size;i++){
                 outStream<<"SW "<<"$0"<<", "<<(arrayLocation-i*4)<<"($fp)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
             }
         }
     }
