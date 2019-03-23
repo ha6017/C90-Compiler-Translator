@@ -336,14 +336,16 @@ class Comma: public ASTNode
             outStream<<")";
     }
 
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{\
         std::string exp_reg = myContext.findTemp();
         expr1->printMips(exp_reg, myContext, outStream);
         if(myContext.localIntExists(myContext.currentArrayName)){
             outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($fp)"<<std::endl;
-        }else if(myContext.globalIntExists(myContext.currentArrayName)){
-            outStream<<"SW "<<exp_reg<<", "<<myContext.findGlobalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl; 
-        }else{
+        }
+        // else if(myContext.globalIntExists(myContext.currentArrayName)){
+        //     outStream<<"SW "<<exp_reg<<", "<<myContext.findGlobalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl; 
+        // }
+        else{
             throw "Variable has not yet been declared";
         }   
 
@@ -351,11 +353,6 @@ class Comma: public ASTNode
         if(expr2!=NULL){
             expr2->printMips(dstreg, myContext,outStream);
         }
-
-
-
-
-        
     }
 };
 

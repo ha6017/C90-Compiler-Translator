@@ -83,26 +83,26 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
         }
@@ -117,10 +117,11 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         }
@@ -155,26 +156,26 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
         }
@@ -189,10 +190,11 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         }
@@ -227,29 +229,29 @@ public:
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
          
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
-        } 
+        }
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         outStream<<"ADDI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
 
@@ -261,10 +263,11 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         }
@@ -297,33 +300,31 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
 
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
-        }  
+        }
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
-
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
@@ -332,10 +333,11 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         }
@@ -378,6 +380,22 @@ public:
         }  
 
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< exp_reg<<std::endl;
+        // if(myContext.localIntExists(var)){
+        //     if(ArrayIndex==-1){
+        //         outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+        //     }else{
+        //         outStream<<"SW "<<dstreg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
+        //     }
+        // }else if(myContext.globalIntExists(var)){
+        //     if(ArrayIndex==-1){
+        //         outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+        //     }else{
+        //         outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+        //     }
+        // }else{
+        //     throw "Variable has not yet been declared";
+        // }        
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
@@ -385,14 +403,19 @@ public:
                 outStream<<"SW "<<dstreg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<dstreg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<dstreg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<dstreg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
-        }        
+        }
+
         myContext.UnlockReg(exp_reg);
     }
 };
@@ -432,41 +455,33 @@ public:
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
 
+std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
         }  
 
-
         outStream<<"ADDU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
 
-        // if(myContext.localIntExists(var)){
-        //     outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
-        // }else if(myContext.globalIntExists(var)){
-        //     outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-        // }else{
-        //     throw "Variable has not yet been declared";
-        // }   
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
@@ -475,15 +490,14 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
-        }  
-
-
+        }
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);
 
@@ -520,28 +534,29 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
-        }    
+        } 
 
         outStream<<"SUBU "<<var_reg<<", "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
@@ -555,13 +570,14 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
-        }  
+        }
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg);    
     }
@@ -597,29 +613,29 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
 
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
-        }  
+        }
         outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
@@ -631,13 +647,14 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
-        }  
+        }
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -674,28 +691,29 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
-
             }else{
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
                 outStream<<"nop"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
-
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
-        }  
+        } 
         outStream<<"DIV "<<var_reg<<", "<< exp_reg<<std::endl;
         outStream<<"MFLO "<<var_reg<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
@@ -707,13 +725,14 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
-        }     
+        } 
         myContext.UnlockReg(var_reg);
         myContext.UnlockReg(exp_reg); 
     }
@@ -749,6 +768,8 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
         std::string var_reg = myContext.findTemp();
+        std::string addr_reg;
+
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"LW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
@@ -758,13 +779,15 @@ public:
                 outStream<<"nop"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
+            std::string addr_reg = myContext.findTemp();
+            outStream<<"LUI "<<addr_reg<<", %hi("<<var<<")"<<std::endl;
+            outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             if(ArrayIndex==-1){
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
+                outStream<<"LW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"LW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
-                outStream<<"nop"<<std::endl;
+                outStream<<"LW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            outStream<<"nop"<<std::endl;
         }else{
             throw "Variable has not yet been declared";
         } 
@@ -779,10 +802,11 @@ public:
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalInt(var)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findGlobalArrayElement(var, ArrayIndex)<<"($0)"<<std::endl; 
+                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         }   
@@ -817,7 +841,10 @@ class UnaryNeg: public ASTNode
     }
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-        
+        std::string exp_reg = myContext.findTemp();
+        expr->printMips(exp_reg, myContext, outStream);
+        outStream<<"SUBU "<<dstreg<<", $0, "<<exp_reg<<std::endl;
+        myContext.UnlockReg(exp_reg);
     }
 };
 
@@ -849,7 +876,12 @@ class UnaryPos: public ASTNode
         outStream<<")";
     }
     
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{}
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        std::string exp_reg = myContext.findTemp();
+        expr->printMips(exp_reg, myContext, outStream);
+        outStream<<"ADDU "<<dstreg<<", $0, "<<exp_reg<<std::endl;
+        myContext.UnlockReg(exp_reg);
+    }
 };
 
 #endif

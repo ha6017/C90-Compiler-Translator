@@ -161,15 +161,28 @@ class GlobalDeclare
 
     //! Evaluate the tree using the given mapping of variables to numbers
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
-        std::string var_reg = myContext.findTemp();
+        myContext.createGlobal(id);
+        outStream<<".globl "<<id<<std::endl;
+        outStream<<".data"<<std::endl;
+        outStream<<".align 2"<<std::endl;
+        //can have a .size and .type here but its for debugging so not necessary
+        outStream<<id<<":"<<std::endl;
         if(noInput){
-            outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", 0"<<std::endl;
+            outStream<<".word 0"<<std::endl;
         }else{
-            outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", "<<(int)input<<std::endl;
+            outStream<<".word "<<(int)input<<std::endl;
         }
-        outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(id)<<"($0)"<<std::endl;
-        myContext.UnlockReg(var_reg);
+
+        // std::string var_reg = myContext.findTemp();
+        // if(noInput){
+        //     outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", 0"<<std::endl;
+        // }else{
+        //     outStream<<"ADDI "<<var_reg<<", "<<"$0"<<", "<<(int)input<<std::endl;
+        // }
+        // outStream<<"SW "<<var_reg<<", "<<myContext.createGlobalInt(id)<<"($0)"<<std::endl;
+        // myContext.UnlockReg(var_reg);
+
+
     }
 };
 
@@ -285,48 +298,55 @@ public:
 //     }
 // };
 
-// class GlobalInitArray
-//     : public ASTNode
-// {
-// protected:
-//     std::string var;
-//     int size;
-//     nodePtr myArrayList;
-// public:
-//     GlobalInitArray(std::string &_var, int _size, nodePtr _myArrayList)
-//         :   var(_var)
-//         ,   size(_size)
-//         ,   myArrayList(_myArrayList)
-//     {}
+class GlobalInitArray
+    : public ASTNode
+{
+protected:
+    std::string type;
+    std::string var;
+    int size;
+    nodePtr myArrayList;
+public:
+    GlobalInitArray(std::string &_type, std::string &_var, int _size, nodePtr _myArrayList)
+        :   type(_type)
+        ,   var(_var)
+        ,   size(_size)
+        ,   myArrayList(_myArrayList)
+    {}
 
-//     ~GlobalInitArray(){
-//         delete myArrayList;
-//     }
+    ~GlobalInitArray(){
+       if(myArrayList!=NULL){ delete myArrayList;}
+    }
 
-//     virtual void printC(std::ostream &outStream) const {
-//         outStream<<"int "<<var<<"["<<size<<"] = {";
-//         myArrayList->printC(outStream);
-//         outStream<<"}";
-//     }
+    virtual void printC(std::ostream &outStream) const {
+        outStream<<type<<" "<<var<<"["<<size<<"] = {";
+        myArrayList->printC(outStream);
+        outStream<<"}";
+    }
 
-//     virtual void printPython(std::ostream &outStream) const {
-//         //nothing
-//     }
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+        outStream<<type<<" "<<var<<"["<<size<<"] = {";
+        myArrayList->printPython(outStream,tab);
+        outStream<<"}";
+    }
 
-//     //! Evaluate the tree using the given mapping of variables to numbers
-//     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-//         unsigned int arrayLocation=myContext.createGlobalArray(var,size);
-//         if(myArrayList!=NULL){
-//             myContext.currentArrayElement=0;
-//             myContext.currentArrayName=var;
-//             myArrayList->printMips(dstreg, myContext, outStream);
-//         }else{
-//             for(int i=0;i<size;i++){
-//                 outStream<<"LW "<<"$0"<<", "<<(arrayLocation+i*4)<<"(0)"<<std::endl; 
-//             }
-//         }
-//     }
-// };
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        myContext.createGlobal(var);
+        outStream<<".globl "<<var<<std::endl;
+        outStream<<".data"<<std::endl;
+        outStream<<".align 2"<<std::endl;
+        //can have a .size and .type here but its for debugging so not necessary
+        outStream<<var<<":"<<std::endl;
+        if(myArrayList==NULL){
+            for(int i=0;i<size;i++){
+                outStream<<".word 0"<<std::endl;
+            }
+        }else{
+            myArrayList->printMips(dstreg,myContext,outStream);
+        }
+    }
+};
 
 
 

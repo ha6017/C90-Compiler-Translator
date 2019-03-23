@@ -68,6 +68,51 @@ public:
     }
 };
 
+class Switch: public ASTNode
+{
+    protected:
+        nodePtr condition;
+        nodePtr branch;
+
+    public:
+        Switch(nodePtr _condition, nodePtr _branch)
+        :   condition(_condition)
+        ,   branch(_branch)
+        {}
+
+        ~Switch(){
+            if(condition!=NULL){delete condition;}
+            if (branch!=NULL){delete branch;}
+        }
+
+        virtual void printC(std::ostream &outStream) const{
+            outStream<<"switch(";
+            condition->printC(outStream);
+            outStream<<"){";
+            branch->printC(outStream);
+            outStream<<"}";
+        }
+
+        virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+            for(int i=tab.indent;i!=0;i--){
+                outStream<<"\t";
+            }
+            outStream<<"switch (";
+            condition->printPython(outStream, tab);
+            outStream<<") :"<<std::endl;
+            tab.indent++;
+            branch->printPython(outStream, tab);      
+            tab.indent--;
+        }
+
+        virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+            
+
+        }
+
+
+};
+
 class IfElse
     : public ASTNode
 {
@@ -83,7 +128,7 @@ public:
         , branchB(_branchB)
     {}
 
-    virtual ~IfElse()
+    ~IfElse()
     {
         delete condition;
         delete branchA;
@@ -107,25 +152,25 @@ public:
 
     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const 
     {
-            for(int i=tab.indent;i!=0;i--){
-                outStream<<"\t";
-            }
-            outStream<<"if (";
-            condition->printPython(outStream, tab);
-            outStream<<") :"<<std::endl;
-            tab.indent++;
-            branchA->printPython(outStream, tab);
-            outStream<<std::endl;
-            tab.indent--;
-            for(int i=tab.indent;i!=0;i--){
-                outStream<<"\t";
-            }
-            outStream<<"else :";
-            outStream<<std::endl;
-            tab.indent++;
-            branchB->printPython(outStream, tab);
-            outStream<<std::endl;
-            tab.indent--;
+        for(int i=tab.indent;i!=0;i--){
+            outStream<<"\t";
+        }
+        outStream<<"if (";
+        condition->printPython(outStream, tab);
+        outStream<<") :"<<std::endl;
+        tab.indent++;
+        branchA->printPython(outStream, tab);
+        outStream<<std::endl;
+        tab.indent--;
+        for(int i=tab.indent;i!=0;i--){
+            outStream<<"\t";
+        }
+        outStream<<"else :";
+        outStream<<std::endl;
+        tab.indent++;
+        branchB->printPython(outStream, tab);
+        outStream<<std::endl;
+        tab.indent--;
     }
 
     //! Evaluate the tree using the given mapping of variables to numbers

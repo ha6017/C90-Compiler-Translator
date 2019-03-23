@@ -19,7 +19,8 @@ public:
     int currentLocalPointer;
     int scopeCountPerScope;
 
-    std::map<std::string, unsigned int>globals;
+    // std::map<std::string, unsigned int>globals;
+    std::vector<std::string> globals;
     std::map<std::string, int>locals;
     // std::map<std::string, std::string>funcNameToLabel;
     // int funcLabelCounter;
@@ -35,7 +36,7 @@ public:
         scope_counter=0;
         // funcLabelCounter=0;
         // stackOffset =0;
-        currentGlobalPointer=0x2000;
+        // currentGlobalPointer=0x2000;
         currentLocalPointer=0;
         currentArrayElement=0; //this is for arraylist
         scopeCountPerScope=0;
@@ -55,7 +56,7 @@ public:
         scope_counter=inContext.scope_counter;
         currentArrayElement=inContext.currentArrayElement;
         currentArrayName=inContext.currentArrayName;
-        currentGlobalPointer=inContext.currentGlobalPointer;
+        // currentGlobalPointer=inContext.currentGlobalPointer;
         currentLocalPointer=inContext.currentLocalPointer;
         scopeCountPerScope=inContext.scopeCountPerScope;
     }
@@ -109,30 +110,31 @@ public:
         }
         throw "Incorrect number of parameters.";
     }
-    unsigned int createGlobalInt(std::string name){
-        globals[name]=currentGlobalPointer;
-        currentGlobalPointer=currentGlobalPointer+4;
-        return currentGlobalPointer-4;
-    }
+    // unsigned int createGlobalInt(std::string name){
+    //     globals[name]=currentGlobalPointer;
+    //     currentGlobalPointer=currentGlobalPointer+4;
+    //     return currentGlobalPointer-4;
+    // }
     int createLocalInt(std::string name){
         locals[name]=currentLocalPointer;
         currentLocalPointer=currentLocalPointer-4;
         return currentLocalPointer+4;
     }
-   unsigned int findGlobalInt(std::string name){
-        return globals[name];
-    }
+//    unsigned int findGlobalInt(std::string name){
+//         return globals[name];
+//     }
 
     int findLocalInt(std::string name){
         return locals[name];
         
     }
     bool globalIntExists(std::string name){
-        if(globals.count(name)>0){
-            return 1;
-        }else{
-            return 0;;
+        for(int i=0;i<globals.size();i++){
+            if(globals[i]==name){
+                return 1;
+            }
         }
+        return 0;
     }
     bool localIntExists(std::string name){
         if(locals.count(name)>0){
@@ -143,10 +145,8 @@ public:
     }
 
 
-    unsigned int createGlobalArray(std::string name, int size){
-        globals[name]=currentGlobalPointer;
-        currentGlobalPointer=currentGlobalPointer+4*size;
-        return currentGlobalPointer-4*size;
+    unsigned int createGlobal(std::string name){
+        globals.push_back(name);
     }
     int createLocalArray(std::string name, int size){
         locals[name]=currentLocalPointer;
@@ -156,9 +156,9 @@ public:
     int findLocalArrayElement(std::string name, int index){
         return locals[name]-4*index;
     }
-    unsigned int findGlobalArrayElement(std::string name, int index){
-        return locals[name]+4*index;
-    }
+    // unsigned int findGlobalArrayElement(std::string name, int index){
+    //     return locals[name]+4*index;
+    // }
     // void addFunction(std::string funcName){
     //     funcNameToLabel[funcName]="Func_"+funcLabelCounter++;
     // }
