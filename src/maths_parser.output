@@ -1,5 +1,6 @@
 Nonterminals useless in grammar
 
+   EXPR
    PARAMETER
 
 
@@ -23,22 +24,21 @@ Terminals unused in grammar
    T_SQRT
    T_COLON
    T_GO_TO
-   T_NOT
 
 
 State 66 conflicts: 3 shift/reduce
 State 92 conflicts: 2 shift/reduce
 State 113 conflicts: 3 shift/reduce
-State 115 conflicts: 46 reduce/reduce
-State 165 conflicts: 1 shift/reduce
-State 204 conflicts: 2 shift/reduce
+State 115 conflicts: 47 reduce/reduce
+State 166 conflicts: 1 shift/reduce
 State 205 conflicts: 2 shift/reduce
-State 228 conflicts: 2 shift/reduce
-State 246 conflicts: 2 shift/reduce
-State 261 conflicts: 2 shift/reduce
-State 271 conflicts: 2 shift/reduce
-State 303 conflicts: 1 shift/reduce
-State 310 conflicts: 1 shift/reduce
+State 206 conflicts: 2 shift/reduce
+State 229 conflicts: 2 shift/reduce
+State 247 conflicts: 2 shift/reduce
+State 262 conflicts: 2 shift/reduce
+State 272 conflicts: 2 shift/reduce
+State 304 conflicts: 1 shift/reduce
+State 311 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -149,7 +149,7 @@ Grammar
    78 EXPR16: EXPR15
    79       | EXPR16 T_COMMA EXPR15
 
-   80 EXPR15: EXPR
+   80 EXPR15: EXPR2
    81       | T_VARIABLE T_EQUAL EXPR15
    82       | T_VARIABLE T_ADDASSIGN EXPR15
    83       | T_VARIABLE T_SUBASSIGN EXPR15
@@ -169,51 +169,50 @@ Grammar
    97       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15
    98       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15
 
-   99 EXPR: T_LEXCLAIM EXPR2
-  100     | EXPR2
+   99 EXPR2: EXPR2 T_LOR EXPR3
+  100      | EXPR3
 
-  101 EXPR2: EXPR2 T_LOR EXPR3
-  102      | EXPR3
+  101 EXPR3: EXPR3 T_LAND EXPR4
+  102      | EXPR4
 
-  103 EXPR3: EXPR3 T_LAND EXPR4
-  104      | EXPR4
+  103 EXPR4: EXPR4 T_OR EXPR5
+  104      | EXPR5
 
-  105 EXPR4: EXPR4 T_OR EXPR5
-  106      | EXPR5
+  105 EXPR5: EXPR5 T_XOR EXPR6
+  106      | EXPR6
 
-  107 EXPR5: EXPR5 T_XOR EXPR6
-  108      | EXPR6
+  107 EXPR6: EXPR6 T_AND EXPR7
+  108      | EXPR7
 
-  109 EXPR6: EXPR6 T_AND EXPR7
-  110      | EXPR7
+  109 EXPR7: EXPR7 T_EQ EXPR8
+  110      | EXPR7 T_NEQ EXPR8
+  111      | EXPR8
 
-  111 EXPR7: EXPR7 T_EQ EXPR8
-  112      | EXPR7 T_NEQ EXPR8
-  113      | EXPR8
+  112 EXPR8: EXPR8 T_LE EXPR9
+  113      | EXPR8 T_GE EXPR9
+  114      | EXPR8 T_LT EXPR9
+  115      | EXPR8 T_GT EXPR9
+  116      | EXPR9
 
-  114 EXPR8: EXPR8 T_LE EXPR9
-  115      | EXPR8 T_GE EXPR9
-  116      | EXPR8 T_LT EXPR9
-  117      | EXPR8 T_GT EXPR9
-  118      | EXPR9
+  117 EXPR9: EXPR9 T_LSHIFT EXPR10
+  118      | EXPR9 T_RSHIFT EXPR10
+  119      | EXPR10
 
-  119 EXPR9: EXPR9 T_LSHIFT EXPR10
-  120      | EXPR9 T_RSHIFT EXPR10
-  121      | EXPR10
+  120 EXPR10: EXPR10 T_PLUS EXPR11
+  121       | EXPR10 T_MINUS EXPR11
+  122       | EXPR11
 
-  122 EXPR10: EXPR10 T_PLUS EXPR11
-  123       | EXPR10 T_MINUS EXPR11
-  124       | EXPR11
+  123 EXPR11: EXPR11 T_DIVIDE EXPR12
+  124       | EXPR11 T_TIMES EXPR12
+  125       | EXPR11 T_REM EXPR12
+  126       | EXPR12
 
-  125 EXPR11: EXPR11 T_DIVIDE EXPR12
-  126       | EXPR11 T_TIMES EXPR12
-  127       | EXPR11 T_REM EXPR12
-  128       | EXPR12
-
-  129 EXPR12: T_INC T_VARIABLE
-  130       | T_DEC T_VARIABLE
-  131       | T_MINUS EXPR13
-  132       | T_PLUS EXPR13
+  127 EXPR12: T_INC T_VARIABLE
+  128       | T_DEC T_VARIABLE
+  129       | T_MINUS EXPR13
+  130       | T_PLUS EXPR13
+  131       | T_LEXCLAIM EXPR12
+  132       | T_NOT EXPR12
   133       | T_INC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET
   134       | T_DEC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET
   135       | T_INC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
@@ -266,7 +265,7 @@ T_IF (276) 73 74
 T_ELSE (277) 73
 T_WHILE (278) 76 77
 T_FOR (279) 39 40 41 42
-T_REM (280) 127
+T_REM (280) 125
 T_DO (281) 77
 T_SWITCH (282) 75
 T_STRUCT (283)
@@ -274,16 +273,16 @@ T_CASE (284)
 T_ENUM (285)
 T_UNION (286)
 T_UNSIGNED (287) 18
-T_TIMES (288) 126
-T_DIVIDE (289) 125
-T_PLUS (290) 122 132
-T_MINUS (291) 48 50 60 61 69 71 93 94 95 96 97 98 123 131 135 136 145
+T_TIMES (288) 124
+T_DIVIDE (289) 123
+T_PLUS (290) 120 130
+T_MINUS (291) 48 50 60 61 69 71 93 94 95 96 97 98 121 129 135 136 145
     146 150 152
 T_EXPONENT (292)
 T_EQUAL (293) 49 50 51 56 59 61 62 68 69 70 71 81 87 93
-T_LEXCLAIM (294) 99
-T_INC (295) 129 133 135 139 143 145
-T_DEC (296) 130 134 136 140 144 146
+T_LEXCLAIM (294) 131
+T_INC (295) 127 133 135 139 143 145
+T_DEC (296) 128 134 136 140 144 146
 T_LBRACKET (297) 8 9 10 11 39 40 41 42 70 71 138 141 142
 T_RBRACKET (298) 8 9 10 11 39 40 41 42 70 71 138 141 142
 T_LCBRACKET (299) 8 9 43 49 50 51 59 61 62
@@ -295,8 +294,8 @@ T_RSBRACKET (302) 47 48 49 50 51 58 59 60 61 62 87 88 89 90 91 92 93
 T_LOG (303)
 T_EXP (304)
 T_SQRT (305)
-T_LSHIFT (306) 119
-T_RSHIFT (307) 120
+T_LSHIFT (306) 117
+T_RSHIFT (307) 118
 T_ADDASSIGN (308) 82 88 94
 T_SUBASSIGN (309) 83 89 95
 T_MULASSIGN (310) 84 90 96
@@ -304,26 +303,26 @@ T_DIVASSIGN (311) 85 91 97
 T_MODASSIGN (312) 86 92 98
 T_VARIABLE (313) 8 9 10 11 12 13 47 48 49 50 51 56 57 58 59 60 61 62
     68 69 70 71 72 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96
-    97 98 129 130 133 134 135 136 139 140 141 142 143 144 145 146 148
+    97 98 127 128 133 134 135 136 139 140 141 142 143 144 145 146 148
     151 152
 T_COMMA (314) 12 14 53 55 64 67 79
 T_SEMI_COLON (315) 10 11 37 38 44 45 46 58 59 60 61 62 65 77
 T_COLON (316)
 T_GO_TO (317)
 T_CONTINUE (318) 36
-T_LE (319) 114
-T_GE (320) 115
-T_EQ (321) 111
-T_NEQ (322) 112
-T_LT (323) 116
-T_GT (324) 117
+T_LE (319) 112
+T_GE (320) 113
+T_EQ (321) 109
+T_NEQ (322) 110
+T_LT (323) 114
+T_GT (324) 115
 T_BREAK (325) 35
-T_LAND (326) 103
-T_LOR (327) 101
-T_AND (328) 109
-T_OR (329) 105
-T_XOR (330) 107
-T_NOT (331)
+T_LAND (326) 101
+T_LOR (327) 99
+T_AND (328) 107
+T_OR (329) 103
+T_XOR (330) 105
+T_NOT (331) 132
 
 
 Nonterminals, with rules where they appear
@@ -386,36 +385,34 @@ EXPR15 (103)
     on left: 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97
     98, on right: 14 15 56 78 79 81 82 83 84 85 86 87 88 89 90 91 92
     93 94 95 96 97 98
-EXPR (104)
-    on left: 99 100, on right: 80
-EXPR2 (105)
+EXPR2 (104)
+    on left: 99 100, on right: 80 99
+EXPR3 (105)
     on left: 101 102, on right: 99 100 101
-EXPR3 (106)
+EXPR4 (106)
     on left: 103 104, on right: 101 102 103
-EXPR4 (107)
+EXPR5 (107)
     on left: 105 106, on right: 103 104 105
-EXPR5 (108)
+EXPR6 (108)
     on left: 107 108, on right: 105 106 107
-EXPR6 (109)
-    on left: 109 110, on right: 107 108 109
-EXPR7 (110)
-    on left: 111 112 113, on right: 109 110 111 112
-EXPR8 (111)
-    on left: 114 115 116 117 118, on right: 111 112 113 114 115 116
-    117
-EXPR9 (112)
-    on left: 119 120 121, on right: 114 115 116 117 118 119 120
-EXPR10 (113)
-    on left: 122 123 124, on right: 119 120 121 122 123
-EXPR11 (114)
-    on left: 125 126 127 128, on right: 122 123 124 125 126 127
-EXPR12 (115)
-    on left: 129 130 131 132 133 134 135 136 137, on right: 125 126
-    127 128
-EXPR13 (116)
-    on left: 138 139 140 141 142 143 144 145 146 147, on right: 131
-    132 137
-EXPR14 (117)
+EXPR7 (109)
+    on left: 109 110 111, on right: 107 108 109 110
+EXPR8 (110)
+    on left: 112 113 114 115 116, on right: 109 110 111 112 113 114
+    115
+EXPR9 (111)
+    on left: 117 118 119, on right: 112 113 114 115 116 117 118
+EXPR10 (112)
+    on left: 120 121 122, on right: 117 118 119 120 121
+EXPR11 (113)
+    on left: 123 124 125 126, on right: 120 121 122 123 124 125
+EXPR12 (114)
+    on left: 127 128 129 130 131 132 133 134 135 136 137, on right:
+    123 124 125 126 131 132
+EXPR13 (115)
+    on left: 138 139 140 141 142 143 144 145 146 147, on right: 129
+    130 137
+EXPR14 (116)
     on left: 148 149 150 151 152, on right: 147
 
 
@@ -851,21 +848,21 @@ State 42
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    SCOPE               go to state 71
-    STATEMENT           go to state 72
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    SCOPE               go to state 72
+    STATEMENT           go to state 73
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -973,10 +970,10 @@ State 52
     T_LBRACKET    shift, and go to state 64
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 105
+    T_NOT         shift, and go to state 70
 
     EXPR16  go to state 106
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -1012,10 +1009,10 @@ State 54
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR16  go to state 107
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -1043,10 +1040,10 @@ State 55
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR16  go to state 108
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -1103,20 +1100,20 @@ State 57
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
+    TYPE_NAME           go to state 71
     STATEMENT           go to state 110
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1144,10 +1141,10 @@ State 58
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR16  go to state 111
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -1165,7 +1162,7 @@ State 58
 
 State 59
 
-  132 EXPR12: T_PLUS . EXPR13
+  130 EXPR12: T_PLUS . EXPR13
 
     I_FLOAT     shift, and go to state 53
     T_MINUS     shift, and go to state 112
@@ -1178,7 +1175,7 @@ State 59
 
 State 60
 
-  131 EXPR12: T_MINUS . EXPR13
+  129 EXPR12: T_MINUS . EXPR13
   150 EXPR14: T_MINUS . I_FLOAT
 
     I_FLOAT     shift, and go to state 115
@@ -1192,34 +1189,26 @@ State 60
 
 State 61
 
-   99 EXPR: T_LEXCLAIM . EXPR2
+  131 EXPR12: T_LEXCLAIM . EXPR12
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR2   go to state 117
-    EXPR3   go to state 85
-    EXPR4   go to state 86
-    EXPR5   go to state 87
-    EXPR6   go to state 88
-    EXPR7   go to state 89
-    EXPR8   go to state 90
-    EXPR9   go to state 91
-    EXPR10  go to state 92
-    EXPR11  go to state 93
-    EXPR12  go to state 94
+    EXPR12  go to state 117
     EXPR13  go to state 95
     EXPR14  go to state 96
 
 
 State 62
 
-  129 EXPR12: T_INC . T_VARIABLE
+  127 EXPR12: T_INC . T_VARIABLE
   133       | T_INC . T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET
   135       | T_INC . T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
 
@@ -1228,7 +1217,7 @@ State 62
 
 State 63
 
-  130 EXPR12: T_DEC . T_VARIABLE
+  128 EXPR12: T_DEC . T_VARIABLE
   134       | T_DEC . T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET
   136       | T_DEC . T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
 
@@ -1247,10 +1236,10 @@ State 64
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR16  go to state 120
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -1297,21 +1286,21 @@ State 65
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
+    TYPE_NAME           go to state 71
     SCOPE               go to state 121
-    STATEMENT           go to state 72
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    STATEMENT           go to state 73
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1399,6 +1388,25 @@ State 69
 
 State 70
 
+  132 EXPR12: T_NOT . EXPR12
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
+
+    EXPR12  go to state 132
+    EXPR13  go to state 95
+    EXPR14  go to state 96
+
+
+State 71
+
    46 DEC_STATEMENT: TYPE_NAME . DEC_VAR_LIST T_SEMI_COLON
    47              | TYPE_NAME . T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET
    48              | TYPE_NAME . T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
@@ -1406,13 +1414,13 @@ State 70
    50              | TYPE_NAME . T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
    51              | TYPE_NAME . T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    T_VARIABLE  shift, and go to state 132
+    T_VARIABLE  shift, and go to state 133
 
-    DEC_VAR_LIST          go to state 133
-    VARIABLE_DECLARATION  go to state 134
+    DEC_VAR_LIST          go to state 134
+    VARIABLE_DECLARATION  go to state 135
 
 
-State 71
+State 72
 
     9 FUNCTION_DECLARATION: TYPE_NAME T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
    25 SCOPE: SCOPE . STATEMENT
@@ -1440,25 +1448,25 @@ State 71
     T_DEC         shift, and go to state 63
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
-    T_RCBRACKET   shift, and go to state 135
+    T_RCBRACKET   shift, and go to state 136
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 136
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 137
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1474,215 +1482,208 @@ State 71
     EXPR14              go to state 96
 
 
-State 72
+State 73
 
    26 SCOPE: STATEMENT .
 
     $default  reduce using rule 26 (SCOPE)
 
 
-State 73
+State 74
 
    29 STATEMENT: EXPR_STATEMENT .
 
     $default  reduce using rule 29 (STATEMENT)
 
 
-State 74
+State 75
 
    34 STATEMENT: FOR_STATEMENT .
 
     $default  reduce using rule 34 (STATEMENT)
 
 
-State 75
+State 76
 
    33 STATEMENT: NEW_SCOPE .
 
     $default  reduce using rule 33 (STATEMENT)
 
 
-State 76
+State 77
 
    27 STATEMENT: RETURN_STATEMENT .
 
     $default  reduce using rule 27 (STATEMENT)
 
 
-State 77
+State 78
 
    28 STATEMENT: DEC_STATEMENT .
 
     $default  reduce using rule 28 (STATEMENT)
 
 
-State 78
+State 79
 
    30 STATEMENT: IF_OR_ELSE .
 
     $default  reduce using rule 30 (STATEMENT)
 
 
-State 79
+State 80
 
    31 STATEMENT: WHILE_STATEMENT .
 
     $default  reduce using rule 31 (STATEMENT)
 
 
-State 80
+State 81
 
    32 STATEMENT: DO_WHILE_STATEMENT .
 
     $default  reduce using rule 32 (STATEMENT)
 
 
-State 81
+State 82
 
    37 EXPR_STATEMENT: EXPR16 . T_SEMI_COLON
    79 EXPR16: EXPR16 . T_COMMA EXPR15
 
-    T_COMMA       shift, and go to state 137
-    T_SEMI_COLON  shift, and go to state 138
+    T_COMMA       shift, and go to state 138
+    T_SEMI_COLON  shift, and go to state 139
 
 
-State 82
+State 83
 
    78 EXPR16: EXPR15 .
 
     $default  reduce using rule 78 (EXPR16)
 
 
-State 83
+State 84
 
-   80 EXPR15: EXPR .
+   80 EXPR15: EXPR2 .
+   99 EXPR2: EXPR2 . T_LOR EXPR3
+
+    T_LOR  shift, and go to state 140
 
     $default  reduce using rule 80 (EXPR15)
 
 
-State 84
-
-  100 EXPR: EXPR2 .
-  101 EXPR2: EXPR2 . T_LOR EXPR3
-
-    T_LOR  shift, and go to state 139
-
-    $default  reduce using rule 100 (EXPR)
-
-
 State 85
 
-  102 EXPR2: EXPR3 .
-  103 EXPR3: EXPR3 . T_LAND EXPR4
+  100 EXPR2: EXPR3 .
+  101 EXPR3: EXPR3 . T_LAND EXPR4
 
-    T_LAND  shift, and go to state 140
+    T_LAND  shift, and go to state 141
 
-    $default  reduce using rule 102 (EXPR2)
+    $default  reduce using rule 100 (EXPR2)
 
 
 State 86
 
-  104 EXPR3: EXPR4 .
-  105 EXPR4: EXPR4 . T_OR EXPR5
+  102 EXPR3: EXPR4 .
+  103 EXPR4: EXPR4 . T_OR EXPR5
 
-    T_OR  shift, and go to state 141
+    T_OR  shift, and go to state 142
 
-    $default  reduce using rule 104 (EXPR3)
+    $default  reduce using rule 102 (EXPR3)
 
 
 State 87
 
-  106 EXPR4: EXPR5 .
-  107 EXPR5: EXPR5 . T_XOR EXPR6
+  104 EXPR4: EXPR5 .
+  105 EXPR5: EXPR5 . T_XOR EXPR6
 
-    T_XOR  shift, and go to state 142
+    T_XOR  shift, and go to state 143
 
-    $default  reduce using rule 106 (EXPR4)
+    $default  reduce using rule 104 (EXPR4)
 
 
 State 88
 
-  108 EXPR5: EXPR6 .
-  109 EXPR6: EXPR6 . T_AND EXPR7
+  106 EXPR5: EXPR6 .
+  107 EXPR6: EXPR6 . T_AND EXPR7
 
-    T_AND  shift, and go to state 143
+    T_AND  shift, and go to state 144
 
-    $default  reduce using rule 108 (EXPR5)
+    $default  reduce using rule 106 (EXPR5)
 
 
 State 89
 
-  110 EXPR6: EXPR7 .
-  111 EXPR7: EXPR7 . T_EQ EXPR8
-  112      | EXPR7 . T_NEQ EXPR8
+  108 EXPR6: EXPR7 .
+  109 EXPR7: EXPR7 . T_EQ EXPR8
+  110      | EXPR7 . T_NEQ EXPR8
 
-    T_EQ   shift, and go to state 144
-    T_NEQ  shift, and go to state 145
+    T_EQ   shift, and go to state 145
+    T_NEQ  shift, and go to state 146
 
-    $default  reduce using rule 110 (EXPR6)
+    $default  reduce using rule 108 (EXPR6)
 
 
 State 90
 
-  113 EXPR7: EXPR8 .
-  114 EXPR8: EXPR8 . T_LE EXPR9
-  115      | EXPR8 . T_GE EXPR9
-  116      | EXPR8 . T_LT EXPR9
-  117      | EXPR8 . T_GT EXPR9
+  111 EXPR7: EXPR8 .
+  112 EXPR8: EXPR8 . T_LE EXPR9
+  113      | EXPR8 . T_GE EXPR9
+  114      | EXPR8 . T_LT EXPR9
+  115      | EXPR8 . T_GT EXPR9
 
-    T_LE  shift, and go to state 146
-    T_GE  shift, and go to state 147
-    T_LT  shift, and go to state 148
-    T_GT  shift, and go to state 149
+    T_LE  shift, and go to state 147
+    T_GE  shift, and go to state 148
+    T_LT  shift, and go to state 149
+    T_GT  shift, and go to state 150
 
-    $default  reduce using rule 113 (EXPR7)
+    $default  reduce using rule 111 (EXPR7)
 
 
 State 91
 
-  118 EXPR8: EXPR9 .
-  119 EXPR9: EXPR9 . T_LSHIFT EXPR10
-  120      | EXPR9 . T_RSHIFT EXPR10
+  116 EXPR8: EXPR9 .
+  117 EXPR9: EXPR9 . T_LSHIFT EXPR10
+  118      | EXPR9 . T_RSHIFT EXPR10
 
-    T_LSHIFT  shift, and go to state 150
-    T_RSHIFT  shift, and go to state 151
+    T_LSHIFT  shift, and go to state 151
+    T_RSHIFT  shift, and go to state 152
 
-    $default  reduce using rule 118 (EXPR8)
+    $default  reduce using rule 116 (EXPR8)
 
 
 State 92
 
-  121 EXPR9: EXPR10 .
-  122 EXPR10: EXPR10 . T_PLUS EXPR11
-  123       | EXPR10 . T_MINUS EXPR11
+  119 EXPR9: EXPR10 .
+  120 EXPR10: EXPR10 . T_PLUS EXPR11
+  121       | EXPR10 . T_MINUS EXPR11
 
-    T_PLUS   shift, and go to state 152
-    T_MINUS  shift, and go to state 153
+    T_PLUS   shift, and go to state 153
+    T_MINUS  shift, and go to state 154
 
-    T_PLUS    [reduce using rule 121 (EXPR9)]
-    T_MINUS   [reduce using rule 121 (EXPR9)]
-    $default  reduce using rule 121 (EXPR9)
+    T_PLUS    [reduce using rule 119 (EXPR9)]
+    T_MINUS   [reduce using rule 119 (EXPR9)]
+    $default  reduce using rule 119 (EXPR9)
 
 
 State 93
 
-  124 EXPR10: EXPR11 .
-  125 EXPR11: EXPR11 . T_DIVIDE EXPR12
-  126       | EXPR11 . T_TIMES EXPR12
-  127       | EXPR11 . T_REM EXPR12
+  122 EXPR10: EXPR11 .
+  123 EXPR11: EXPR11 . T_DIVIDE EXPR12
+  124       | EXPR11 . T_TIMES EXPR12
+  125       | EXPR11 . T_REM EXPR12
 
-    T_REM     shift, and go to state 154
-    T_TIMES   shift, and go to state 155
-    T_DIVIDE  shift, and go to state 156
+    T_REM     shift, and go to state 155
+    T_TIMES   shift, and go to state 156
+    T_DIVIDE  shift, and go to state 157
 
-    $default  reduce using rule 124 (EXPR10)
+    $default  reduce using rule 122 (EXPR10)
 
 
 State 94
 
-  128 EXPR11: EXPR12 .
+  126 EXPR11: EXPR12 .
 
-    $default  reduce using rule 128 (EXPR11)
+    $default  reduce using rule 126 (EXPR11)
 
 
 State 95
@@ -1730,21 +1731,21 @@ State 97
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    SCOPE               go to state 157
-    STATEMENT           go to state 72
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    SCOPE               go to state 158
+    STATEMENT           go to state 73
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1771,14 +1772,14 @@ State 99
 
    12 PARAMETER_LIST: PARAMETER_LIST T_COMMA TYPE_NAME . T_VARIABLE
 
-    T_VARIABLE  shift, and go to state 158
+    T_VARIABLE  shift, and go to state 159
 
 
 State 100
 
    59 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
 
-    T_LCBRACKET  shift, and go to state 159
+    T_LCBRACKET  shift, and go to state 160
 
 
 State 101
@@ -1793,17 +1794,17 @@ State 102
    60 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_SEMI_COLON
    61                         | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
 
-    T_EQUAL       shift, and go to state 160
-    T_SEMI_COLON  shift, and go to state 161
+    T_EQUAL       shift, and go to state 161
+    T_SEMI_COLON  shift, and go to state 162
 
 
 State 103
 
    62 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET . GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
 
-    I_FLOAT  shift, and go to state 162
+    I_FLOAT  shift, and go to state 163
 
-    GLOBAL_VAL_LIST  go to state 163
+    GLOBAL_VAL_LIST  go to state 164
 
 
 State 104
@@ -1825,8 +1826,8 @@ State 106
    44 RETURN_STATEMENT: T_RETURN EXPR16 . T_SEMI_COLON
    79 EXPR16: EXPR16 . T_COMMA EXPR15
 
-    T_COMMA       shift, and go to state 137
-    T_SEMI_COLON  shift, and go to state 164
+    T_COMMA       shift, and go to state 138
+    T_SEMI_COLON  shift, and go to state 165
 
 
 State 107
@@ -1859,24 +1860,24 @@ State 107
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
     T_VARIABLE    shift, and go to state 66
-    T_COMMA       shift, and go to state 137
+    T_COMMA       shift, and go to state 138
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 165
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 166
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1921,24 +1922,24 @@ State 108
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
     T_VARIABLE    shift, and go to state 66
-    T_COMMA       shift, and go to state 137
+    T_COMMA       shift, and go to state 138
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 166
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 167
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -1979,13 +1980,13 @@ State 109
     T_LBRACKET    shift, and go to state 64
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 67
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME       go to state 70
-    EXPR_STATEMENT  go to state 167
-    DEC_STATEMENT   go to state 168
-    EXPR16          go to state 81
-    EXPR15          go to state 82
-    EXPR            go to state 83
+    TYPE_NAME       go to state 71
+    EXPR_STATEMENT  go to state 168
+    DEC_STATEMENT   go to state 169
+    EXPR16          go to state 82
+    EXPR15          go to state 83
     EXPR2           go to state 84
     EXPR3           go to state 85
     EXPR4           go to state 86
@@ -2005,7 +2006,7 @@ State 110
 
    77 DO_WHILE_STATEMENT: T_DO STATEMENT . T_WHILE EXPR16 T_SEMI_COLON
 
-    T_WHILE  shift, and go to state 169
+    T_WHILE  shift, and go to state 170
 
 
 State 111
@@ -2037,24 +2038,24 @@ State 111
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
     T_VARIABLE    shift, and go to state 66
-    T_COMMA       shift, and go to state 137
+    T_COMMA       shift, and go to state 138
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 170
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 171
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -2074,7 +2075,7 @@ State 112
 
   150 EXPR14: T_MINUS . I_FLOAT
 
-    I_FLOAT  shift, and go to state 171
+    I_FLOAT  shift, and go to state 172
 
 
 State 113
@@ -2094,7 +2095,7 @@ State 113
     T_INC        shift, and go to state 123
     T_DEC        shift, and go to state 124
     T_LBRACKET   shift, and go to state 125
-    T_LSBRACKET  shift, and go to state 172
+    T_LSBRACKET  shift, and go to state 173
 
     T_INC       [reduce using rule 148 (EXPR14)]
     T_DEC       [reduce using rule 148 (EXPR14)]
@@ -2104,9 +2105,9 @@ State 113
 
 State 114
 
-  132 EXPR12: T_PLUS EXPR13 .
+  130 EXPR12: T_PLUS EXPR13 .
 
-    $default  reduce using rule 132 (EXPR12)
+    $default  reduce using rule 130 (EXPR12)
 
 
 State 115
@@ -2206,46 +2207,45 @@ State 115
     T_OR          [reduce using rule 150 (EXPR14)]
     T_XOR         reduce using rule 149 (EXPR14)
     T_XOR         [reduce using rule 150 (EXPR14)]
+    T_NOT         reduce using rule 149 (EXPR14)
+    T_NOT         [reduce using rule 150 (EXPR14)]
     $default      reduce using rule 149 (EXPR14)
 
 
 State 116
 
-  131 EXPR12: T_MINUS EXPR13 .
-
-    $default  reduce using rule 131 (EXPR12)
-
-
-State 117
-
-   99 EXPR: T_LEXCLAIM EXPR2 .
-  101 EXPR2: EXPR2 . T_LOR EXPR3
-
-    T_LOR  shift, and go to state 139
-
-    $default  reduce using rule 99 (EXPR)
-
-
-State 118
-
-  129 EXPR12: T_INC T_VARIABLE .
-  133       | T_INC T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET
-  135       | T_INC T_VARIABLE . T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
-
-    T_LSBRACKET  shift, and go to state 173
+  129 EXPR12: T_MINUS EXPR13 .
 
     $default  reduce using rule 129 (EXPR12)
 
 
-State 119
+State 117
 
-  130 EXPR12: T_DEC T_VARIABLE .
-  134       | T_DEC T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET
-  136       | T_DEC T_VARIABLE . T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
+  131 EXPR12: T_LEXCLAIM EXPR12 .
+
+    $default  reduce using rule 131 (EXPR12)
+
+
+State 118
+
+  127 EXPR12: T_INC T_VARIABLE .
+  133       | T_INC T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET
+  135       | T_INC T_VARIABLE . T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
 
     T_LSBRACKET  shift, and go to state 174
 
-    $default  reduce using rule 130 (EXPR12)
+    $default  reduce using rule 127 (EXPR12)
+
+
+State 119
+
+  128 EXPR12: T_DEC T_VARIABLE .
+  134       | T_DEC T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET
+  136       | T_DEC T_VARIABLE . T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
+
+    T_LSBRACKET  shift, and go to state 175
+
+    $default  reduce using rule 128 (EXPR12)
 
 
 State 120
@@ -2253,8 +2253,8 @@ State 120
    79 EXPR16: EXPR16 . T_COMMA EXPR15
   138 EXPR13: T_LBRACKET EXPR16 . T_RBRACKET
 
-    T_RBRACKET  shift, and go to state 175
-    T_COMMA     shift, and go to state 137
+    T_RBRACKET  shift, and go to state 176
+    T_COMMA     shift, and go to state 138
 
 
 State 121
@@ -2285,25 +2285,25 @@ State 121
     T_DEC         shift, and go to state 63
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
-    T_RCBRACKET   shift, and go to state 176
+    T_RCBRACKET   shift, and go to state 177
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 136
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 137
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -2331,9 +2331,9 @@ State 122
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 177
-    EXPR    go to state 83
+    EXPR15  go to state 178
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2375,12 +2375,12 @@ State 125
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
-    T_RBRACKET  shift, and go to state 178
+    T_RBRACKET  shift, and go to state 179
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    PARAMETER_LIST_NO_TYPE  go to state 179
-    EXPR15                  go to state 180
-    EXPR                    go to state 83
+    PARAMETER_LIST_NO_TYPE  go to state 180
+    EXPR15                  go to state 181
     EXPR2                   go to state 84
     EXPR3                   go to state 85
     EXPR4                   go to state 86
@@ -2417,8 +2417,8 @@ State 126
   151 EXPR14: T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
   152       | T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
 
-    I_FLOAT  shift, and go to state 181
-    T_MINUS  shift, and go to state 182
+    I_FLOAT  shift, and go to state 182
+    T_MINUS  shift, and go to state 183
 
 
 State 127
@@ -2433,9 +2433,9 @@ State 127
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 183
-    EXPR    go to state 83
+    EXPR15  go to state 184
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2463,9 +2463,9 @@ State 128
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 184
-    EXPR    go to state 83
+    EXPR15  go to state 185
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2493,9 +2493,9 @@ State 129
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 185
-    EXPR    go to state 83
+    EXPR15  go to state 186
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2523,9 +2523,9 @@ State 130
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 186
-    EXPR    go to state 83
+    EXPR15  go to state 187
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2553,9 +2553,9 @@ State 131
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 187
-    EXPR    go to state 83
+    EXPR15  go to state 188
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2573,6 +2573,13 @@ State 131
 
 State 132
 
+  132 EXPR12: T_NOT EXPR12 .
+
+    $default  reduce using rule 132 (EXPR12)
+
+
+State 133
+
    47 DEC_STATEMENT: TYPE_NAME T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET
    48              | TYPE_NAME T_VARIABLE . T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET
    49              | TYPE_NAME T_VARIABLE . T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
@@ -2581,43 +2588,43 @@ State 132
    56 VARIABLE_DECLARATION: T_VARIABLE . T_EQUAL EXPR15
    57                     | T_VARIABLE .
 
-    T_EQUAL      shift, and go to state 188
-    T_LSBRACKET  shift, and go to state 189
+    T_EQUAL      shift, and go to state 189
+    T_LSBRACKET  shift, and go to state 190
 
     $default  reduce using rule 57 (VARIABLE_DECLARATION)
 
 
-State 133
+State 134
 
    46 DEC_STATEMENT: TYPE_NAME DEC_VAR_LIST . T_SEMI_COLON
    55 DEC_VAR_LIST: DEC_VAR_LIST . T_COMMA VARIABLE_DECLARATION
 
-    T_COMMA       shift, and go to state 190
-    T_SEMI_COLON  shift, and go to state 191
+    T_COMMA       shift, and go to state 191
+    T_SEMI_COLON  shift, and go to state 192
 
 
-State 134
+State 135
 
    54 DEC_VAR_LIST: VARIABLE_DECLARATION .
 
     $default  reduce using rule 54 (DEC_VAR_LIST)
 
 
-State 135
+State 136
 
     9 FUNCTION_DECLARATION: TYPE_NAME T_VARIABLE T_LBRACKET T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
 
     $default  reduce using rule 9 (FUNCTION_DECLARATION)
 
 
-State 136
+State 137
 
    25 SCOPE: SCOPE STATEMENT .
 
     $default  reduce using rule 25 (SCOPE)
 
 
-State 137
+State 138
 
    79 EXPR16: EXPR16 T_COMMA . EXPR15
 
@@ -2629,9 +2636,9 @@ State 137
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 192
-    EXPR    go to state 83
+    EXPR15  go to state 193
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -2647,52 +2654,29 @@ State 137
     EXPR14  go to state 96
 
 
-State 138
+State 139
 
    37 EXPR_STATEMENT: EXPR16 T_SEMI_COLON .
 
     $default  reduce using rule 37 (EXPR_STATEMENT)
 
 
-State 139
-
-  101 EXPR2: EXPR2 T_LOR . EXPR3
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 113
-
-    EXPR3   go to state 193
-    EXPR4   go to state 86
-    EXPR5   go to state 87
-    EXPR6   go to state 88
-    EXPR7   go to state 89
-    EXPR8   go to state 90
-    EXPR9   go to state 91
-    EXPR10  go to state 92
-    EXPR11  go to state 93
-    EXPR12  go to state 94
-    EXPR13  go to state 95
-    EXPR14  go to state 96
-
-
 State 140
 
-  103 EXPR3: EXPR3 T_LAND . EXPR4
+   99 EXPR2: EXPR2 T_LOR . EXPR3
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR4   go to state 194
+    EXPR3   go to state 194
+    EXPR4   go to state 86
     EXPR5   go to state 87
     EXPR6   go to state 88
     EXPR7   go to state 89
@@ -2707,17 +2691,20 @@ State 140
 
 State 141
 
-  105 EXPR4: EXPR4 T_OR . EXPR5
+  101 EXPR3: EXPR3 T_LAND . EXPR4
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR5   go to state 195
+    EXPR4   go to state 195
+    EXPR5   go to state 87
     EXPR6   go to state 88
     EXPR7   go to state 89
     EXPR8   go to state 90
@@ -2731,17 +2718,20 @@ State 141
 
 State 142
 
-  107 EXPR5: EXPR5 T_XOR . EXPR6
+  103 EXPR4: EXPR4 T_OR . EXPR5
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR6   go to state 196
+    EXPR5   go to state 196
+    EXPR6   go to state 88
     EXPR7   go to state 89
     EXPR8   go to state 90
     EXPR9   go to state 91
@@ -2754,17 +2744,20 @@ State 142
 
 State 143
 
-  109 EXPR6: EXPR6 T_AND . EXPR7
+  105 EXPR5: EXPR5 T_XOR . EXPR6
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR7   go to state 197
+    EXPR6   go to state 197
+    EXPR7   go to state 89
     EXPR8   go to state 90
     EXPR9   go to state 91
     EXPR10  go to state 92
@@ -2776,17 +2769,20 @@ State 143
 
 State 144
 
-  111 EXPR7: EXPR7 T_EQ . EXPR8
+  107 EXPR6: EXPR6 T_AND . EXPR7
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR8   go to state 198
+    EXPR7   go to state 198
+    EXPR8   go to state 90
     EXPR9   go to state 91
     EXPR10  go to state 92
     EXPR11  go to state 93
@@ -2797,15 +2793,17 @@ State 144
 
 State 145
 
-  112 EXPR7: EXPR7 T_NEQ . EXPR8
+  109 EXPR7: EXPR7 T_EQ . EXPR8
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR8   go to state 199
     EXPR9   go to state 91
@@ -2818,17 +2816,20 @@ State 145
 
 State 146
 
-  114 EXPR8: EXPR8 T_LE . EXPR9
+  110 EXPR7: EXPR7 T_NEQ . EXPR8
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR9   go to state 200
+    EXPR8   go to state 200
+    EXPR9   go to state 91
     EXPR10  go to state 92
     EXPR11  go to state 93
     EXPR12  go to state 94
@@ -2838,15 +2839,17 @@ State 146
 
 State 147
 
-  115 EXPR8: EXPR8 T_GE . EXPR9
+  112 EXPR8: EXPR8 T_LE . EXPR9
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR9   go to state 201
     EXPR10  go to state 92
@@ -2858,15 +2861,17 @@ State 147
 
 State 148
 
-  116 EXPR8: EXPR8 T_LT . EXPR9
+  113 EXPR8: EXPR8 T_GE . EXPR9
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR9   go to state 202
     EXPR10  go to state 92
@@ -2878,15 +2883,17 @@ State 148
 
 State 149
 
-  117 EXPR8: EXPR8 T_GT . EXPR9
+  114 EXPR8: EXPR8 T_LT . EXPR9
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR9   go to state 203
     EXPR10  go to state 92
@@ -2898,17 +2905,20 @@ State 149
 
 State 150
 
-  119 EXPR9: EXPR9 T_LSHIFT . EXPR10
+  115 EXPR8: EXPR8 T_GT . EXPR9
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR10  go to state 204
+    EXPR9   go to state 204
+    EXPR10  go to state 92
     EXPR11  go to state 93
     EXPR12  go to state 94
     EXPR13  go to state 95
@@ -2917,15 +2927,17 @@ State 150
 
 State 151
 
-  120 EXPR9: EXPR9 T_RSHIFT . EXPR10
+  117 EXPR9: EXPR9 T_LSHIFT . EXPR10
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR10  go to state 205
     EXPR11  go to state 93
@@ -2936,17 +2948,20 @@ State 151
 
 State 152
 
-  122 EXPR10: EXPR10 T_PLUS . EXPR11
+  118 EXPR9: EXPR9 T_RSHIFT . EXPR10
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR11  go to state 206
+    EXPR10  go to state 206
+    EXPR11  go to state 93
     EXPR12  go to state 94
     EXPR13  go to state 95
     EXPR14  go to state 96
@@ -2954,15 +2969,17 @@ State 152
 
 State 153
 
-  123 EXPR10: EXPR10 T_MINUS . EXPR11
+  120 EXPR10: EXPR10 T_PLUS . EXPR11
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR11  go to state 207
     EXPR12  go to state 94
@@ -2972,32 +2989,37 @@ State 153
 
 State 154
 
-  127 EXPR11: EXPR11 T_REM . EXPR12
+  121 EXPR10: EXPR10 T_MINUS . EXPR11
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
-    EXPR12  go to state 208
+    EXPR11  go to state 208
+    EXPR12  go to state 94
     EXPR13  go to state 95
     EXPR14  go to state 96
 
 
 State 155
 
-  126 EXPR11: EXPR11 T_TIMES . EXPR12
+  125 EXPR11: EXPR11 T_REM . EXPR12
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR12  go to state 209
     EXPR13  go to state 95
@@ -3006,15 +3028,17 @@ State 155
 
 State 156
 
-  125 EXPR11: EXPR11 T_DIVIDE . EXPR12
+  124 EXPR11: EXPR11 T_TIMES . EXPR12
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
     T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
 
     EXPR12  go to state 210
     EXPR13  go to state 95
@@ -3022,6 +3046,25 @@ State 156
 
 
 State 157
+
+  123 EXPR11: EXPR11 T_DIVIDE . EXPR12
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 113
+    T_NOT       shift, and go to state 70
+
+    EXPR12  go to state 211
+    EXPR13  go to state 95
+    EXPR14  go to state 96
+
+
+State 158
 
     8 FUNCTION_DECLARATION: TYPE_NAME T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE . T_RCBRACKET
    25 SCOPE: SCOPE . STATEMENT
@@ -3049,25 +3092,25 @@ State 157
     T_DEC         shift, and go to state 63
     T_LBRACKET    shift, and go to state 64
     T_LCBRACKET   shift, and go to state 65
-    T_RCBRACKET   shift, and go to state 211
+    T_RCBRACKET   shift, and go to state 212
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 136
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 137
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -3083,78 +3126,78 @@ State 157
     EXPR14              go to state 96
 
 
-State 158
+State 159
 
    12 PARAMETER_LIST: PARAMETER_LIST T_COMMA TYPE_NAME T_VARIABLE .
 
     $default  reduce using rule 12 (PARAMETER_LIST)
 
 
-State 159
+State 160
 
    59 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
 
-    I_FLOAT  shift, and go to state 162
+    I_FLOAT  shift, and go to state 163
 
-    GLOBAL_VAL_LIST  go to state 212
-
-
-State 160
-
-   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
-
-    T_LCBRACKET  shift, and go to state 213
+    GLOBAL_VAL_LIST  go to state 213
 
 
 State 161
+
+   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
+
+    T_LCBRACKET  shift, and go to state 214
+
+
+State 162
 
    60 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SEMI_COLON .
 
     $default  reduce using rule 60 (GLOBAL_ARRAY_DECLARATION)
 
 
-State 162
+State 163
 
    63 GLOBAL_VAL_LIST: I_FLOAT .
 
     $default  reduce using rule 63 (GLOBAL_VAL_LIST)
 
 
-State 163
+State 164
 
    62 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST . T_RCBRACKET T_SEMI_COLON
    64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST . T_COMMA I_FLOAT
 
-    T_RCBRACKET  shift, and go to state 214
-    T_COMMA      shift, and go to state 215
+    T_RCBRACKET  shift, and go to state 215
+    T_COMMA      shift, and go to state 216
 
 
-State 164
+State 165
 
    44 RETURN_STATEMENT: T_RETURN EXPR16 T_SEMI_COLON .
 
     $default  reduce using rule 44 (RETURN_STATEMENT)
 
 
-State 165
+State 166
 
    73 IF_OR_ELSE: T_IF EXPR16 STATEMENT . T_ELSE STATEMENT
    74           | T_IF EXPR16 STATEMENT .
 
-    T_ELSE  shift, and go to state 216
+    T_ELSE  shift, and go to state 217
 
     T_ELSE    [reduce using rule 74 (IF_OR_ELSE)]
     $default  reduce using rule 74 (IF_OR_ELSE)
 
 
-State 166
+State 167
 
    76 WHILE_STATEMENT: T_WHILE EXPR16 STATEMENT .
 
     $default  reduce using rule 76 (WHILE_STATEMENT)
 
 
-State 167
+State 168
 
    40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT . EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT
    42              | T_FOR T_LBRACKET EXPR_STATEMENT . EXPR_STATEMENT T_RBRACKET STATEMENT
@@ -3168,45 +3211,11 @@ State 167
     T_LBRACKET    shift, and go to state 64
     T_VARIABLE    shift, and go to state 66
     T_SEMI_COLON  shift, and go to state 67
-
-    EXPR_STATEMENT  go to state 217
-    EXPR16          go to state 81
-    EXPR15          go to state 82
-    EXPR            go to state 83
-    EXPR2           go to state 84
-    EXPR3           go to state 85
-    EXPR4           go to state 86
-    EXPR5           go to state 87
-    EXPR6           go to state 88
-    EXPR7           go to state 89
-    EXPR8           go to state 90
-    EXPR9           go to state 91
-    EXPR10          go to state 92
-    EXPR11          go to state 93
-    EXPR12          go to state 94
-    EXPR13          go to state 95
-    EXPR14          go to state 96
-
-
-State 168
-
-   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT
-   41              | T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT T_RBRACKET STATEMENT
-
-    I_FLOAT       shift, and go to state 53
-    T_PLUS        shift, and go to state 59
-    T_MINUS       shift, and go to state 60
-    T_LEXCLAIM    shift, and go to state 61
-    T_INC         shift, and go to state 62
-    T_DEC         shift, and go to state 63
-    T_LBRACKET    shift, and go to state 64
-    T_VARIABLE    shift, and go to state 66
-    T_SEMI_COLON  shift, and go to state 67
+    T_NOT         shift, and go to state 70
 
     EXPR_STATEMENT  go to state 218
-    EXPR16          go to state 81
-    EXPR15          go to state 82
-    EXPR            go to state 83
+    EXPR16          go to state 82
+    EXPR15          go to state 83
     EXPR2           go to state 84
     EXPR3           go to state 85
     EXPR4           go to state 86
@@ -3224,6 +3233,40 @@ State 168
 
 State 169
 
+   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT
+   41              | T_FOR T_LBRACKET DEC_STATEMENT . EXPR_STATEMENT T_RBRACKET STATEMENT
+
+    I_FLOAT       shift, and go to state 53
+    T_PLUS        shift, and go to state 59
+    T_MINUS       shift, and go to state 60
+    T_LEXCLAIM    shift, and go to state 61
+    T_INC         shift, and go to state 62
+    T_DEC         shift, and go to state 63
+    T_LBRACKET    shift, and go to state 64
+    T_VARIABLE    shift, and go to state 66
+    T_SEMI_COLON  shift, and go to state 67
+    T_NOT         shift, and go to state 70
+
+    EXPR_STATEMENT  go to state 219
+    EXPR16          go to state 82
+    EXPR15          go to state 83
+    EXPR2           go to state 84
+    EXPR3           go to state 85
+    EXPR4           go to state 86
+    EXPR5           go to state 87
+    EXPR6           go to state 88
+    EXPR7           go to state 89
+    EXPR8           go to state 90
+    EXPR9           go to state 91
+    EXPR10          go to state 92
+    EXPR11          go to state 93
+    EXPR12          go to state 94
+    EXPR13          go to state 95
+    EXPR14          go to state 96
+
+
+State 170
+
    77 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE . EXPR16 T_SEMI_COLON
 
     I_FLOAT     shift, and go to state 53
@@ -3234,10 +3277,10 @@ State 169
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR16  go to state 219
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR16  go to state 220
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -3253,21 +3296,21 @@ State 169
     EXPR14  go to state 96
 
 
-State 170
+State 171
 
    75 IF_OR_ELSE: T_SWITCH EXPR16 STATEMENT .
 
     $default  reduce using rule 75 (IF_OR_ELSE)
 
 
-State 171
+State 172
 
   150 EXPR14: T_MINUS I_FLOAT .
 
     $default  reduce using rule 150 (EXPR14)
 
 
-State 172
+State 173
 
   143 EXPR13: T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET T_INC
   144       | T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET T_DEC
@@ -3276,73 +3319,73 @@ State 172
   151 EXPR14: T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
   152       | T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
 
-    I_FLOAT  shift, and go to state 220
-    T_MINUS  shift, and go to state 221
-
-
-State 173
-
-  133 EXPR12: T_INC T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
-  135       | T_INC T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
-
-    I_FLOAT  shift, and go to state 222
-    T_MINUS  shift, and go to state 223
+    I_FLOAT  shift, and go to state 221
+    T_MINUS  shift, and go to state 222
 
 
 State 174
 
-  134 EXPR12: T_DEC T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
-  136       | T_DEC T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
+  133 EXPR12: T_INC T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
+  135       | T_INC T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
 
-    I_FLOAT  shift, and go to state 224
-    T_MINUS  shift, and go to state 225
+    I_FLOAT  shift, and go to state 223
+    T_MINUS  shift, and go to state 224
 
 
 State 175
+
+  134 EXPR12: T_DEC T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
+  136       | T_DEC T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
+
+    I_FLOAT  shift, and go to state 225
+    T_MINUS  shift, and go to state 226
+
+
+State 176
 
   138 EXPR13: T_LBRACKET EXPR16 T_RBRACKET .
 
     $default  reduce using rule 138 (EXPR13)
 
 
-State 176
+State 177
 
    43 NEW_SCOPE: T_LCBRACKET SCOPE T_RCBRACKET .
 
     $default  reduce using rule 43 (NEW_SCOPE)
 
 
-State 177
+State 178
 
    81 EXPR15: T_VARIABLE T_EQUAL EXPR15 .
 
     $default  reduce using rule 81 (EXPR15)
 
 
-State 178
+State 179
 
   142 EXPR13: T_VARIABLE T_LBRACKET T_RBRACKET .
 
     $default  reduce using rule 142 (EXPR13)
 
 
-State 179
+State 180
 
    14 PARAMETER_LIST_NO_TYPE: PARAMETER_LIST_NO_TYPE . T_COMMA EXPR15
   141 EXPR13: T_VARIABLE T_LBRACKET PARAMETER_LIST_NO_TYPE . T_RBRACKET
 
-    T_RBRACKET  shift, and go to state 226
-    T_COMMA     shift, and go to state 227
+    T_RBRACKET  shift, and go to state 227
+    T_COMMA     shift, and go to state 228
 
 
-State 180
+State 181
 
    15 PARAMETER_LIST_NO_TYPE: EXPR15 .
 
     $default  reduce using rule 15 (PARAMETER_LIST_NO_TYPE)
 
 
-State 181
+State 182
 
    87 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_EQUAL EXPR15
    88       | T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_ADDASSIGN EXPR15
@@ -3354,10 +3397,10 @@ State 181
   144       | T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_DEC
   151 EXPR14: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
 
-    T_RSBRACKET  shift, and go to state 228
+    T_RSBRACKET  shift, and go to state 229
 
 
-State 182
+State 183
 
    93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_EQUAL EXPR15
    94       | T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15
@@ -3369,45 +3412,45 @@ State 182
   146       | T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_DEC
   152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
 
-    I_FLOAT  shift, and go to state 229
+    I_FLOAT  shift, and go to state 230
 
 
-State 183
+State 184
 
    82 EXPR15: T_VARIABLE T_ADDASSIGN EXPR15 .
 
     $default  reduce using rule 82 (EXPR15)
 
 
-State 184
+State 185
 
    83 EXPR15: T_VARIABLE T_SUBASSIGN EXPR15 .
 
     $default  reduce using rule 83 (EXPR15)
 
 
-State 185
+State 186
 
    84 EXPR15: T_VARIABLE T_MULASSIGN EXPR15 .
 
     $default  reduce using rule 84 (EXPR15)
 
 
-State 186
+State 187
 
    85 EXPR15: T_VARIABLE T_DIVASSIGN EXPR15 .
 
     $default  reduce using rule 85 (EXPR15)
 
 
-State 187
+State 188
 
    86 EXPR15: T_VARIABLE T_MODASSIGN EXPR15 .
 
     $default  reduce using rule 86 (EXPR15)
 
 
-State 188
+State 189
 
    56 VARIABLE_DECLARATION: T_VARIABLE T_EQUAL . EXPR15
 
@@ -3419,9 +3462,9 @@ State 188
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 230
-    EXPR    go to state 83
+    EXPR15  go to state 231
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -3437,7 +3480,7 @@ State 188
     EXPR14  go to state 96
 
 
-State 189
+State 190
 
    47 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET . I_FLOAT T_RSBRACKET
    48              | TYPE_NAME T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET
@@ -3445,283 +3488,283 @@ State 189
    50              | TYPE_NAME T_VARIABLE T_LSBRACKET . T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
    51              | TYPE_NAME T_VARIABLE T_LSBRACKET . T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    I_FLOAT      shift, and go to state 231
-    T_MINUS      shift, and go to state 232
-    T_RSBRACKET  shift, and go to state 233
-
-
-State 190
-
-   55 DEC_VAR_LIST: DEC_VAR_LIST T_COMMA . VARIABLE_DECLARATION
-
-    T_VARIABLE  shift, and go to state 234
-
-    VARIABLE_DECLARATION  go to state 235
+    I_FLOAT      shift, and go to state 232
+    T_MINUS      shift, and go to state 233
+    T_RSBRACKET  shift, and go to state 234
 
 
 State 191
+
+   55 DEC_VAR_LIST: DEC_VAR_LIST T_COMMA . VARIABLE_DECLARATION
+
+    T_VARIABLE  shift, and go to state 235
+
+    VARIABLE_DECLARATION  go to state 236
+
+
+State 192
 
    46 DEC_STATEMENT: TYPE_NAME DEC_VAR_LIST T_SEMI_COLON .
 
     $default  reduce using rule 46 (DEC_STATEMENT)
 
 
-State 192
+State 193
 
    79 EXPR16: EXPR16 T_COMMA EXPR15 .
 
     $default  reduce using rule 79 (EXPR16)
 
 
-State 193
-
-  101 EXPR2: EXPR2 T_LOR EXPR3 .
-  103 EXPR3: EXPR3 . T_LAND EXPR4
-
-    T_LAND  shift, and go to state 140
-
-    $default  reduce using rule 101 (EXPR2)
-
-
 State 194
 
-  103 EXPR3: EXPR3 T_LAND EXPR4 .
-  105 EXPR4: EXPR4 . T_OR EXPR5
+   99 EXPR2: EXPR2 T_LOR EXPR3 .
+  101 EXPR3: EXPR3 . T_LAND EXPR4
 
-    T_OR  shift, and go to state 141
+    T_LAND  shift, and go to state 141
 
-    $default  reduce using rule 103 (EXPR3)
+    $default  reduce using rule 99 (EXPR2)
 
 
 State 195
 
-  105 EXPR4: EXPR4 T_OR EXPR5 .
-  107 EXPR5: EXPR5 . T_XOR EXPR6
+  101 EXPR3: EXPR3 T_LAND EXPR4 .
+  103 EXPR4: EXPR4 . T_OR EXPR5
 
-    T_XOR  shift, and go to state 142
+    T_OR  shift, and go to state 142
 
-    $default  reduce using rule 105 (EXPR4)
+    $default  reduce using rule 101 (EXPR3)
 
 
 State 196
 
-  107 EXPR5: EXPR5 T_XOR EXPR6 .
-  109 EXPR6: EXPR6 . T_AND EXPR7
+  103 EXPR4: EXPR4 T_OR EXPR5 .
+  105 EXPR5: EXPR5 . T_XOR EXPR6
 
-    T_AND  shift, and go to state 143
+    T_XOR  shift, and go to state 143
 
-    $default  reduce using rule 107 (EXPR5)
+    $default  reduce using rule 103 (EXPR4)
 
 
 State 197
 
-  109 EXPR6: EXPR6 T_AND EXPR7 .
-  111 EXPR7: EXPR7 . T_EQ EXPR8
-  112      | EXPR7 . T_NEQ EXPR8
+  105 EXPR5: EXPR5 T_XOR EXPR6 .
+  107 EXPR6: EXPR6 . T_AND EXPR7
 
-    T_EQ   shift, and go to state 144
-    T_NEQ  shift, and go to state 145
+    T_AND  shift, and go to state 144
 
-    $default  reduce using rule 109 (EXPR6)
+    $default  reduce using rule 105 (EXPR5)
 
 
 State 198
 
-  111 EXPR7: EXPR7 T_EQ EXPR8 .
-  114 EXPR8: EXPR8 . T_LE EXPR9
-  115      | EXPR8 . T_GE EXPR9
-  116      | EXPR8 . T_LT EXPR9
-  117      | EXPR8 . T_GT EXPR9
+  107 EXPR6: EXPR6 T_AND EXPR7 .
+  109 EXPR7: EXPR7 . T_EQ EXPR8
+  110      | EXPR7 . T_NEQ EXPR8
 
-    T_LE  shift, and go to state 146
-    T_GE  shift, and go to state 147
-    T_LT  shift, and go to state 148
-    T_GT  shift, and go to state 149
+    T_EQ   shift, and go to state 145
+    T_NEQ  shift, and go to state 146
 
-    $default  reduce using rule 111 (EXPR7)
+    $default  reduce using rule 107 (EXPR6)
 
 
 State 199
 
-  112 EXPR7: EXPR7 T_NEQ EXPR8 .
-  114 EXPR8: EXPR8 . T_LE EXPR9
-  115      | EXPR8 . T_GE EXPR9
-  116      | EXPR8 . T_LT EXPR9
-  117      | EXPR8 . T_GT EXPR9
+  109 EXPR7: EXPR7 T_EQ EXPR8 .
+  112 EXPR8: EXPR8 . T_LE EXPR9
+  113      | EXPR8 . T_GE EXPR9
+  114      | EXPR8 . T_LT EXPR9
+  115      | EXPR8 . T_GT EXPR9
 
-    T_LE  shift, and go to state 146
-    T_GE  shift, and go to state 147
-    T_LT  shift, and go to state 148
-    T_GT  shift, and go to state 149
+    T_LE  shift, and go to state 147
+    T_GE  shift, and go to state 148
+    T_LT  shift, and go to state 149
+    T_GT  shift, and go to state 150
 
-    $default  reduce using rule 112 (EXPR7)
+    $default  reduce using rule 109 (EXPR7)
 
 
 State 200
 
-  114 EXPR8: EXPR8 T_LE EXPR9 .
-  119 EXPR9: EXPR9 . T_LSHIFT EXPR10
-  120      | EXPR9 . T_RSHIFT EXPR10
+  110 EXPR7: EXPR7 T_NEQ EXPR8 .
+  112 EXPR8: EXPR8 . T_LE EXPR9
+  113      | EXPR8 . T_GE EXPR9
+  114      | EXPR8 . T_LT EXPR9
+  115      | EXPR8 . T_GT EXPR9
 
-    T_LSHIFT  shift, and go to state 150
-    T_RSHIFT  shift, and go to state 151
+    T_LE  shift, and go to state 147
+    T_GE  shift, and go to state 148
+    T_LT  shift, and go to state 149
+    T_GT  shift, and go to state 150
 
-    $default  reduce using rule 114 (EXPR8)
+    $default  reduce using rule 110 (EXPR7)
 
 
 State 201
 
-  115 EXPR8: EXPR8 T_GE EXPR9 .
-  119 EXPR9: EXPR9 . T_LSHIFT EXPR10
-  120      | EXPR9 . T_RSHIFT EXPR10
+  112 EXPR8: EXPR8 T_LE EXPR9 .
+  117 EXPR9: EXPR9 . T_LSHIFT EXPR10
+  118      | EXPR9 . T_RSHIFT EXPR10
 
-    T_LSHIFT  shift, and go to state 150
-    T_RSHIFT  shift, and go to state 151
+    T_LSHIFT  shift, and go to state 151
+    T_RSHIFT  shift, and go to state 152
 
-    $default  reduce using rule 115 (EXPR8)
+    $default  reduce using rule 112 (EXPR8)
 
 
 State 202
 
-  116 EXPR8: EXPR8 T_LT EXPR9 .
-  119 EXPR9: EXPR9 . T_LSHIFT EXPR10
-  120      | EXPR9 . T_RSHIFT EXPR10
+  113 EXPR8: EXPR8 T_GE EXPR9 .
+  117 EXPR9: EXPR9 . T_LSHIFT EXPR10
+  118      | EXPR9 . T_RSHIFT EXPR10
 
-    T_LSHIFT  shift, and go to state 150
-    T_RSHIFT  shift, and go to state 151
+    T_LSHIFT  shift, and go to state 151
+    T_RSHIFT  shift, and go to state 152
 
-    $default  reduce using rule 116 (EXPR8)
+    $default  reduce using rule 113 (EXPR8)
 
 
 State 203
 
-  117 EXPR8: EXPR8 T_GT EXPR9 .
-  119 EXPR9: EXPR9 . T_LSHIFT EXPR10
-  120      | EXPR9 . T_RSHIFT EXPR10
+  114 EXPR8: EXPR8 T_LT EXPR9 .
+  117 EXPR9: EXPR9 . T_LSHIFT EXPR10
+  118      | EXPR9 . T_RSHIFT EXPR10
 
-    T_LSHIFT  shift, and go to state 150
-    T_RSHIFT  shift, and go to state 151
+    T_LSHIFT  shift, and go to state 151
+    T_RSHIFT  shift, and go to state 152
 
-    $default  reduce using rule 117 (EXPR8)
+    $default  reduce using rule 114 (EXPR8)
 
 
 State 204
 
-  119 EXPR9: EXPR9 T_LSHIFT EXPR10 .
-  122 EXPR10: EXPR10 . T_PLUS EXPR11
-  123       | EXPR10 . T_MINUS EXPR11
+  115 EXPR8: EXPR8 T_GT EXPR9 .
+  117 EXPR9: EXPR9 . T_LSHIFT EXPR10
+  118      | EXPR9 . T_RSHIFT EXPR10
 
-    T_PLUS   shift, and go to state 152
-    T_MINUS  shift, and go to state 153
+    T_LSHIFT  shift, and go to state 151
+    T_RSHIFT  shift, and go to state 152
 
-    T_PLUS    [reduce using rule 119 (EXPR9)]
-    T_MINUS   [reduce using rule 119 (EXPR9)]
-    $default  reduce using rule 119 (EXPR9)
+    $default  reduce using rule 115 (EXPR8)
 
 
 State 205
 
-  120 EXPR9: EXPR9 T_RSHIFT EXPR10 .
-  122 EXPR10: EXPR10 . T_PLUS EXPR11
-  123       | EXPR10 . T_MINUS EXPR11
+  117 EXPR9: EXPR9 T_LSHIFT EXPR10 .
+  120 EXPR10: EXPR10 . T_PLUS EXPR11
+  121       | EXPR10 . T_MINUS EXPR11
 
-    T_PLUS   shift, and go to state 152
-    T_MINUS  shift, and go to state 153
+    T_PLUS   shift, and go to state 153
+    T_MINUS  shift, and go to state 154
 
-    T_PLUS    [reduce using rule 120 (EXPR9)]
-    T_MINUS   [reduce using rule 120 (EXPR9)]
-    $default  reduce using rule 120 (EXPR9)
+    T_PLUS    [reduce using rule 117 (EXPR9)]
+    T_MINUS   [reduce using rule 117 (EXPR9)]
+    $default  reduce using rule 117 (EXPR9)
 
 
 State 206
 
-  122 EXPR10: EXPR10 T_PLUS EXPR11 .
-  125 EXPR11: EXPR11 . T_DIVIDE EXPR12
-  126       | EXPR11 . T_TIMES EXPR12
-  127       | EXPR11 . T_REM EXPR12
+  118 EXPR9: EXPR9 T_RSHIFT EXPR10 .
+  120 EXPR10: EXPR10 . T_PLUS EXPR11
+  121       | EXPR10 . T_MINUS EXPR11
 
-    T_REM     shift, and go to state 154
-    T_TIMES   shift, and go to state 155
-    T_DIVIDE  shift, and go to state 156
+    T_PLUS   shift, and go to state 153
+    T_MINUS  shift, and go to state 154
 
-    $default  reduce using rule 122 (EXPR10)
+    T_PLUS    [reduce using rule 118 (EXPR9)]
+    T_MINUS   [reduce using rule 118 (EXPR9)]
+    $default  reduce using rule 118 (EXPR9)
 
 
 State 207
 
-  123 EXPR10: EXPR10 T_MINUS EXPR11 .
-  125 EXPR11: EXPR11 . T_DIVIDE EXPR12
-  126       | EXPR11 . T_TIMES EXPR12
-  127       | EXPR11 . T_REM EXPR12
+  120 EXPR10: EXPR10 T_PLUS EXPR11 .
+  123 EXPR11: EXPR11 . T_DIVIDE EXPR12
+  124       | EXPR11 . T_TIMES EXPR12
+  125       | EXPR11 . T_REM EXPR12
 
-    T_REM     shift, and go to state 154
-    T_TIMES   shift, and go to state 155
-    T_DIVIDE  shift, and go to state 156
+    T_REM     shift, and go to state 155
+    T_TIMES   shift, and go to state 156
+    T_DIVIDE  shift, and go to state 157
 
-    $default  reduce using rule 123 (EXPR10)
+    $default  reduce using rule 120 (EXPR10)
 
 
 State 208
 
-  127 EXPR11: EXPR11 T_REM EXPR12 .
+  121 EXPR10: EXPR10 T_MINUS EXPR11 .
+  123 EXPR11: EXPR11 . T_DIVIDE EXPR12
+  124       | EXPR11 . T_TIMES EXPR12
+  125       | EXPR11 . T_REM EXPR12
 
-    $default  reduce using rule 127 (EXPR11)
+    T_REM     shift, and go to state 155
+    T_TIMES   shift, and go to state 156
+    T_DIVIDE  shift, and go to state 157
+
+    $default  reduce using rule 121 (EXPR10)
 
 
 State 209
 
-  126 EXPR11: EXPR11 T_TIMES EXPR12 .
-
-    $default  reduce using rule 126 (EXPR11)
-
-
-State 210
-
-  125 EXPR11: EXPR11 T_DIVIDE EXPR12 .
+  125 EXPR11: EXPR11 T_REM EXPR12 .
 
     $default  reduce using rule 125 (EXPR11)
 
 
+State 210
+
+  124 EXPR11: EXPR11 T_TIMES EXPR12 .
+
+    $default  reduce using rule 124 (EXPR11)
+
+
 State 211
+
+  123 EXPR11: EXPR11 T_DIVIDE EXPR12 .
+
+    $default  reduce using rule 123 (EXPR11)
+
+
+State 212
 
     8 FUNCTION_DECLARATION: TYPE_NAME T_VARIABLE T_LBRACKET PARAMETER_LIST T_RBRACKET T_LCBRACKET SCOPE T_RCBRACKET .
 
     $default  reduce using rule 8 (FUNCTION_DECLARATION)
 
 
-State 212
+State 213
 
    59 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST . T_RCBRACKET T_SEMI_COLON
    64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST . T_COMMA I_FLOAT
 
-    T_RCBRACKET  shift, and go to state 236
-    T_COMMA      shift, and go to state 215
-
-
-State 213
-
-   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
-
-    I_FLOAT  shift, and go to state 162
-
-    GLOBAL_VAL_LIST  go to state 237
+    T_RCBRACKET  shift, and go to state 237
+    T_COMMA      shift, and go to state 216
 
 
 State 214
 
-   62 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET . T_SEMI_COLON
+   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON
 
-    T_SEMI_COLON  shift, and go to state 238
+    I_FLOAT  shift, and go to state 163
+
+    GLOBAL_VAL_LIST  go to state 238
 
 
 State 215
 
-   64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST T_COMMA . I_FLOAT
+   62 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET . T_SEMI_COLON
 
-    I_FLOAT  shift, and go to state 239
+    T_SEMI_COLON  shift, and go to state 239
 
 
 State 216
+
+   64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST T_COMMA . I_FLOAT
+
+    I_FLOAT  shift, and go to state 240
+
+
+State 217
 
    73 IF_OR_ELSE: T_IF EXPR16 STATEMENT T_ELSE . STATEMENT
 
@@ -3752,20 +3795,20 @@ State 216
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 240
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 241
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -3781,7 +3824,7 @@ State 216
     EXPR14              go to state 96
 
 
-State 217
+State 218
 
    40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT . EXPR16 T_RBRACKET STATEMENT
    42              | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT . T_RBRACKET STATEMENT
@@ -3793,45 +3836,12 @@ State 217
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
-    T_RBRACKET  shift, and go to state 241
+    T_RBRACKET  shift, and go to state 242
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR16  go to state 242
-    EXPR15  go to state 82
-    EXPR    go to state 83
-    EXPR2   go to state 84
-    EXPR3   go to state 85
-    EXPR4   go to state 86
-    EXPR5   go to state 87
-    EXPR6   go to state 88
-    EXPR7   go to state 89
-    EXPR8   go to state 90
-    EXPR9   go to state 91
-    EXPR10  go to state 92
-    EXPR11  go to state 93
-    EXPR12  go to state 94
-    EXPR13  go to state 95
-    EXPR14  go to state 96
-
-
-State 218
-
-   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT . EXPR16 T_RBRACKET STATEMENT
-   41              | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT . T_RBRACKET STATEMENT
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_RBRACKET  shift, and go to state 243
-    T_VARIABLE  shift, and go to state 66
-
-    EXPR16  go to state 244
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR16  go to state 243
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -3849,69 +3859,8 @@ State 218
 
 State 219
 
-   77 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 . T_SEMI_COLON
-   79 EXPR16: EXPR16 . T_COMMA EXPR15
-
-    T_COMMA       shift, and go to state 137
-    T_SEMI_COLON  shift, and go to state 245
-
-
-State 220
-
-  143 EXPR13: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_INC
-  144       | T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_DEC
-  151 EXPR14: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
-
-    T_RSBRACKET  shift, and go to state 246
-
-
-State 221
-
-  145 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_INC
-  146       | T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_DEC
-  152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
-
-    I_FLOAT  shift, and go to state 247
-
-
-State 222
-
-  133 EXPR12: T_INC T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
-
-    T_RSBRACKET  shift, and go to state 248
-
-
-State 223
-
-  135 EXPR12: T_INC T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
-
-    I_FLOAT  shift, and go to state 249
-
-
-State 224
-
-  134 EXPR12: T_DEC T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
-
-    T_RSBRACKET  shift, and go to state 250
-
-
-State 225
-
-  136 EXPR12: T_DEC T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
-
-    I_FLOAT  shift, and go to state 251
-
-
-State 226
-
-  141 EXPR13: T_VARIABLE T_LBRACKET PARAMETER_LIST_NO_TYPE T_RBRACKET .
-
-    $default  reduce using rule 141 (EXPR13)
-
-
-State 227
-
-   14 PARAMETER_LIST_NO_TYPE: PARAMETER_LIST_NO_TYPE T_COMMA . EXPR15
+   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT . EXPR16 T_RBRACKET STATEMENT
+   41              | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT . T_RBRACKET STATEMENT
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -3920,10 +3869,12 @@ State 227
     T_INC       shift, and go to state 62
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
+    T_RBRACKET  shift, and go to state 244
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 252
-    EXPR    go to state 83
+    EXPR16  go to state 245
+    EXPR15  go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -3939,7 +3890,99 @@ State 227
     EXPR14  go to state 96
 
 
+State 220
+
+   77 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 . T_SEMI_COLON
+   79 EXPR16: EXPR16 . T_COMMA EXPR15
+
+    T_COMMA       shift, and go to state 138
+    T_SEMI_COLON  shift, and go to state 246
+
+
+State 221
+
+  143 EXPR13: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_INC
+  144       | T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_DEC
+  151 EXPR14: T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
+
+    T_RSBRACKET  shift, and go to state 247
+
+
+State 222
+
+  145 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_INC
+  146       | T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_DEC
+  152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
+
+    I_FLOAT  shift, and go to state 248
+
+
+State 223
+
+  133 EXPR12: T_INC T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
+
+    T_RSBRACKET  shift, and go to state 249
+
+
+State 224
+
+  135 EXPR12: T_INC T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
+
+    I_FLOAT  shift, and go to state 250
+
+
+State 225
+
+  134 EXPR12: T_DEC T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
+
+    T_RSBRACKET  shift, and go to state 251
+
+
+State 226
+
+  136 EXPR12: T_DEC T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
+
+    I_FLOAT  shift, and go to state 252
+
+
+State 227
+
+  141 EXPR13: T_VARIABLE T_LBRACKET PARAMETER_LIST_NO_TYPE T_RBRACKET .
+
+    $default  reduce using rule 141 (EXPR13)
+
+
 State 228
+
+   14 PARAMETER_LIST_NO_TYPE: PARAMETER_LIST_NO_TYPE T_COMMA . EXPR15
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    EXPR15  go to state 253
+    EXPR2   go to state 84
+    EXPR3   go to state 85
+    EXPR4   go to state 86
+    EXPR5   go to state 87
+    EXPR6   go to state 88
+    EXPR7   go to state 89
+    EXPR8   go to state 90
+    EXPR9   go to state 91
+    EXPR10  go to state 92
+    EXPR11  go to state 93
+    EXPR12  go to state 94
+    EXPR13  go to state 95
+    EXPR14  go to state 96
+
+
+State 229
 
    87 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_EQUAL EXPR15
    88       | T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_ADDASSIGN EXPR15
@@ -3951,21 +3994,21 @@ State 228
   144       | T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_DEC
   151 EXPR14: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET .
 
-    T_EQUAL      shift, and go to state 253
-    T_INC        shift, and go to state 254
-    T_DEC        shift, and go to state 255
-    T_ADDASSIGN  shift, and go to state 256
-    T_SUBASSIGN  shift, and go to state 257
-    T_MULASSIGN  shift, and go to state 258
-    T_DIVASSIGN  shift, and go to state 259
-    T_MODASSIGN  shift, and go to state 260
+    T_EQUAL      shift, and go to state 254
+    T_INC        shift, and go to state 255
+    T_DEC        shift, and go to state 256
+    T_ADDASSIGN  shift, and go to state 257
+    T_SUBASSIGN  shift, and go to state 258
+    T_MULASSIGN  shift, and go to state 259
+    T_DIVASSIGN  shift, and go to state 260
+    T_MODASSIGN  shift, and go to state 261
 
     T_INC     [reduce using rule 151 (EXPR14)]
     T_DEC     [reduce using rule 151 (EXPR14)]
     $default  reduce using rule 151 (EXPR14)
 
 
-State 229
+State 230
 
    93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_EQUAL EXPR15
    94       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_ADDASSIGN EXPR15
@@ -3977,94 +4020,94 @@ State 229
   146       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_DEC
   152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET
 
-    T_RSBRACKET  shift, and go to state 261
+    T_RSBRACKET  shift, and go to state 262
 
 
-State 230
+State 231
 
    56 VARIABLE_DECLARATION: T_VARIABLE T_EQUAL EXPR15 .
 
     $default  reduce using rule 56 (VARIABLE_DECLARATION)
 
 
-State 231
+State 232
 
    47 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET
    49              | TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT . T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    T_RSBRACKET  shift, and go to state 262
-
-
-State 232
-
-   48 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
-   50              | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
-
-    I_FLOAT  shift, and go to state 263
+    T_RSBRACKET  shift, and go to state 263
 
 
 State 233
 
-   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET . T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
+   48 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET
+   50              | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS . I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    T_EQUAL  shift, and go to state 264
+    I_FLOAT  shift, and go to state 264
 
 
 State 234
 
+   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET . T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
+
+    T_EQUAL  shift, and go to state 265
+
+
+State 235
+
    56 VARIABLE_DECLARATION: T_VARIABLE . T_EQUAL EXPR15
    57                     | T_VARIABLE .
 
-    T_EQUAL  shift, and go to state 188
+    T_EQUAL  shift, and go to state 189
 
     $default  reduce using rule 57 (VARIABLE_DECLARATION)
 
 
-State 235
+State 236
 
    55 DEC_VAR_LIST: DEC_VAR_LIST T_COMMA VARIABLE_DECLARATION .
 
     $default  reduce using rule 55 (DEC_VAR_LIST)
 
 
-State 236
+State 237
 
    59 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET . T_SEMI_COLON
 
-    T_SEMI_COLON  shift, and go to state 265
+    T_SEMI_COLON  shift, and go to state 266
 
 
-State 237
+State 238
 
    61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST . T_RCBRACKET T_SEMI_COLON
    64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST . T_COMMA I_FLOAT
 
-    T_RCBRACKET  shift, and go to state 266
-    T_COMMA      shift, and go to state 215
+    T_RCBRACKET  shift, and go to state 267
+    T_COMMA      shift, and go to state 216
 
 
-State 238
+State 239
 
    62 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON .
 
     $default  reduce using rule 62 (GLOBAL_ARRAY_DECLARATION)
 
 
-State 239
+State 240
 
    64 GLOBAL_VAL_LIST: GLOBAL_VAL_LIST T_COMMA I_FLOAT .
 
     $default  reduce using rule 64 (GLOBAL_VAL_LIST)
 
 
-State 240
+State 241
 
    73 IF_OR_ELSE: T_IF EXPR16 STATEMENT T_ELSE STATEMENT .
 
     $default  reduce using rule 73 (IF_OR_ELSE)
 
 
-State 241
+State 242
 
    42 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET . STATEMENT
 
@@ -4095,20 +4138,20 @@ State 241
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 267
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 268
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -4124,16 +4167,16 @@ State 241
     EXPR14              go to state 96
 
 
-State 242
+State 243
 
    40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR16 . T_RBRACKET STATEMENT
    79 EXPR16: EXPR16 . T_COMMA EXPR15
 
-    T_RBRACKET  shift, and go to state 268
-    T_COMMA     shift, and go to state 137
+    T_RBRACKET  shift, and go to state 269
+    T_COMMA     shift, and go to state 138
 
 
-State 243
+State 244
 
    41 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET . STATEMENT
 
@@ -4164,20 +4207,20 @@ State 243
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 269
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 270
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -4193,81 +4236,81 @@ State 243
     EXPR14              go to state 96
 
 
-State 244
+State 245
 
    39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR16 . T_RBRACKET STATEMENT
    79 EXPR16: EXPR16 . T_COMMA EXPR15
 
-    T_RBRACKET  shift, and go to state 270
-    T_COMMA     shift, and go to state 137
+    T_RBRACKET  shift, and go to state 271
+    T_COMMA     shift, and go to state 138
 
 
-State 245
+State 246
 
    77 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 T_SEMI_COLON .
 
     $default  reduce using rule 77 (DO_WHILE_STATEMENT)
 
 
-State 246
+State 247
 
   143 EXPR13: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_INC
   144       | T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_DEC
   151 EXPR14: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET .
 
-    T_INC  shift, and go to state 254
-    T_DEC  shift, and go to state 255
+    T_INC  shift, and go to state 255
+    T_DEC  shift, and go to state 256
 
     T_INC     [reduce using rule 151 (EXPR14)]
     T_DEC     [reduce using rule 151 (EXPR14)]
     $default  reduce using rule 151 (EXPR14)
 
 
-State 247
+State 248
 
   145 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_INC
   146       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_DEC
   152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET
 
-    T_RSBRACKET  shift, and go to state 271
+    T_RSBRACKET  shift, and go to state 272
 
 
-State 248
+State 249
 
   133 EXPR12: T_INC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET .
 
     $default  reduce using rule 133 (EXPR12)
 
 
-State 249
+State 250
 
   135 EXPR12: T_INC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET
 
-    T_RSBRACKET  shift, and go to state 272
+    T_RSBRACKET  shift, and go to state 273
 
 
-State 250
+State 251
 
   134 EXPR12: T_DEC T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET .
 
     $default  reduce using rule 134 (EXPR12)
 
 
-State 251
+State 252
 
   136 EXPR12: T_DEC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET
 
-    T_RSBRACKET  shift, and go to state 273
+    T_RSBRACKET  shift, and go to state 274
 
 
-State 252
+State 253
 
    14 PARAMETER_LIST_NO_TYPE: PARAMETER_LIST_NO_TYPE T_COMMA EXPR15 .
 
     $default  reduce using rule 14 (PARAMETER_LIST_NO_TYPE)
 
 
-State 253
+State 254
 
    87 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL . EXPR15
 
@@ -4279,9 +4322,9 @@ State 253
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 274
-    EXPR    go to state 83
+    EXPR15  go to state 275
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4297,21 +4340,21 @@ State 253
     EXPR14  go to state 96
 
 
-State 254
+State 255
 
   143 EXPR13: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_INC .
 
     $default  reduce using rule 143 (EXPR13)
 
 
-State 255
+State 256
 
   144 EXPR13: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DEC .
 
     $default  reduce using rule 144 (EXPR13)
 
 
-State 256
+State 257
 
    88 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_ADDASSIGN . EXPR15
 
@@ -4323,39 +4366,9 @@ State 256
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
-
-    EXPR15  go to state 275
-    EXPR    go to state 83
-    EXPR2   go to state 84
-    EXPR3   go to state 85
-    EXPR4   go to state 86
-    EXPR5   go to state 87
-    EXPR6   go to state 88
-    EXPR7   go to state 89
-    EXPR8   go to state 90
-    EXPR9   go to state 91
-    EXPR10  go to state 92
-    EXPR11  go to state 93
-    EXPR12  go to state 94
-    EXPR13  go to state 95
-    EXPR14  go to state 96
-
-
-State 257
-
-   89 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_SUBASSIGN . EXPR15
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 276
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4373,7 +4386,7 @@ State 257
 
 State 258
 
-   90 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MULASSIGN . EXPR15
+   89 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_SUBASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4383,9 +4396,9 @@ State 258
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 277
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4403,7 +4416,7 @@ State 258
 
 State 259
 
-   91 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DIVASSIGN . EXPR15
+   90 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MULASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4413,9 +4426,9 @@ State 259
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 278
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4433,7 +4446,7 @@ State 259
 
 State 260
 
-   92 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MODASSIGN . EXPR15
+   91 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DIVASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4443,9 +4456,9 @@ State 260
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 279
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4463,6 +4476,36 @@ State 260
 
 State 261
 
+   92 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MODASSIGN . EXPR15
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    EXPR15  go to state 280
+    EXPR2   go to state 84
+    EXPR3   go to state 85
+    EXPR4   go to state 86
+    EXPR5   go to state 87
+    EXPR6   go to state 88
+    EXPR7   go to state 89
+    EXPR8   go to state 90
+    EXPR9   go to state 91
+    EXPR10  go to state 92
+    EXPR11  go to state 93
+    EXPR12  go to state 94
+    EXPR13  go to state 95
+    EXPR14  go to state 96
+
+
+State 262
+
    93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_EQUAL EXPR15
    94       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_ADDASSIGN EXPR15
    95       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_SUBASSIGN EXPR15
@@ -4473,67 +4516,67 @@ State 261
   146       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_DEC
   152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
 
-    T_EQUAL      shift, and go to state 280
-    T_INC        shift, and go to state 281
-    T_DEC        shift, and go to state 282
-    T_ADDASSIGN  shift, and go to state 283
-    T_SUBASSIGN  shift, and go to state 284
-    T_MULASSIGN  shift, and go to state 285
-    T_DIVASSIGN  shift, and go to state 286
-    T_MODASSIGN  shift, and go to state 287
+    T_EQUAL      shift, and go to state 281
+    T_INC        shift, and go to state 282
+    T_DEC        shift, and go to state 283
+    T_ADDASSIGN  shift, and go to state 284
+    T_SUBASSIGN  shift, and go to state 285
+    T_MULASSIGN  shift, and go to state 286
+    T_DIVASSIGN  shift, and go to state 287
+    T_MODASSIGN  shift, and go to state 288
 
     T_INC     [reduce using rule 152 (EXPR14)]
     T_DEC     [reduce using rule 152 (EXPR14)]
     $default  reduce using rule 152 (EXPR14)
 
 
-State 262
+State 263
 
    47 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET .
    49              | TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET . T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    T_EQUAL  shift, and go to state 288
+    T_EQUAL  shift, and go to state 289
 
     $default  reduce using rule 47 (DEC_STATEMENT)
 
 
-State 263
+State 264
 
    48 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET
    50              | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT . T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
 
-    T_RSBRACKET  shift, and go to state 289
-
-
-State 264
-
-   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 290
+    T_RSBRACKET  shift, and go to state 290
 
 
 State 265
+
+   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
+
+    T_LCBRACKET  shift, and go to state 291
+
+
+State 266
 
    59 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON .
 
     $default  reduce using rule 59 (GLOBAL_ARRAY_DECLARATION)
 
 
-State 266
+State 267
 
    61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET . T_SEMI_COLON
 
-    T_SEMI_COLON  shift, and go to state 291
+    T_SEMI_COLON  shift, and go to state 292
 
 
-State 267
+State 268
 
    42 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT .
 
     $default  reduce using rule 42 (FOR_STATEMENT)
 
 
-State 268
+State 269
 
    40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET . STATEMENT
 
@@ -4564,20 +4607,20 @@ State 268
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 292
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 293
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -4593,14 +4636,14 @@ State 268
     EXPR14              go to state 96
 
 
-State 269
+State 270
 
    41 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT .
 
     $default  reduce using rule 41 (FOR_STATEMENT)
 
 
-State 270
+State 271
 
    39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET . STATEMENT
 
@@ -4631,20 +4674,20 @@ State 270
     T_SEMI_COLON  shift, and go to state 67
     T_CONTINUE    shift, and go to state 68
     T_BREAK       shift, and go to state 69
+    T_NOT         shift, and go to state 70
 
-    TYPE_NAME           go to state 70
-    STATEMENT           go to state 293
-    EXPR_STATEMENT      go to state 73
-    FOR_STATEMENT       go to state 74
-    NEW_SCOPE           go to state 75
-    RETURN_STATEMENT    go to state 76
-    DEC_STATEMENT       go to state 77
-    IF_OR_ELSE          go to state 78
-    WHILE_STATEMENT     go to state 79
-    DO_WHILE_STATEMENT  go to state 80
-    EXPR16              go to state 81
-    EXPR15              go to state 82
-    EXPR                go to state 83
+    TYPE_NAME           go to state 71
+    STATEMENT           go to state 294
+    EXPR_STATEMENT      go to state 74
+    FOR_STATEMENT       go to state 75
+    NEW_SCOPE           go to state 76
+    RETURN_STATEMENT    go to state 77
+    DEC_STATEMENT       go to state 78
+    IF_OR_ELSE          go to state 79
+    WHILE_STATEMENT     go to state 80
+    DO_WHILE_STATEMENT  go to state 81
+    EXPR16              go to state 82
+    EXPR15              go to state 83
     EXPR2               go to state 84
     EXPR3               go to state 85
     EXPR4               go to state 86
@@ -4660,77 +4703,77 @@ State 270
     EXPR14              go to state 96
 
 
-State 271
+State 272
 
   145 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_INC
   146       | T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_DEC
   152 EXPR14: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
 
-    T_INC  shift, and go to state 281
-    T_DEC  shift, and go to state 282
+    T_INC  shift, and go to state 282
+    T_DEC  shift, and go to state 283
 
     T_INC     [reduce using rule 152 (EXPR14)]
     T_DEC     [reduce using rule 152 (EXPR14)]
     $default  reduce using rule 152 (EXPR14)
 
 
-State 272
+State 273
 
   135 EXPR12: T_INC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
 
     $default  reduce using rule 135 (EXPR12)
 
 
-State 273
+State 274
 
   136 EXPR12: T_DEC T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
 
     $default  reduce using rule 136 (EXPR12)
 
 
-State 274
+State 275
 
    87 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL EXPR15 .
 
     $default  reduce using rule 87 (EXPR15)
 
 
-State 275
+State 276
 
    88 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 .
 
     $default  reduce using rule 88 (EXPR15)
 
 
-State 276
+State 277
 
    89 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 .
 
     $default  reduce using rule 89 (EXPR15)
 
 
-State 277
+State 278
 
    90 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MULASSIGN EXPR15 .
 
     $default  reduce using rule 90 (EXPR15)
 
 
-State 278
+State 279
 
    91 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15 .
 
     $default  reduce using rule 91 (EXPR15)
 
 
-State 279
+State 280
 
    92 EXPR15: T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15 .
 
     $default  reduce using rule 92 (EXPR15)
 
 
-State 280
+State 281
 
    93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL . EXPR15
 
@@ -4742,9 +4785,9 @@ State 280
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    EXPR15  go to state 294
-    EXPR    go to state 83
+    EXPR15  go to state 295
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4760,21 +4803,21 @@ State 280
     EXPR14  go to state 96
 
 
-State 281
+State 282
 
   145 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_INC .
 
     $default  reduce using rule 145 (EXPR13)
 
 
-State 282
+State 283
 
   146 EXPR13: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DEC .
 
     $default  reduce using rule 146 (EXPR13)
 
 
-State 283
+State 284
 
    94 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_ADDASSIGN . EXPR15
 
@@ -4786,39 +4829,9 @@ State 283
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
-
-    EXPR15  go to state 295
-    EXPR    go to state 83
-    EXPR2   go to state 84
-    EXPR3   go to state 85
-    EXPR4   go to state 86
-    EXPR5   go to state 87
-    EXPR6   go to state 88
-    EXPR7   go to state 89
-    EXPR8   go to state 90
-    EXPR9   go to state 91
-    EXPR10  go to state 92
-    EXPR11  go to state 93
-    EXPR12  go to state 94
-    EXPR13  go to state 95
-    EXPR14  go to state 96
-
-
-State 284
-
-   95 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SUBASSIGN . EXPR15
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 296
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4836,7 +4849,7 @@ State 284
 
 State 285
 
-   96 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MULASSIGN . EXPR15
+   95 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SUBASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4846,9 +4859,9 @@ State 285
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 297
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4866,7 +4879,7 @@ State 285
 
 State 286
 
-   97 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN . EXPR15
+   96 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MULASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4876,9 +4889,9 @@ State 286
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 298
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4896,7 +4909,7 @@ State 286
 
 State 287
 
-   98 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN . EXPR15
+   97 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4906,9 +4919,9 @@ State 287
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
     EXPR15  go to state 299
-    EXPR    go to state 83
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -4926,24 +4939,7 @@ State 287
 
 State 288
 
-   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 300
-
-
-State 289
-
-   48 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
-   50              | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
-
-    T_EQUAL  shift, and go to state 301
-
-    $default  reduce using rule 48 (DEC_STATEMENT)
-
-
-State 290
-
-   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
+   98 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN . EXPR15
 
     I_FLOAT     shift, and go to state 53
     T_PLUS      shift, and go to state 59
@@ -4953,212 +4949,9 @@ State 290
     T_DEC       shift, and go to state 63
     T_LBRACKET  shift, and go to state 64
     T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
 
-    VAL_LIST  go to state 302
-    EXPR16    go to state 303
-    EXPR15    go to state 82
-    EXPR      go to state 83
-    EXPR2     go to state 84
-    EXPR3     go to state 85
-    EXPR4     go to state 86
-    EXPR5     go to state 87
-    EXPR6     go to state 88
-    EXPR7     go to state 89
-    EXPR8     go to state 90
-    EXPR9     go to state 91
-    EXPR10    go to state 92
-    EXPR11    go to state 93
-    EXPR12    go to state 94
-    EXPR13    go to state 95
-    EXPR14    go to state 96
-
-
-State 291
-
-   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON .
-
-    $default  reduce using rule 61 (GLOBAL_ARRAY_DECLARATION)
-
-
-State 292
-
-   40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT .
-
-    $default  reduce using rule 40 (FOR_STATEMENT)
-
-
-State 293
-
-   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT .
-
-    $default  reduce using rule 39 (FOR_STATEMENT)
-
-
-State 294
-
-   93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL EXPR15 .
-
-    $default  reduce using rule 93 (EXPR15)
-
-
-State 295
-
-   94 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 .
-
-    $default  reduce using rule 94 (EXPR15)
-
-
-State 296
-
-   95 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 .
-
-    $default  reduce using rule 95 (EXPR15)
-
-
-State 297
-
-   96 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MULASSIGN EXPR15 .
-
-    $default  reduce using rule 96 (EXPR15)
-
-
-State 298
-
-   97 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15 .
-
-    $default  reduce using rule 97 (EXPR15)
-
-
-State 299
-
-   98 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15 .
-
-    $default  reduce using rule 98 (EXPR15)
-
-
-State 300
-
-   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 66
-
-    VAL_LIST  go to state 304
-    EXPR16    go to state 303
-    EXPR15    go to state 82
-    EXPR      go to state 83
-    EXPR2     go to state 84
-    EXPR3     go to state 85
-    EXPR4     go to state 86
-    EXPR5     go to state 87
-    EXPR6     go to state 88
-    EXPR7     go to state 89
-    EXPR8     go to state 90
-    EXPR9     go to state 91
-    EXPR10    go to state 92
-    EXPR11    go to state 93
-    EXPR12    go to state 94
-    EXPR13    go to state 95
-    EXPR14    go to state 96
-
-
-State 301
-
-   50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
-
-    T_LCBRACKET  shift, and go to state 305
-
-
-State 302
-
-   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST . T_RCBRACKET
-   53 VAL_LIST: VAL_LIST . T_COMMA EXPR16
-
-    T_RCBRACKET  shift, and go to state 306
-    T_COMMA      shift, and go to state 307
-
-
-State 303
-
-   52 VAL_LIST: EXPR16 .
-   79 EXPR16: EXPR16 . T_COMMA EXPR15
-
-    T_COMMA  shift, and go to state 137
-
-    T_COMMA   [reduce using rule 52 (VAL_LIST)]
-    $default  reduce using rule 52 (VAL_LIST)
-
-
-State 304
-
-   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST . T_RCBRACKET
-   53 VAL_LIST: VAL_LIST . T_COMMA EXPR16
-
-    T_RCBRACKET  shift, and go to state 308
-    T_COMMA      shift, and go to state 307
-
-
-State 305
-
-   50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 66
-
-    VAL_LIST  go to state 309
-    EXPR16    go to state 303
-    EXPR15    go to state 82
-    EXPR      go to state 83
-    EXPR2     go to state 84
-    EXPR3     go to state 85
-    EXPR4     go to state 86
-    EXPR5     go to state 87
-    EXPR6     go to state 88
-    EXPR7     go to state 89
-    EXPR8     go to state 90
-    EXPR9     go to state 91
-    EXPR10    go to state 92
-    EXPR11    go to state 93
-    EXPR12    go to state 94
-    EXPR13    go to state 95
-    EXPR14    go to state 96
-
-
-State 306
-
-   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET .
-
-    $default  reduce using rule 51 (DEC_STATEMENT)
-
-
-State 307
-
-   53 VAL_LIST: VAL_LIST T_COMMA . EXPR16
-
-    I_FLOAT     shift, and go to state 53
-    T_PLUS      shift, and go to state 59
-    T_MINUS     shift, and go to state 60
-    T_LEXCLAIM  shift, and go to state 61
-    T_INC       shift, and go to state 62
-    T_DEC       shift, and go to state 63
-    T_LBRACKET  shift, and go to state 64
-    T_VARIABLE  shift, and go to state 66
-
-    EXPR16  go to state 310
-    EXPR15  go to state 82
-    EXPR    go to state 83
+    EXPR15  go to state 300
     EXPR2   go to state 84
     EXPR3   go to state 85
     EXPR4   go to state 86
@@ -5174,34 +4967,284 @@ State 307
     EXPR14  go to state 96
 
 
+State 289
+
+   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
+
+    T_LCBRACKET  shift, and go to state 301
+
+
+State 290
+
+   48 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET .
+   50              | TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET . T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET
+
+    T_EQUAL  shift, and go to state 302
+
+    $default  reduce using rule 48 (DEC_STATEMENT)
+
+
+State 291
+
+   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    VAL_LIST  go to state 303
+    EXPR16    go to state 304
+    EXPR15    go to state 83
+    EXPR2     go to state 84
+    EXPR3     go to state 85
+    EXPR4     go to state 86
+    EXPR5     go to state 87
+    EXPR6     go to state 88
+    EXPR7     go to state 89
+    EXPR8     go to state 90
+    EXPR9     go to state 91
+    EXPR10    go to state 92
+    EXPR11    go to state 93
+    EXPR12    go to state 94
+    EXPR13    go to state 95
+    EXPR14    go to state 96
+
+
+State 292
+
+   61 GLOBAL_ARRAY_DECLARATION: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET GLOBAL_VAL_LIST T_RCBRACKET T_SEMI_COLON .
+
+    $default  reduce using rule 61 (GLOBAL_ARRAY_DECLARATION)
+
+
+State 293
+
+   40 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT .
+
+    $default  reduce using rule 40 (FOR_STATEMENT)
+
+
+State 294
+
+   39 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR16 T_RBRACKET STATEMENT .
+
+    $default  reduce using rule 39 (FOR_STATEMENT)
+
+
+State 295
+
+   93 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL EXPR15 .
+
+    $default  reduce using rule 93 (EXPR15)
+
+
+State 296
+
+   94 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 .
+
+    $default  reduce using rule 94 (EXPR15)
+
+
+State 297
+
+   95 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 .
+
+    $default  reduce using rule 95 (EXPR15)
+
+
+State 298
+
+   96 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MULASSIGN EXPR15 .
+
+    $default  reduce using rule 96 (EXPR15)
+
+
+State 299
+
+   97 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_DIVASSIGN EXPR15 .
+
+    $default  reduce using rule 97 (EXPR15)
+
+
+State 300
+
+   98 EXPR15: T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_MODASSIGN EXPR15 .
+
+    $default  reduce using rule 98 (EXPR15)
+
+
+State 301
+
+   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    VAL_LIST  go to state 305
+    EXPR16    go to state 304
+    EXPR15    go to state 83
+    EXPR2     go to state 84
+    EXPR3     go to state 85
+    EXPR4     go to state 86
+    EXPR5     go to state 87
+    EXPR6     go to state 88
+    EXPR7     go to state 89
+    EXPR8     go to state 90
+    EXPR9     go to state 91
+    EXPR10    go to state 92
+    EXPR11    go to state 93
+    EXPR12    go to state 94
+    EXPR13    go to state 95
+    EXPR14    go to state 96
+
+
+State 302
+
+   50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL . T_LCBRACKET VAL_LIST T_RCBRACKET
+
+    T_LCBRACKET  shift, and go to state 306
+
+
+State 303
+
+   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST . T_RCBRACKET
+   53 VAL_LIST: VAL_LIST . T_COMMA EXPR16
+
+    T_RCBRACKET  shift, and go to state 307
+    T_COMMA      shift, and go to state 308
+
+
+State 304
+
+   52 VAL_LIST: EXPR16 .
+   79 EXPR16: EXPR16 . T_COMMA EXPR15
+
+    T_COMMA  shift, and go to state 138
+
+    T_COMMA   [reduce using rule 52 (VAL_LIST)]
+    $default  reduce using rule 52 (VAL_LIST)
+
+
+State 305
+
+   49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST . T_RCBRACKET
+   53 VAL_LIST: VAL_LIST . T_COMMA EXPR16
+
+    T_RCBRACKET  shift, and go to state 309
+    T_COMMA      shift, and go to state 308
+
+
+State 306
+
+   50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET . VAL_LIST T_RCBRACKET
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    VAL_LIST  go to state 310
+    EXPR16    go to state 304
+    EXPR15    go to state 83
+    EXPR2     go to state 84
+    EXPR3     go to state 85
+    EXPR4     go to state 86
+    EXPR5     go to state 87
+    EXPR6     go to state 88
+    EXPR7     go to state 89
+    EXPR8     go to state 90
+    EXPR9     go to state 91
+    EXPR10    go to state 92
+    EXPR11    go to state 93
+    EXPR12    go to state 94
+    EXPR13    go to state 95
+    EXPR14    go to state 96
+
+
+State 307
+
+   51 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET .
+
+    $default  reduce using rule 51 (DEC_STATEMENT)
+
+
 State 308
+
+   53 VAL_LIST: VAL_LIST T_COMMA . EXPR16
+
+    I_FLOAT     shift, and go to state 53
+    T_PLUS      shift, and go to state 59
+    T_MINUS     shift, and go to state 60
+    T_LEXCLAIM  shift, and go to state 61
+    T_INC       shift, and go to state 62
+    T_DEC       shift, and go to state 63
+    T_LBRACKET  shift, and go to state 64
+    T_VARIABLE  shift, and go to state 66
+    T_NOT       shift, and go to state 70
+
+    EXPR16  go to state 311
+    EXPR15  go to state 83
+    EXPR2   go to state 84
+    EXPR3   go to state 85
+    EXPR4   go to state 86
+    EXPR5   go to state 87
+    EXPR6   go to state 88
+    EXPR7   go to state 89
+    EXPR8   go to state 90
+    EXPR9   go to state 91
+    EXPR10  go to state 92
+    EXPR11  go to state 93
+    EXPR12  go to state 94
+    EXPR13  go to state 95
+    EXPR14  go to state 96
+
+
+State 309
 
    49 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET .
 
     $default  reduce using rule 49 (DEC_STATEMENT)
 
 
-State 309
+State 310
 
    50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST . T_RCBRACKET
    53 VAL_LIST: VAL_LIST . T_COMMA EXPR16
 
-    T_RCBRACKET  shift, and go to state 311
-    T_COMMA      shift, and go to state 307
+    T_RCBRACKET  shift, and go to state 312
+    T_COMMA      shift, and go to state 308
 
 
-State 310
+State 311
 
    53 VAL_LIST: VAL_LIST T_COMMA EXPR16 .
    79 EXPR16: EXPR16 . T_COMMA EXPR15
 
-    T_COMMA  shift, and go to state 137
+    T_COMMA  shift, and go to state 138
 
     T_COMMA   [reduce using rule 53 (VAL_LIST)]
     $default  reduce using rule 53 (VAL_LIST)
 
 
-State 311
+State 312
 
    50 DEC_STATEMENT: TYPE_NAME T_VARIABLE T_LSBRACKET T_MINUS I_FLOAT T_RSBRACKET T_EQUAL T_LCBRACKET VAL_LIST T_RCBRACKET .
 

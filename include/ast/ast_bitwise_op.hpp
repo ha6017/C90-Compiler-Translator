@@ -159,6 +159,10 @@ public:
     //     delete exp;
     // }
     
+    ~BitNot(){
+        if (exp!=NULL){ delete exp;}
+    }
+
     virtual void printC(std::ostream &outStream) const override{
         outStream<<"~";
         exp->printC(outStream);

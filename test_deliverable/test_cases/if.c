@@ -1,6 +1,10 @@
 int func(){
-    if(1){
-        return 0;
+    int b=1;
+    if(b==1){
+        return 2;
     }
-    return 69;
+    else{
+        return 69;
+    }
+    
 }
