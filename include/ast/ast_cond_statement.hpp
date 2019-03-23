@@ -177,7 +177,6 @@ public:
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
 
 
-        
         Context newContext(myContext);
 
         std::string my_labelA=newContext.makeLabelName();
