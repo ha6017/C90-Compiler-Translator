@@ -493,6 +493,67 @@ public:
 };
 
 
+class GlobalArrayList: public ASTNode
+{
+protected:
+
+    int num;
+    nodePtr next_num;
+
+public:
+
+
+    GlobalArrayList(nodePtr _next_num,int _num)
+        :   num(_num)
+        ,   next_num(_next_num)
+        {}
+
+    ~GlobalArrayList(){
+        if(next_num!=NULL){delete next_num;}
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+            if(next_num!=NULL){
+                next_num->printC(outStream);
+                outStream<<",";
+            }
+            //exp->printC(outStream);
+            outStream<<num;
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+        // if(exp!=NULL){
+        //     if(myArrayList!=NULL){
+        //         myArrayList->printPython(outStream, tab);
+        //         outStream<<",";
+        //     }
+        //     exp->printPython(outStream, tab);
+        // }
+        if(next_num!=NULL){
+                next_num->printPython(outStream, tab);
+                outStream<<",";
+            }
+            //exp->printC(outStream);
+            outStream<<num;
+    }
+
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        // std::string exp_reg = myContext.findTemp();
+        // exp->printMips(exp_reg, myContext, outStream);
+        // outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl;
+        // outStream<<"nop"<<std::endl;
+
+        // myContext.UnlockReg(exp_reg);
+
+        // if(myArrayList!=NULL){
+        //     myArrayList->printMips(dstreg, myContext,outStream);
+        // }
+        
+    }
+};
+
 // class ProgList
 //     : public ASTNode
 // {
