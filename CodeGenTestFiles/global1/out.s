@@ -1,5 +1,8 @@
-ADDI $8, $0, 10
-SW $8, 8192($0)
+.globl a
+.data
+.align 2
+a:
+.word 10
 
 .text
 .align 2
@@ -9,9 +12,11 @@ f:
 SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
-LW $9, 8192($0)
+LUI $20, %hi(a)
+ADDI $20, $20, %lo(a)
+LW $17, 0($20)
 nop
-SW $9, -8 ($fp)
+SW $17, -8 ($fp)
 LW $2, -8($fp)
 nop
 LW $31, -4 ($fp)

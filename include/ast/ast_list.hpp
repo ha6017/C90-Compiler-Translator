@@ -541,17 +541,10 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        // std::string exp_reg = myContext.findTemp();
-        // exp->printMips(exp_reg, myContext, outStream);
-        // outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl;
-        // outStream<<"nop"<<std::endl;
-
-        // myContext.UnlockReg(exp_reg);
-
-        // if(myArrayList!=NULL){
-        //     myArrayList->printMips(dstreg, myContext,outStream);
-        // }
-        
+        outStream<<".word "<<num<<std::endl;      
+        if(next_num!=NULL){
+            next_num->printMips(dstreg, myContext,outStream);
+        }
     }
 };
 
