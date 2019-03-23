@@ -13,29 +13,27 @@ SW $17, -12 ($fp)
 LW $20, -12($fp)
 nop
 ADDI $17, $0, 1
-BEQ $20, $0,L_3
+BEQ $20, $0,L_4
 nop
 ADDI $17, $0, 0
-L_3
+L_4
 BEQ $17, $0, L_2
 nop
-LW $24, -8($fp)
+LW $20, -8($fp)
 nop
-ADDI $20, $0, 1
-BEQ $24, $0,L_6
-nop
-ADDI $20, $0, 0
-L_6
-BEQ $20, $0, L_4
+BEQ $20, $0, L_5
 nop
 ADDI $2, $0, 1
-J L_5
+J L_6
 nop
-L_4:
-ADDI $2, $0, 0
 L_5:
-L_2:
 ADDI $2, $0, 20
+L_6:
+J L_3
+nop
+L_2:
+ADDI $2, $0, 10
+L_3:
 LW $31, -4 ($fp)
 nop
 LW $fp, 0 ($fp)
