@@ -18,6 +18,7 @@ public:
     int indent;
 
     std::vector<std::string> global_var;
+    std::vector<std::string> global_array;
 
     //std::string currentType;
 

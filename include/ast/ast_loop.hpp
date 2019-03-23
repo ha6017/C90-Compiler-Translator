@@ -186,7 +186,6 @@ public:
     }
 
     virtual void printC(std::ostream &outStream) const {
-
         outStream<<"do {";
         branch->printC(outStream);
         outStream<<"}";
