@@ -816,8 +816,12 @@ class UnaryNeg: public ASTNode
         outStream<<")";
     }
 
-    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{}
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+        
+    }
 };
+
+
 
 class UnaryPos: public ASTNode
 {

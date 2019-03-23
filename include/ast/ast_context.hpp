@@ -16,11 +16,11 @@ class Context
 
 public:
     unsigned int currentGlobalPointer;
-    unsigned int currentLocalPointer;
+    int currentLocalPointer;
     int scopeCountPerScope;
 
     std::map<std::string, unsigned int>globals;
-    std::map<std::string, unsigned int>locals;
+    std::map<std::string, int>locals;
     // std::map<std::string, std::string>funcNameToLabel;
     // int funcLabelCounter;
     // unsigned int stackOffset;
@@ -35,7 +35,7 @@ public:
         scope_counter=0;
         // funcLabelCounter=0;
         // stackOffset =0;
-        currentGlobalPointer=0x200000;
+        currentGlobalPointer=0x2000;
         currentLocalPointer=0;
         currentArrayElement=0; //this is for arraylist
         scopeCountPerScope=0;
@@ -114,16 +114,16 @@ public:
         currentGlobalPointer=currentGlobalPointer+4;
         return currentGlobalPointer-4;
     }
-    unsigned int createLocalInt(std::string name){
+    int createLocalInt(std::string name){
         locals[name]=currentLocalPointer;
-        currentLocalPointer=currentLocalPointer+4;
-        return currentLocalPointer-4;
+        currentLocalPointer=currentLocalPointer-4;
+        return currentLocalPointer+4;
     }
    unsigned int findGlobalInt(std::string name){
         return globals[name];
     }
 
-    unsigned int findLocalInt(std::string name){
+    int findLocalInt(std::string name){
         return locals[name];
         
     }
@@ -148,13 +148,13 @@ public:
         currentGlobalPointer=currentGlobalPointer+4*size;
         return currentGlobalPointer-4*size;
     }
-    unsigned int createLocalArray(std::string name, int size){
+    int createLocalArray(std::string name, int size){
         locals[name]=currentLocalPointer;
-        currentLocalPointer=currentLocalPointer+4*size;
-        return currentLocalPointer-4*size;
+        currentLocalPointer=currentLocalPointer-4*size;
+        return currentLocalPointer+4*size;
     }
-    unsigned int findLocalArrayElement(std::string name, int index){
-        return locals[name]+4*index;
+    int findLocalArrayElement(std::string name, int index){
+        return locals[name]-4*index;
     }
     unsigned int findGlobalArrayElement(std::string name, int index){
         return locals[name]+4*index;

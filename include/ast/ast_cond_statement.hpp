@@ -353,15 +353,12 @@ class FunctionStatementInExpr: public ASTNode
         Context newContext(myContext);
         arg->printMips(dstreg, newContext, outStream);
         
-        outStream<<"ADDI "<<"$sp, "<<"$fp, "<<newContext.currentLocalPointer<<std::endl;
-        newContext.enterFunction();
+        outStream<<"ADDI $sp, $fp, "<<newContext.currentLocalPointer<<std::endl;
+        // newContext.enterFunction();
 
-        // newContext.updateStackOffset();
-        // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
-        // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
-        outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
+        // outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
         
-        outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
+        // outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
 
         outStream<<"JAL "<<id<<std::endl;
         outStream<<"nop"<<std::endl;

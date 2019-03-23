@@ -8,9 +8,3 @@ int makeFive(int d){
 	return b;
 }
 
-
-int main(){  
-	int a=17;
-	int output=makeFive(a);
-}
-

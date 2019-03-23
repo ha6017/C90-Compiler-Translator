@@ -109,8 +109,17 @@ public:
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         myContext.enterFunction();
         myContext.createLocalInt(std::to_string(label_counter++));//this makes it such that the fp can be in address 0 with no over lap
+        
+        outStream<<".text"<<std::endl;
+        outStream<<".align 2"<<std::endl;
+        outStream<<".globl "<<id<<std::endl;
+        outStream<<".ent "<<id<<std::endl;
         outStream<<id<<":"<<std::endl;
-        outStream<<"SW "<<"$31"<<", "<<myContext.createLocalInt(std::to_string(label_counter++))<<" ($fp)"<<std::endl;
+
+        outStream<<"SW $fp, 0 ($sp)"<<std::endl;
+        myContext.createLocalInt(std::to_string(label_counter++));
+        outStream<<"SW $31, -4 ($sp)"<<std::endl;
+        outStream<<"ADDI $fp, $sp,  0"<<std::endl;
 
         if(myNameList!=NULL){
             myNameList->printMips(dstreg,myContext,outStream);
@@ -121,15 +130,19 @@ public:
             myContext.UnlockReg(new_dest_reg);
 
         }
-        outStream<<"LW "<<"$31"<<", "<<"4"<<" ($fp)"<<std::endl;
+        outStream<<"LW "<<"$31"<<", "<<"-4"<<" ($fp)"<<std::endl;
         outStream<<"nop"<<std::endl;
-
+        
         outStream<<"LW "<<"$fp"<<", "<<"0"<<" ($fp)"<<std::endl;
         outStream<<"nop"<<std::endl;
+        outStream<<"ADDI $sp, $fp,  0"<<std::endl;
+
         if(id!="main"){ 
             outStream<<"JR $31"<<std::endl;
             outStream<<"nop"<<std::endl;
         }
+        outStream<<".end "<<id<<std::endl;
+
     }
 };
 
@@ -216,18 +229,18 @@ public:
         myParamList->printMips(dstreg, newContext, outStream);
         
         outStream<<"ADDI "<<"$sp, "<<"$fp, "<<newContext.currentLocalPointer<<std::endl;
-        newContext.enterFunction();
+        // newContext.enterFunction();
 
         // newContext.updateStackOffset();
         // outStream<<"SW "<<"$fp"<<", "<<"$fp"<<myContext.createLocalInt(id)<<std::endl;
         // outStream<<"SW "<<"$fp, "<<"$sp, "<<"$0"<<std::endl;
-        outStream<<"SW "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
+        // outStream<<"SW= "<<"$fp"<<", "<<"0"<<" ($sp)"<<std::endl;
         // outStream<<"SW "<<"$31"<<", "<<"4"<<" ($sp)"<<std::endl;
-        outStream<<"ADDI "<<"$fp, "<<"$sp, "<<" 0"<<std::endl;
 
         outStream<<"JAL "<<id<<std::endl;
         outStream<<"nop"<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", $2, "<<"sp"<<std::endl;
+        // outStream<<"ADDU "<<dstreg<<", $2, "<<"0"<<std::endl;
+
     }
 };
 

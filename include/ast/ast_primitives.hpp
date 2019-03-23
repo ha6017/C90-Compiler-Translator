@@ -63,7 +63,7 @@ public:
 
      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
 
-        outStream<<"ADDI "<<dstreg<<", "<<"$0"<<", "<< value<<std::endl;
+        outStream<<"ADDI "<<dstreg<<", $0, "<< value<<std::endl;
 
     }
 
