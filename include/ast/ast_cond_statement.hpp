@@ -175,8 +175,6 @@ public:
 
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
-
         Context newContext(myContext);
 
         std::string my_labelA=newContext.makeLabelName();
@@ -236,6 +234,8 @@ class ReturnStatement:
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
         expr->printMips("$2", myContext, outStream);
+        outStream<<"JR $31"<<std::endl;
+        outStream<<"nop"<<std::endl;
     }
 };
 

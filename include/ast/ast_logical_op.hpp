@@ -73,9 +73,9 @@ public:
         outStream<<"J "<<my_labelB<<std::endl;
         outStream<<"nop"<<std::endl;
 
-        outStream<<my_labelA<<std::endl;
+        outStream<<my_labelA<<":"<<std::endl;
         outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
-        outStream<<my_labelB<<std::endl;
+        outStream<<my_labelB<<":"<<std::endl;
 
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
@@ -125,9 +125,9 @@ public:
         outStream<<"J "<<my_labelB<<std::endl;
         outStream<<"nop"<<std::endl;
 
-        outStream<<my_labelA<<std::endl;
+        outStream<<my_labelA<<":"<<std::endl;
         outStream<<"ADDI "<<dstreg<<", $0"<<", 1"<<std::endl;
-        outStream<<my_labelB<<std::endl;
+        outStream<<my_labelB<<":"<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
     }
@@ -164,7 +164,7 @@ public:
         outStream<<"BEQ "<<exp_reg<<", $0,"<<my_label<<std::endl;
         outStream<<"nop"<<std::endl;
         outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
-        outStream<<my_label<<std::endl;
+        outStream<<my_label<<":"<<std::endl;
         myContext.UnlockReg(exp_reg);
     }
 };
