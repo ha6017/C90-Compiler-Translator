@@ -146,7 +146,7 @@ public:
     }
 
 
-    unsigned int createGlobal(std::string name){
+    void createGlobal(std::string name){
         globals.push_back(name);
     }
     int createLocalArray(std::string name, int size){
@@ -155,7 +155,7 @@ public:
         return currentLocalPointer+4*size;
     }
     int findLocalArrayElement(std::string name, int index){
-        return locals[name]-4*index;
+        return (locals[name]-4*index);
     }
     // unsigned int findGlobalArrayElement(std::string name, int index){
     //     return locals[name]+4*index;

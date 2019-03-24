@@ -179,7 +179,7 @@ public:
         }else{
             throw "Variable has not yet been declared";
         }
-        outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+        outStream<<"ADDIU "<<var_reg<<", "<<var_reg<< ", -1"<<std::endl;
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
 
         if(myContext.localIntExists(var)){
@@ -324,7 +324,7 @@ public:
             throw "Variable has not yet been declared";
         }
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
-        outStream<<"SUBI "<<var_reg<<", "<<var_reg<< ", 1"<<std::endl;
+        outStream<<"ADDIU "<<var_reg<<", "<<var_reg<< ", -1"<<std::endl;
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
                 outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;

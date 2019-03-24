@@ -481,9 +481,9 @@ public:
         
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
-        outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl;
-        outStream<<"nop"<<std::endl;
 
+        outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($0)"<<std::endl;
+        myContext.currentArrayElement++;
         myContext.UnlockReg(exp_reg);
 
         if(myArrayList!=NULL){
