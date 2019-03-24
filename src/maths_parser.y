@@ -140,7 +140,7 @@ DEC_STATEMENT: 	TYPE_NAME DEC_VAR_LIST T_SEMI_COLON      { $$ = new DeclareState
 				;
 
 VAL_LIST:	EXPR16	{$$= new ArrayList($1, NULL);}
-		|	VAL_LIST T_COMMA EXPR16	{$$ = new ArrayList($1, $3); }
+		|	VAL_LIST T_COMMA EXPR16	{$$ = new ArrayList($3, $1); }
 		;
 
 DEC_VAR_LIST: 	VARIABLE_DECLARATION                     { $$ = new Dec_Var_List($1, NULL); }
@@ -182,7 +182,7 @@ WHILE_STATEMENT: T_WHILE EXPR16 STATEMENT                              { $$ = ne
 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 T_SEMI_COLON                { $$ = new DoWhile($4,$2); }
 
 EXPR16: 	EXPR15 {$$=$1;}
- 		//|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
+//|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
 
 EXPR15: 		EXPR2 {$$ = $1;}
 			|	T_VARIABLE T_EQUAL EXPR15 	  { $$ =  new AssignEqual(*$1, $3, -1);}

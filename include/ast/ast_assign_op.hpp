@@ -377,8 +377,7 @@ public:
         exp->printMips(exp_reg, myContext, outStream);
         if(!myContext.localIntExists(var) && !myContext.globalIntExists(var)){
             throw "Variable has not yet been declared";
-        }  
-
+        }
         outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< exp_reg<<std::endl;
         // if(myContext.localIntExists(var)){
         //     if(ArrayIndex==-1){

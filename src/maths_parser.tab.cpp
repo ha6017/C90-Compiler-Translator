@@ -534,14 +534,14 @@ static const yytype_uint16 yyrline[] =
      137,   138,   139,   142,   143,   146,   147,   150,   151,   154,
      155,   156,   157,   158,   161,   162,   164,   167,   168,   170,
      171,   172,   173,   174,   176,   177,   178,   180,   182,   184,
-     187,   188,   189,   190,   191,   192,   193,   199,   200,   201,
-     202,   203,   204,   205,   206,   207,   208,   209,   210,   215,
-     216,   218,   219,   221,   222,   224,   225,   227,   228,   230,
-     231,   232,   234,   235,   236,   237,   238,   240,   241,   242,
-     244,   245,   246,   248,   249,   250,   251,   253,   254,   255,
-     256,   257,   258,   259,   260,   261,   262,   263,   265,   266,
-     267,   268,   269,   270,   271,   272,   273,   274,   276,   277,
-     278,   279,   280
+     187,   188,   189,   190,   191,   192,   193,   194,   195,   196,
+     197,   198,   199,   200,   201,   202,   203,   204,   205,   210,
+     211,   213,   214,   216,   217,   219,   220,   222,   223,   225,
+     226,   227,   229,   230,   231,   232,   233,   235,   236,   237,
+     239,   240,   241,   243,   244,   245,   246,   248,   249,   250,
+     251,   252,   253,   254,   255,   256,   257,   258,   260,   261,
+     262,   263,   264,   265,   266,   267,   268,   269,   271,   272,
+     273,   274,   275
 };
 #endif
 
@@ -1874,7 +1874,7 @@ yyreduce:
 
   case 54:
 #line 143 "src/maths_parser.y" /* yacc.c:1646  */
-    {(yyval.expr) = new ArrayList((yyvsp[-2].expr), (yyvsp[0].expr)); }
+    {(yyval.expr) = new ArrayList((yyvsp[0].expr), (yyvsp[-2].expr)); }
 #line 1879 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -2071,397 +2071,397 @@ yyreduce:
     break;
 
   case 87:
-#line 199 "src/maths_parser.y" /* yacc.c:1646  */
+#line 194 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new AssignEqual(*(yyvsp[-5].string),(yyvsp[0].expr), (yyvsp[-3].number)); }
 #line 2077 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 200 "src/maths_parser.y" /* yacc.c:1646  */
+#line 195 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new PlusEqual(*(yyvsp[-5].string), (yyvsp[0].expr), (yyvsp[-3].number));}
 #line 2083 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 201 "src/maths_parser.y" /* yacc.c:1646  */
+#line 196 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new SubEqual(*(yyvsp[-5].string), (yyvsp[0].expr), (yyvsp[-3].number)); }
 #line 2089 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 202 "src/maths_parser.y" /* yacc.c:1646  */
+#line 197 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new MultEqual(*(yyvsp[-5].string), (yyvsp[0].expr), (yyvsp[-3].number)); }
 #line 2095 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 203 "src/maths_parser.y" /* yacc.c:1646  */
+#line 198 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new DivEqual(*(yyvsp[-5].string), (yyvsp[0].expr), (yyvsp[-3].number)); }
 #line 2101 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 204 "src/maths_parser.y" /* yacc.c:1646  */
+#line 199 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new RemEqual(*(yyvsp[-5].string), (yyvsp[0].expr), (yyvsp[-3].number)); }
 #line 2107 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 205 "src/maths_parser.y" /* yacc.c:1646  */
+#line 200 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new AssignEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number)); }
 #line 2113 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 206 "src/maths_parser.y" /* yacc.c:1646  */
+#line 201 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new PlusEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number));}
 #line 2119 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 207 "src/maths_parser.y" /* yacc.c:1646  */
+#line 202 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new SubEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number)); }
 #line 2125 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 208 "src/maths_parser.y" /* yacc.c:1646  */
+#line 203 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new MultEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number)); }
 #line 2131 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 209 "src/maths_parser.y" /* yacc.c:1646  */
+#line 204 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new DivEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number)); }
 #line 2137 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 210 "src/maths_parser.y" /* yacc.c:1646  */
+#line 205 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) =  new RemEqual(*(yyvsp[-6].string), (yyvsp[0].expr), -(yyvsp[-3].number)); }
 #line 2143 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 215 "src/maths_parser.y" /* yacc.c:1646  */
+#line 210 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new LogOr((yyvsp[-2].expr), (yyvsp[0].expr));  }
 #line 2149 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 216 "src/maths_parser.y" /* yacc.c:1646  */
+#line 211 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2155 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 218 "src/maths_parser.y" /* yacc.c:1646  */
+#line 213 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new LogAnd((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2161 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 219 "src/maths_parser.y" /* yacc.c:1646  */
+#line 214 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2167 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 221 "src/maths_parser.y" /* yacc.c:1646  */
+#line 216 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new BitOr((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2173 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 222 "src/maths_parser.y" /* yacc.c:1646  */
+#line 217 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2179 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 224 "src/maths_parser.y" /* yacc.c:1646  */
+#line 219 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new BitXor((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2185 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 225 "src/maths_parser.y" /* yacc.c:1646  */
+#line 220 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2191 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 227 "src/maths_parser.y" /* yacc.c:1646  */
+#line 222 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new BitAnd((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2197 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 228 "src/maths_parser.y" /* yacc.c:1646  */
+#line 223 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2203 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 230 "src/maths_parser.y" /* yacc.c:1646  */
+#line 225 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new CondEqual((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2209 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 231 "src/maths_parser.y" /* yacc.c:1646  */
+#line 226 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new NotEqual((yyvsp[-2].expr), (yyvsp[0].expr));}
 #line 2215 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 232 "src/maths_parser.y" /* yacc.c:1646  */
+#line 227 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2221 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 234 "src/maths_parser.y" /* yacc.c:1646  */
+#line 229 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new LessOrEqual((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2227 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 235 "src/maths_parser.y" /* yacc.c:1646  */
+#line 230 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new GreaterOrEqual ((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2233 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 236 "src/maths_parser.y" /* yacc.c:1646  */
+#line 231 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Less((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2239 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 237 "src/maths_parser.y" /* yacc.c:1646  */
+#line 232 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Greater ((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2245 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 238 "src/maths_parser.y" /* yacc.c:1646  */
+#line 233 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2251 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 240 "src/maths_parser.y" /* yacc.c:1646  */
+#line 235 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new LShift((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2257 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 241 "src/maths_parser.y" /* yacc.c:1646  */
+#line 236 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new RShift((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2263 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 242 "src/maths_parser.y" /* yacc.c:1646  */
+#line 237 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2269 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 244 "src/maths_parser.y" /* yacc.c:1646  */
+#line 239 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Add((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2275 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 245 "src/maths_parser.y" /* yacc.c:1646  */
+#line 240 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Sub((yyvsp[-2].expr),(yyvsp[0].expr)); }
 #line 2281 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 246 "src/maths_parser.y" /* yacc.c:1646  */
+#line 241 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2287 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 248 "src/maths_parser.y" /* yacc.c:1646  */
+#line 243 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Div((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2293 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 249 "src/maths_parser.y" /* yacc.c:1646  */
+#line 244 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Mult((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2299 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 125:
-#line 250 "src/maths_parser.y" /* yacc.c:1646  */
+#line 245 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Mod((yyvsp[-2].expr),(yyvsp[0].expr));}
 #line 2305 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 126:
-#line 251 "src/maths_parser.y" /* yacc.c:1646  */
+#line 246 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[0].expr);}
 #line 2311 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 127:
-#line 253 "src/maths_parser.y" /* yacc.c:1646  */
+#line 248 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreIncrement(*(yyvsp[0].string), -1);}
 #line 2317 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 128:
-#line 254 "src/maths_parser.y" /* yacc.c:1646  */
+#line 249 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreDecrement(*(yyvsp[0].string), -1);}
 #line 2323 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 129:
-#line 255 "src/maths_parser.y" /* yacc.c:1646  */
+#line 250 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new UnaryNeg((yyvsp[0].expr));}
 #line 2329 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 130:
-#line 256 "src/maths_parser.y" /* yacc.c:1646  */
+#line 251 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new UnaryPos((yyvsp[0].expr));}
 #line 2335 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 131:
-#line 257 "src/maths_parser.y" /* yacc.c:1646  */
+#line 252 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) =new LogNot((yyvsp[0].expr));}
 #line 2341 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 132:
-#line 258 "src/maths_parser.y" /* yacc.c:1646  */
+#line 253 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new BitNot((yyvsp[0].expr));}
 #line 2347 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 133:
-#line 259 "src/maths_parser.y" /* yacc.c:1646  */
+#line 254 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreIncrement(*(yyvsp[-3].string), (yyvsp[-1].number));}
 #line 2353 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 134:
-#line 260 "src/maths_parser.y" /* yacc.c:1646  */
+#line 255 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreDecrement(*(yyvsp[-3].string), (yyvsp[-1].number));}
 #line 2359 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 135:
-#line 261 "src/maths_parser.y" /* yacc.c:1646  */
+#line 256 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreIncrement(*(yyvsp[-4].string), -(yyvsp[-1].number));}
 #line 2365 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 136:
-#line 262 "src/maths_parser.y" /* yacc.c:1646  */
+#line 257 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PreDecrement(*(yyvsp[-4].string), -(yyvsp[-1].number));}
 #line 2371 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 137:
-#line 263 "src/maths_parser.y" /* yacc.c:1646  */
+#line 258 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = (yyvsp[0].expr);}
 #line 2377 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 138:
-#line 265 "src/maths_parser.y" /* yacc.c:1646  */
+#line 260 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = (yyvsp[-1].expr); }
 #line 2383 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 139:
-#line 266 "src/maths_parser.y" /* yacc.c:1646  */
+#line 261 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new PostIncrement(*(yyvsp[-1].string), -1);}
 #line 2389 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 140:
-#line 267 "src/maths_parser.y" /* yacc.c:1646  */
+#line 262 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new PostDecrement(*(yyvsp[-1].string), -1);}
 #line 2395 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 141:
-#line 268 "src/maths_parser.y" /* yacc.c:1646  */
+#line 263 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new FunctionStatementInExpr(*(yyvsp[-3].string),(yyvsp[-1].expr)); }
 #line 2401 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 142:
-#line 269 "src/maths_parser.y" /* yacc.c:1646  */
+#line 264 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new FunctionStatementInExpr(*(yyvsp[-2].string), NULL); }
 #line 2407 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 143:
-#line 270 "src/maths_parser.y" /* yacc.c:1646  */
+#line 265 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PostIncrement(*(yyvsp[-4].string), (yyvsp[-2].number));}
 #line 2413 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 144:
-#line 271 "src/maths_parser.y" /* yacc.c:1646  */
+#line 266 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PostDecrement(*(yyvsp[-4].string), (yyvsp[-2].number));}
 #line 2419 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 145:
-#line 272 "src/maths_parser.y" /* yacc.c:1646  */
+#line 267 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PostIncrement(*(yyvsp[-5].string), -(yyvsp[-2].number));}
 #line 2425 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 146:
-#line 273 "src/maths_parser.y" /* yacc.c:1646  */
+#line 268 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new PostDecrement(*(yyvsp[-5].string), -(yyvsp[-2].number));}
 #line 2431 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 147:
-#line 274 "src/maths_parser.y" /* yacc.c:1646  */
+#line 269 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = (yyvsp[0].expr);}
 #line 2437 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 148:
-#line 276 "src/maths_parser.y" /* yacc.c:1646  */
+#line 271 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new Variable( *(yyvsp[0].string) ); }
 #line 2443 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 149:
-#line 277 "src/maths_parser.y" /* yacc.c:1646  */
+#line 272 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Number( (yyvsp[0].number), 0); }
 #line 2449 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 150:
-#line 278 "src/maths_parser.y" /* yacc.c:1646  */
+#line 273 "src/maths_parser.y" /* yacc.c:1646  */
     { (yyval.expr) = new Number( 0, (yyvsp[0].number)); }
 #line 2455 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 151:
-#line 279 "src/maths_parser.y" /* yacc.c:1646  */
+#line 274 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new ArrElement(*(yyvsp[-3].string), (yyvsp[-1].number));}
 #line 2461 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 152:
-#line 280 "src/maths_parser.y" /* yacc.c:1646  */
+#line 275 "src/maths_parser.y" /* yacc.c:1646  */
     {(yyval.expr) = new ArrElement(*(yyvsp[-4].string), -(yyvsp[-1].number));}
 #line 2467 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2695,7 +2695,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 285 "src/maths_parser.y" /* yacc.c:1906  */
+#line 280 "src/maths_parser.y" /* yacc.c:1906  */
 
 
 

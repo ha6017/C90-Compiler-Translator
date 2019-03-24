@@ -179,7 +179,7 @@ public:
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
         outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
-        outStream<<"MFLO "<<std::endl;
+        outStream<<"MFLO "<<dstreg<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);   
     }
@@ -215,7 +215,7 @@ public:
         std::string right_reg = myContext.findTemp();
         right->printMips(right_reg, myContext, outStream);
         outStream<<"DIV "<<left_reg<<", "<<right_reg<<std::endl;
-        outStream<<"MFHI "<<std::endl;
+        outStream<<"MFHI "<<dstreg<<std::endl;
         myContext.UnlockReg(left_reg);
         myContext.UnlockReg(right_reg);
     }

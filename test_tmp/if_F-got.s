@@ -6,17 +6,17 @@ f:
 SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
-ADDI $17, $0, 100
-SW $17, -8 ($fp)
-LW $20, -8($fp)
+ADDI $9, $0, 100
+SW $9, -8 ($fp)
+LW $10, -8($fp)
 nop
-ADDI $24, $0, 100
-ADDI $17, $0, 0
-BEQ $20, $24, L_3
+ADDI $11, $0, 100
+ADDI $9, $0, 0
+BEQ $10, $11, L_3
 nop
-ADDI $17, $0, 1
+ADDI $9, $0, 1
 L_3:
-BEQ $17, $0, L_2
+BEQ $9, $0, L_2
 nop
 ADDI $2, $0, 2
 LW $31, -4 ($fp)

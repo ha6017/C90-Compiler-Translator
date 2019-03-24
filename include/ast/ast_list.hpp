@@ -301,12 +301,11 @@ class Argument: public ASTNode
         dst<<argId;
     }
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-
-        outStream<<"SW "<<myContext.retrieveParam()<<", "<<myContext.createLocalInt(argId)<<"($fp)"<<std::endl;
-
         if(nextArguments!=NULL){
             nextArguments->printMips(dstreg, myContext, outStream);
         }
+        outStream<<"SW "<<"$"<<std::to_string(4+myContext.paramCount++)<<", "<<myContext.createLocalInt(argId)<<"($fp)"<<std::endl;
+
     }
 };
 
@@ -346,11 +345,14 @@ class ArgumentNoType : public ASTNode
     }
    
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
-        std::string param_var=myContext.findParam();
-        arg->printMips(param_var, myContext, outStream);
+        //nextarguments is a list
         if(nextArguments!=NULL){
-            nextArguments->printMips(dstreg, myContext, outStream);
+            nextArguments->printMips("HELELELWKRLWENRKNEWKRNWEKLNKLRENKLNEWR", myContext, outStream);
         }
+        std::string param_var="$"+std::to_string(4+myContext.paramCount);
+        myContext.paramCount++;
+        arg->printMips(param_var, myContext, outStream);
+
     }
 };
 
@@ -482,7 +484,7 @@ public:
         std::string exp_reg = myContext.findTemp();
         exp->printMips(exp_reg, myContext, outStream);
 
-        outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($0)"<<std::endl;
+        outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($fp)"<<std::endl;
         myContext.currentArrayElement++;
         myContext.UnlockReg(exp_reg);
 

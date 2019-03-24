@@ -7,31 +7,31 @@ SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
 SW $4, -8($fp)
-ADDI $17, $0, 0
-SW $17, -12 ($fp)
-ADDI $17, $0, 0
-SW $17, -16 ($fp)
+ADDI $9, $0, 0
+SW $9, -12 ($fp)
+ADDI $9, $0, 0
+SW $9, -16 ($fp)
 
 top_1_0:
-LW $20, -16($fp)
+LW $10, -16($fp)
 nop
-LW $24, -8($fp)
+LW $11, -8($fp)
 nop
-SLT $17, $20, $24
-BEQ $17, $0, bottom_1_0
+SLT $9, $10, $11
+BEQ $9, $0, bottom_1_0
 nop
-LW $24, -12($fp)
+LW $11, -12($fp)
 nop
-LW $25, -16($fp)
+LW $12, -16($fp)
 nop
-ADDU $20, $24, $25
-ADDU $16, $0, $20
-SW $16, -12($fp)
-LW $20, -16($fp)
+ADDU $10, $11, $12
+ADDU $8, $0, $10
+SW $8, -12($fp)
+LW $10, -16($fp)
 nop
-ADDU $16, $0, $20
-ADDI $20, $20, 1
-SW $20, -16($fp)
+ADDU $8, $0, $10
+ADDI $10, $10, 1
+SW $10, -16($fp)
 J top_1_0
 nop
 

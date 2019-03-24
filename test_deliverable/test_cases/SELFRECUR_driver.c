@@ -1,10 +1,9 @@
-int recur(int x);
-
+int makeFive(int a);
 int main(){
-    if(recur(10)){
-        return 1;
-    }
-    else{
+    int output= makeFive(1);
+    if (output==5){
         return 0;
+    }else{
+        return 5;
     }
 }
