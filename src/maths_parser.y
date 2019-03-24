@@ -182,20 +182,15 @@ WHILE_STATEMENT: T_WHILE EXPR16 STATEMENT                              { $$ = ne
 DO_WHILE_STATEMENT: T_DO STATEMENT T_WHILE EXPR16 T_SEMI_COLON                { $$ = new DoWhile($4,$2); }
 
 EXPR16: 	EXPR15 {$$=$1;}
- 		|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
+ 		//|	EXPR16 T_COMMA EXPR15	{$$ = new Comma($1, $3);}
 
 EXPR15: 		EXPR2 {$$ = $1;}
-			|	T_VARIABLE T_EQUAL EXPR15 { $$ = new AssignEqual(*$1, $3, -1);}
+			|	T_VARIABLE T_EQUAL EXPR15 	  { $$ =  new AssignEqual(*$1, $3, -1);}
 			|	T_VARIABLE T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1, $3, -1);}  
 		 	| 	T_VARIABLE T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1, $3, -1);}  
 			| 	T_VARIABLE T_MULASSIGN EXPR15 { $$ =  new MultEqual(*$1, $3, -1);}  
 			| 	T_VARIABLE T_DIVASSIGN EXPR15 { $$ =  new DivEqual(*$1, $3, -1);}  
 			| 	T_VARIABLE T_MODASSIGN EXPR15 { $$ =  new RemEqual(*$1, $3, -1);} 
-			// and assign?
-			// or assign?
-			// left assign?
-			// right assighn?
-			// xor assighn?
 			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_EQUAL EXPR15 { $$ = new AssignEqual(*$1,$6, $3); }
 			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_ADDASSIGN EXPR15 { $$ =  new PlusEqual(*$1, $6, $3);}
 			|	T_VARIABLE T_LSBRACKET I_FLOAT T_RSBRACKET T_SUBASSIGN EXPR15 { $$ =  new SubEqual(*$1, $6, $3); }

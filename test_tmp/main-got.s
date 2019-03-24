@@ -14,4 +14,11 @@ nop
 ADDI $sp, $fp,  0
 JR $31
 nop
+LW $31, -4 ($fp)
+nop
+LW $fp, 0 ($fp)
+nop
+ADDI $sp, $fp,  0
+JR $31
+nop
 .end f
