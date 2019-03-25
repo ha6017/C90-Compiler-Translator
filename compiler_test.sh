@@ -19,11 +19,6 @@ mkdir -p ${working_exec}
 
 for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
 
-    #base=$(echo $i | sed -E -e "s|${input_dir}/([^.]+)[.]c|\1|g");
-    #NAME=$(echo $DRIVER | sed -E -e "s|test_deliverable/testcases")
-    #${String%ABC}
-
-    #NAME=$(basename $DRIVER _driver.c)
     driver=$(basename ${DRIVER%.c})
     NAME=$(basename ${DRIVER%_driver.c})
     TESTCODE=test_deliverable/test_cases/$NAME.c
