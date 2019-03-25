@@ -8,11 +8,11 @@ SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
 SW $4, -8($fp)
 SW $5, -12($fp)
-LW $17, -12($fp)
+LW $9, -8($fp)
 nop
-LW $20, -8($fp)
+LW $10, -12($fp)
 nop
-ADDU $2, $17, $20
+ADDU $2, $9, $10
 LW $31, -4 ($fp)
 nop
 LW $fp, 0 ($fp)

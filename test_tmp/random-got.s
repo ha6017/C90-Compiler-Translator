@@ -6,14 +6,14 @@ rand:
 SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
-ADDI $17, $0, 0
-SW $17, -8 ($fp)
-ADDI $17, $0, 1
-LW $20, -8($fp)
+ADDI $9, $0, 0
+SW $9, -8 ($fp)
+ADDI $9, $0, 1
+LW $10, -8($fp)
 nop
-ADDU $20, $20, $17
-ADDU $16, $0, $20
-SW $20, -8($fp)
+ADDU $10, $10, $9
+ADDU $8, $0, $10
+SW $10, -8($fp)
 LW $2, -8($fp)
 nop
 LW $31, -4 ($fp)
