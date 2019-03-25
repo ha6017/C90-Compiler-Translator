@@ -7,9 +7,9 @@ SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
 SW $4, -8($fp)
-LW $17, -8($fp)
+LW $9, -8($fp)
 nop
-BEQ $17, $0, L_2
+BEQ $9, $0, L_2
 nop
 ADDI $2, $0, 12
 LW $31, -4 ($fp)

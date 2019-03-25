@@ -64,6 +64,7 @@ public:
         outStream<<"nop"<<std::endl;
         branch->printMips(dstreg, newContext, outStream);
         outStream<<my_label<<":"<<std::endl;
+        myContext.UnlockReg(compare_reg);
 
     }
 };
@@ -192,6 +193,7 @@ public:
         outStream<<my_labelA<<":"<<std::endl;
         branchB->printMips(dstreg, newContext, outStream);
         outStream<<my_labelB<<":"<<std::endl;
+        myContext.UnlockReg(compare_reg);
     }
 };
 
@@ -401,8 +403,9 @@ class FunctionStatementInExpr: public ASTNode
 
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override {
         Context newContext(myContext);
+        newContext.paramCount=0;
         arg->printMips(dstreg, newContext, outStream);
-        
+
         outStream<<"ADDI $sp, $fp, "<<newContext.currentLocalPointer<<std::endl;
         // newContext.enterFunction();
 

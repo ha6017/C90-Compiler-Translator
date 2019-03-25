@@ -140,7 +140,7 @@ DEC_STATEMENT: 	TYPE_NAME DEC_VAR_LIST T_SEMI_COLON      { $$ = new DeclareState
 				;
 
 VAL_LIST:	EXPR16	{$$= new ArrayList($1, NULL);}
-		|	VAL_LIST T_COMMA EXPR16	{$$ = new ArrayList($1, $3); }
+		|	VAL_LIST T_COMMA EXPR16	{$$ = new ArrayList($3, $1); }
 		;
 
 DEC_VAR_LIST: 	VARIABLE_DECLARATION                     { $$ = new Dec_Var_List($1, NULL); }

@@ -1,9 +1,8 @@
-int recur(int x){
-    if(x!=0){
-        x--;
-        return recur(x--);
-    }
-    else{
-        return x;
+int makeFive(int a){
+    if(a<5){
+        a++;
+        return makeFive(a);
+    }else{
+        return a;
     }
 }

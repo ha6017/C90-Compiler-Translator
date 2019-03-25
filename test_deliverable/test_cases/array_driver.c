@@ -1,6 +1,10 @@
 int f();
 
 int main(){
-    return f();
-
+    int output= f();
+    if(output ==15){
+        return 0;
+    }else{
+        return 10;
+    }
 }

@@ -122,6 +122,7 @@ public:
         outStream<<"ADDI $fp, $sp,  0"<<std::endl;
 
         if(myNameList!=NULL){
+            myContext.paramCount=0;
             myNameList->printMips(dstreg,myContext,outStream);
         }
         if(myBranch!=NULL){
@@ -226,6 +227,7 @@ public:
     //! Evaluate the tree using the given mapping of variables to numbers
     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
         Context newContext(myContext);
+        newContext.paramCount=0;
         myParamList->printMips(dstreg, newContext, outStream);
         
         outStream<<"ADDI "<<"$sp, "<<"$fp, "<<newContext.currentLocalPointer<<std::endl;

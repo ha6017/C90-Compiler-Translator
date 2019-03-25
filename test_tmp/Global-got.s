@@ -12,9 +12,9 @@ f:
 SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
-LUI $17, %hi(a)
-ADDI $17, $17, %lo(a)
-LW $2, 0($17)
+LUI $9, %hi(a)
+ADDI $9, $9, %lo(a)
+LW $2, 0($9)
 nop
 LW $31, -4 ($fp)
 nop

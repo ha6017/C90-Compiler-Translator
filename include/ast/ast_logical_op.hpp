@@ -115,8 +115,6 @@ public:
         std::string my_labelA=myContext.makeLabelName();
         std::string my_labelB=myContext.makeLabelName();
 
-
-
         outStream<<"ADDI "<<dstreg<<", $0"<<", 0"<<std::endl;
         outStream<<"BNE "<<left_reg<<", $0,"<<my_labelA<<std::endl;
         outStream<<"nop"<<std::endl;

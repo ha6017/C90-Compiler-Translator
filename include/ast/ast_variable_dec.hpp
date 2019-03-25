@@ -335,6 +335,8 @@ public:
         outStream<<".globl "<<var<<std::endl;
         outStream<<".data"<<std::endl;
         outStream<<".align 2"<<std::endl;
+        outStream<<".size "<<var<<", "<<size*4<<std::endl;
+
         //can have a .size and .type here but its for debugging so not necessary
         outStream<<var<<":"<<std::endl;
         if(myArrayList==NULL){

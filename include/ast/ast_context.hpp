@@ -19,7 +19,7 @@ public:
     unsigned int currentGlobalPointer;
     int currentLocalPointer;
     int scopeCountPerScope;
-
+    int paramCount;
     // std::map<std::string, unsigned int>globals;
     std::vector<std::string> globals;
     std::map<std::string, int>locals;
@@ -35,6 +35,7 @@ public:
 
     Context(){
         scope_counter=0;
+        paramCount=0;
         // funcLabelCounter=0;
         // stackOffset =0;
         // currentGlobalPointer=0x2000;
@@ -43,6 +44,9 @@ public:
         scopeCountPerScope=0;
 
         //CREATE FOR LOOP TO FREE THE TEMPS
+        for(int i=0;i<32;i++){
+            freeRegs[i]=1;
+        }
     }
     
     Context(const Context &inContext){
@@ -54,9 +58,11 @@ public:
         for(int i=0;i<32;i++){
             freeRegs[i]=inContext.freeRegs[i];
         }
+        
         scope_counter=inContext.scope_counter;
         currentArrayElement=inContext.currentArrayElement;
         currentArrayName=inContext.currentArrayName;
+        paramCount=inContext.paramCount;
         // currentGlobalPointer=inContext.currentGlobalPointer;
         currentLocalPointer=inContext.currentLocalPointer;
         scopeCountPerScope=inContext.scopeCountPerScope;
@@ -75,6 +81,7 @@ public:
     void enterFunction(){
         currentLocalPointer=0;
         locals.clear();
+        // paramCount=0;
     }
     // void exitScope(){
     //     scope_counter--;
@@ -87,30 +94,30 @@ public:
                 return "$"+std::to_string(i);
             }
         }
-
+        throw "Ran out of registers";
     }
     
-    std::string findParam(){
-        for(int i=4;i<8;i++){
-            if(freeRegs[i]==1){
-                freeRegs[i]=0;
-                return "$"+std::to_string(i);
-            }
-        }
-    }
+    // std::string findParam(){
+    //     for(int i=4;i<8;i++){
+    //         if(freeRegs[i]==1){
+    //             freeRegs[i]=0;
+    //             return "$"+std::to_string(i);
+    //         }
+    //     }
+    // }
     void UnlockReg(std::string RegName){
         int index=std::stoi(RegName.substr(1));
         freeRegs[index]=1;
     }
-    std::string retrieveParam(){
-        for(int i=4;i<8;i++){
-            if(freeRegs[i]==0){
-                freeRegs[i]=1;
-                return "$"+std::to_string(i);
-            }
-        }
-        throw "Incorrect number of parameters.";
-    }
+    // std::string retrieveParam(){
+    //     for(int i=4;i<8;i++){
+    //         if(freeRegs[i]==0){
+    //             freeRegs[i]=1;
+    //             return "$"+std::to_string(i);
+    //         }
+    //     }
+    //     throw "Incorrect number of parameters.";
+    // }
     // unsigned int createGlobalInt(std::string name){
     //     globals[name]=currentGlobalPointer;
     //     currentGlobalPointer=currentGlobalPointer+4;

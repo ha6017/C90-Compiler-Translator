@@ -48,6 +48,7 @@ public:
             outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<var<<")"<<std::endl;
             outStream<<"LW "<<dstreg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             outStream<<"nop"<<std::endl;
+            myContext.UnlockReg(addr_reg);
         }else{
             throw "Variable has not yet been declared";
         } 
@@ -127,6 +128,8 @@ public:
             outStream<<"ADDI "<<addr_reg<<", "<<addr_reg<<", %lo("<<id<<")"<<std::endl;
             outStream<<"LW "<<dstreg<<", "<<(element*4)<<"("<<addr_reg<<")"<<std::endl; 
             outStream<<"nop"<<std::endl;
+            myContext.UnlockReg(addr_reg);
+
         }else{
             throw "Variable has not yet been declared";
         } 

@@ -304,70 +304,70 @@ public:
     }
 };
 
-class Comma: public ASTNode
-{
-    public:
-        nodePtr expr1;
-        nodePtr expr2;
+// class Comma: public ASTNode
+// {
+//     public:
+//         nodePtr expr1;
+//         nodePtr expr2;
 
-    Comma(nodePtr _expr1, nodePtr _expr2)
-        : expr1(_expr1)
-        , expr2(_expr2)
-    {}
+//     Comma(nodePtr _expr1, nodePtr _expr2)
+//         : expr1(_expr1)
+//         , expr2(_expr2)
+//     {}
 
-    ~Comma(){
-        delete expr1;
-        delete expr2;
-    }
+//     ~Comma(){
+//         delete expr1;
+//         delete expr2;
+//     }
 
-    virtual void printC(std::ostream &outStream) const override{
-        outStream<<"(";
-        expr1->printC(outStream);
-        outStream<<" , ";
-        expr2->printC(outStream);
-        outStream<<")";
-    }
+//     virtual void printC(std::ostream &outStream) const override{
+//         outStream<<"(";
+//         expr1->printC(outStream);
+//         outStream<<" , ";
+//         expr2->printC(outStream);
+//         outStream<<")";
+//     }
 
-    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
-            outStream<<"(";
-            expr1->printPython(outStream, tab);
-            outStream<<" , ";
-            expr2->printPython(outStream, tab);
-            outStream<<")";
-    }
+//     virtual void printPython(std::ostream &outStream, IndentAdd &tab) const override{
+//             outStream<<"(";
+//             expr1->printPython(outStream, tab);
+//             outStream<<" , ";
+//             expr2->printPython(outStream, tab);
+//             outStream<<")";
+//     }
 
-     virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
-        outStream<<"COMMA "<<std::endl;
-        std::string exp_reg = myContext.findTemp();
-        expr1->printMips(exp_reg, myContext, outStream);
-        if(myContext.localIntExists(myContext.currentArrayName)){
-            outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($fp)"<<std::endl;
-        }
-        // else if(myContext.globalIntExists(myContext.currentArrayName)){
-        //     outStream<<"SW "<<exp_reg<<", "<<myContext.findGlobalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl; 
-        // }
-        else{
-            throw "Variable has not yet been declared";
-        }   
+//      virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const override{
+//         outStream<<"COMMA "<<std::endl;
+//         std::string exp_reg = myContext.findTemp();
+//         expr1->printMips(exp_reg, myContext, outStream);
+//         if(myContext.localIntExists(myContext.currentArrayName)){
+//             outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($fp)"<<std::endl;
+//         }
+//         // else if(myContext.globalIntExists(myContext.currentArrayName)){
+//         //     outStream<<"SW "<<exp_reg<<", "<<myContext.findGlobalArrayElement(myContext.currentArrayName, myContext.currentArrayElement++)<<"($0)"<<std::endl; 
+//         // }
+//         else{
+//             throw "Variable has not yet been declared";
+//         }   
         
-        myContext.UnlockReg(exp_reg);
-        if(expr2!=NULL){
-            expr2->printMips(dstreg, myContext,outStream);
-        }
+//         myContext.UnlockReg(exp_reg);
+//         if(expr2!=NULL){
+//             expr2->printMips(dstreg, myContext,outStream);
+//         }
 
 
 
-        // std::string exp_reg = myContext.findTemp();
-        // exp->printMips(exp_reg, myContext, outStream);
+//         // std::string exp_reg = myContext.findTemp();
+//         // exp->printMips(exp_reg, myContext, outStream);
 
-        // outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($0)"<<std::endl;
-        // myContext.currentArrayElement++;
-        // myContext.UnlockReg(exp_reg);
+//         // outStream<<"SW "<<exp_reg<<", "<<myContext.findLocalArrayElement(myContext.currentArrayName, myContext.currentArrayElement)<<"($0)"<<std::endl;
+//         // myContext.currentArrayElement++;
+//         // myContext.UnlockReg(exp_reg);
 
-        // if(myArrayList!=NULL){
-        //     myArrayList->printMips(dstreg, myContext,outStream);
-        // }
-    }
-};
+//         // if(myArrayList!=NULL){
+//         //     myArrayList->printMips(dstreg, myContext,outStream);
+//         // }
+//     }
+// };
 
 #endif
