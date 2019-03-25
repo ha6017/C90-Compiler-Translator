@@ -635,20 +635,20 @@ public:
         }else{
             throw "Variable has not yet been declared";
         }
-        outStream<<"MULT "<<var_reg<<", "<< exp_reg<<std::endl;
-        outStream<<"MFLO "<<var_reg<<std::endl;
-        outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
+        outStream<<"MUL "<<dstreg<<", "<< var_reg<<", "<< exp_reg<<std::endl;
+        // outStream<<"MFLO "<<var_reg<<std::endl;
+        // outStream<<"ADDU "<<dstreg<<", "<<"$0"<<", "<< var_reg<<std::endl;
         if(myContext.localIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
+                outStream<<"SW "<<dstreg<<", "<<myContext.findLocalInt(var)<<"($fp)"<<std::endl;
             }else{
-                outStream<<"SW "<<var_reg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
+                outStream<<"SW "<<dstreg<<", "<<myContext.findLocalArrayElement(var, ArrayIndex)<<"($fp)"<<std::endl;
             }
         }else if(myContext.globalIntExists(var)){
             if(ArrayIndex==-1){
-                outStream<<"SW "<<var_reg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
+                outStream<<"SW "<<dstreg<<", "<<"0"<<"("<<addr_reg<<")"<<std::endl; 
             }else{
-                outStream<<"SW "<<var_reg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
+                outStream<<"SW "<<dstreg<<", "<<(ArrayIndex*4)<<"("<<addr_reg<<")"<<std::endl; 
             }
             myContext.UnlockReg(addr_reg);
         }else{
