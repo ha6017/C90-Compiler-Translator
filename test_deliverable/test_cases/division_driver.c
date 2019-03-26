@@ -1,6 +1,8 @@
 int f();
 
 int main(){
-    return f();
-
+    if(f()==2){
+        return 0;
+    }
+    return 1;
 }
