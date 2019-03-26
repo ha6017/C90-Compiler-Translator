@@ -350,5 +350,35 @@ public:
 };
 
 
+class Enum : public ASTNode
+  
+{
+protected:
+    nodePtr myEnumList;
+
+public:
+    Enum(nodePtr _myEnumList)
+        :   myEnumList(_myEnumList)
+    {}
+
+    ~Enum(){
+       if(myEnumList!=NULL){ delete myEnumList;}
+    }
+
+    virtual void printC(std::ostream &outStream) const {
+
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+
+    }
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        myContext.prevEnumVal=0;
+        myEnumList->printMips(dstreg,myContext,outStream);
+        
+    }
+};
 
 #endif

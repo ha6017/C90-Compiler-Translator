@@ -6,16 +6,17 @@ f:
 SW $fp, 0 ($sp)
 SW $31, -4 ($sp)
 ADDI $fp, $sp,  0
-ADDI $9, $0, 5
+ADDI $10, $0, 4
+ADDI $11, $0, 5
+SUBU $9, $10, $11
 SW $9, -8($fp)
-ADDI $9, $0, 4
-SW $9, -12($fp)
 ADDI $9, $0, 3
+SW $9, -12($fp)
+ADDI $10, $0, 2
+SUBU $9, $0, $10
 SW $9, -16($fp)
-ADDI $9, $0, 2
+ADDI $9, $0, 0
 SW $9, -20($fp)
-ADDI $9, $0, 1
-SW $9, -24($fp)
 LW $12, -8($fp)
 nop
 LW $13, -12($fp)

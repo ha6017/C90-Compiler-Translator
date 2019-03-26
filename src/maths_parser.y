@@ -40,7 +40,7 @@
 %type <expr> STATEMENT EXPR_STATEMENT RETURN_STATEMENT FUNCTION_DECLARATION VARIABLE_DECLARATION DEC_STATEMENT DEC_VAR_LIST
 %type <expr> NEW_SCOPE SCOPE PARAMETER PARAMETER_LIST PROGRAM_LIST FOR_STATEMENT PARAMETER_LIST_NO_TYPE VAL_LIST GLO_DEC_VAR_LIST GLOBAL_ARRAY_DECLARATION
 %type <expr> IF_OR_ELSE WHILE_STATEMENT GLO_DEC_VARIABLE GLOBLE_VARIABLE_DECLARATION GLOBAL_VAL_LIST 
-%type <expr> DO_WHILE_STATEMENT
+%type <expr> DO_WHILE_STATEMENT ENUMERATOR_LIST ENUM_SPECIFIER
 %type <expr> EXPR EXPR10 EXPR11 EXPR12 EXPR2 EXPR3 EXPR4 EXPR5 EXPR6 EXPR7 EXPR8 EXPR9 EXPR13 EXPR14 EXPR15 EXPR16 
 %type <number> I_FLOAT
 %type <string> T_VARIABLE T_INT T_VOID T_CHAR T_SHORT T_LONG T_FLOAT T_DOUBLE T_SIGNED T_UNSIGNED T_ENUM
@@ -83,22 +83,24 @@ TYPE_NAME: 	T_CHAR          { $$ = $1; }
         | T_FLOAT               { $$ = $1; }
         | T_DOUBLE              { $$ = $1; }
         | T_VOID                { $$ = $1; }
-/*		| ENUM_SPECIFIER		{ $$ = $1; }
+				// | ENUM_SPECIFIER		{ $$ = $1; }
 
-ENUM_SPECIFIER:		T_ENUM T_LCBRACKET ENUMERATOR_LIST T_RCBRACKET { $$ = new }
-				|	T_ENUM	T_VARIABLE T_LCBRACKET ENUMERATOR_LIST T_RCBRACKET { $$ = new}
-				|	T_ENUM T_VARIABLE { $$ = new }
+ENUM_SPECIFIER:		T_ENUM	T_VARIABLE T_LCBRACKET ENUMERATOR_LIST T_RCBRACKET { $$ = new Enum($4); }
 
-ENUMERATOR_LIST: 	ENUMERATOR 
-				|	ENUMERATOR_LIST T_COMMA ENUMERATOR */
-		
-
+ENUMERATOR_LIST: 	T_VARIABLE { $$= new EnumList(NULL, *$1, -293); }
+				| T_VARIABLE T_EQUAL I_FLOAT { $$= new EnumList(NULL, *$1, $3); }
+				| T_VARIABLE T_EQUAL T_MINUS I_FLOAT { $$= new EnumList(NULL, *$1, -$4); }
+				|	ENUMERATOR_LIST T_COMMA T_VARIABLE T_EQUAL I_FLOAT { $$ = new EnumList($1, *$3, $5); }
+				|	ENUMERATOR_LIST T_COMMA T_VARIABLE T_EQUAL T_MINUS I_FLOAT { $$ = new EnumList($1, *$3, -$6); }
+				|	ENUMERATOR_LIST T_COMMA T_VARIABLE { $$ = new EnumList($1, *$3, -293); }
+	
 SCOPE: SCOPE STATEMENT           { $$ = new BranchList($2,$1); }
         | STATEMENT             { $$ = new BranchList($1, NULL); }
 		;
     
 STATEMENT:  	RETURN_STATEMENT           	  { $$ = $1; }
         	| 	DEC_STATEMENT                 { $$ = $1; }
+					| 	ENUM_SPECIFIER								{ $$ = $1; }
         	| 	EXPR_STATEMENT                { $$ = $1; }
         	| 	IF_OR_ELSE                    { $$ = $1; }
         	| 	WHILE_STATEMENT               { $$ = $1; }
