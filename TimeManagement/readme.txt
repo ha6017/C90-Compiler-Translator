@@ -19,7 +19,6 @@ arrays declared locally (i.e. inside a function)
 reading and writing elements of an array
 recursive function calls
 the enum keyword
-switch statements
 the break and continue keywords
 
 advanced:
@@ -27,6 +26,8 @@ advanced:
 calling externally-defined functions
 mutually recursive function calls
 locally scoped variable declarations 
-taking the address of a variable using the & operator
-dereferencing a pointer-variable using the * operator
-pointer arithmetic
+
+
+To run tests:
+1) make
+2) ./compiler_test.sh

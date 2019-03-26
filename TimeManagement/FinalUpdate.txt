@@ -1,0 +1,5 @@
+Today is the day of our final submission. We have worked in a less time intensive way for the last 3 days. The delay in submitting our final hash was a result of making a large amount of tests for many features. Furthermore, time difference made our communication slightly harder. 
+
+In the last few days we made the following features work without bugs: recursion, array lists, global variables (using hi and lo rather than offsets from $0), division, function parameters (for func calls and func definitions). We fixed a prominent bug where we ran out of registers quickly, which caused For each of these features we have created tests to be sure they work. Lastly, the test called FINALBOSStest, which tests all of our most complex features in one test. 
+
+With the 4 days we have before the final submission date we plan to do revision before exams.

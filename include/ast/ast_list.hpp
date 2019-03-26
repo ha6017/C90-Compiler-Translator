@@ -550,6 +550,53 @@ public:
     }
 };
 
+class EnumList : public ASTNode 
+{
+protected:
+    nodePtr myEnumList;
+    std::string name;
+    int val;
+public:
+    EnumList(nodePtr _myEnumList, std::string &_name, int _val)
+        :   myEnumList(_myEnumList)
+        ,   name(_name)
+        ,   val(_val)
+        {}
+
+    ~EnumList(){
+        if(myEnumList!=NULL){delete myEnumList;}
+    }
+    virtual void printC(std::ostream &outStream) const {
+
+    }
+
+    virtual void printPython(std::ostream &outStream, IndentAdd &tab) const {
+
+    }
+
+
+    //! Evaluate the tree using the given mapping of variables to numbers
+    virtual void printMips(std::string dstreg, Context &myContext, std::ostream &outStream) const {
+        if(myEnumList!=NULL){
+            myEnumList->printMips(dstreg, myContext, outStream);
+        }
+        std::string exp_reg = myContext.findTemp();
+        if(val==-293){
+            int currentVal=++myContext.prevEnumVal;
+            outStream<<"ADDI "<<exp_reg<<", $0, "<<currentVal<<std::endl;
+        }else{
+            myContext.prevEnumVal=val;
+            outStream<<"ADDI "<<exp_reg<<", $0, "<<val<<std::endl;
+        }
+        outStream<<"SW "<<exp_reg<<", "<<myContext.createLocalInt(name)<<" ($fp)"<<std::endl;
+        myContext.UnlockReg(exp_reg);
+
+
+
+    }
+
+
+};
 // class ProgList
 //     : public ASTNode
 // {

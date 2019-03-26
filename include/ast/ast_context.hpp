@@ -30,12 +30,14 @@ public:
     int scope_counter;
     int currentArrayElement;    //used for array init
     std::string currentArrayName;   //used for array init
+    int prevEnumVal;
 
 
 
     Context(){
         scope_counter=0;
         paramCount=0;
+        
         // funcLabelCounter=0;
         // stackOffset =0;
         // currentGlobalPointer=0x2000;
